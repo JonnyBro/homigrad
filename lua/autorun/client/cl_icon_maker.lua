@@ -11,13 +11,13 @@ net.Receive( "mapicon_sendMapListReceive", function()
 end )
 
 net.Receive( "mapicon_sendMapIcon", function()
-	local fileName = net.ReadString() 
+	local fileName = net.ReadString()
 	local fileLength = net.ReadUInt(16)
-	local fileContent = net.ReadData(fileLength) 
+	local fileContent = net.ReadData(fileLength)
 	fileContent = util.Decompress(fileContent)
-	file.Write(fileName, fileContent) 
+	file.Write(fileName, fileContent)
 	print("Map Icon received from server.."..fileName)
-	
+
 	net.Start("mapicon_acknowledgeToServer")
 	net.SendToServer()
 end )
@@ -42,18 +42,18 @@ end
 
 local function pushMapIconToServer()
 	if next(mapIconFiles) == nil then print("All Map Icons sent.") return end
-	
+
 	local fileName = "mapicon/"..mapIconFiles[#mapIconFiles]
-	local fileContent = file.Read(fileName, "DATA") 
+	local fileContent = file.Read(fileName, "DATA")
 	fileContent = util.Compress( fileContent )
 	if fileContent:len()>=64000 then print("Error. File larger than 64kb!.."..fileName) return end
 	print("Sending Map Icon..."..fileName)
 	net.Start( "mapicon_sendMapIconsToServer" )
-		net.WriteString(fileName) 
-		net.WriteUInt(#fileContent, 16) 
-		net.WriteData(fileContent, fileContent:len()) 
+		net.WriteString(fileName)
+		net.WriteUInt(#fileContent, 16)
+		net.WriteData(fileContent, fileContent:len())
 	net.SendToServer()
-	mapIconFiles[#mapIconFiles] = nil 
+	mapIconFiles[#mapIconFiles] = nil
 end
 
 local function queue()
@@ -69,11 +69,11 @@ local function getLocalMapList2()
 	local xtable = {}
 	if file.Find("mapicon/*.png", "DATA") then
 		local files = file.Find("mapicon/*.png", "DATA")
-		for k, v in pairs(files) do 
+		for k, v in pairs(files) do
 			local v_trim = string.TrimRight( v, ".png" )
 			if not table.HasValue( xtable, v_trim ) then
 				xtable[table.Count( xtable )+1] = v_trim
-			end 
+			end
 		end
 	end
 	return xtable
@@ -82,7 +82,7 @@ end
 local function sendLocalMapList()
 	local xtable = getLocalMapList2()
 	net.Start("mapicon_sendLocalMapList")
-		net.WriteTable(xtable) 
+		net.WriteTable(xtable)
 	net.SendToServer()
 end
 
@@ -93,19 +93,19 @@ local function getLocalMapList()
 	for k, v in pairs(directories) do
 		if file.Find("mapicon/"..v.."/maps/thumbs/*.png", "DATA") then
 			local files2, directories2 = file.Find("mapicon/"..v.."/maps/thumbs/*.png", "DATA")
-			for x, y in pairs(files2) do 
+			for x, y in pairs(files2) do
 				local v_trim = string.TrimRight( y, ".png" )
 				if not table.HasValue( xtable, v_trim ) then
 					xtable[table.Count( xtable )+1] = v_trim
-				end 
+				end
 			end
 		elseif file.Find("mapicon/*.png", "DATA") then
 			local files2 = file.Find("mapicon/*.png", "DATA")
-			for x, y in pairs(files2) do 
+			for x, y in pairs(files2) do
 				local v_trim = string.TrimRight( y, ".png" )
 				if not table.HasValue( xtable, v_trim ) then
 					xtable[table.Count( xtable )+1] = v_trim
-				end 
+				end
 			end
 		end
 	end
@@ -150,7 +150,7 @@ local function checkForSavedIcons(name)
         return true
 	else
         return false
-    end 
+    end
 end
 
 local function clearSavedIcons()
@@ -158,7 +158,7 @@ local function clearSavedIcons()
 	for k, v in pairs(directories) do
 		if file.Find("mapicon/"..v.."/maps/thumbs/*.png", "DATA") then
 			local files2, directories2 = file.Find("mapicon/"..v.."/maps/thumbs/*.png", "DATA")
-			for x, y in pairs(files2) do 
+			for x, y in pairs(files2) do
 				local v_trim = string.TrimRight( y, ".png" )
 				if checkForSavedIcons(v_trim) then
 					file.Delete( "mapicon/"..v.."/maps/thumbs/"..y, "DATA" )
@@ -169,7 +169,7 @@ local function clearSavedIcons()
 end
 
 local function createBrowser()
-	
+
 	local panel = vgui.Create("DFrame")
 	panel:MakePopup()
 	panel:SetSize(ScrW() * 0.75, ScrH() * 0.75)
@@ -178,7 +178,7 @@ local function createBrowser()
 	panel.Paint = function(self, w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(132, 132, 132))
 	end
-	
+
 	surface.CreateFont( "ButtonFont", {
 		font = "DermaLarge",
 		size = 22,
@@ -217,46 +217,46 @@ local function createBrowser()
 end
 concommand.Add("smm_menu", createBrowser)
 hook.Add( "InitPostEntity", "AutoMapIcon", function()
-	if LocalPlayer():IsAdmin() then 
-		if !ConVarExists("mapicon_screenshotSize") then 
+	if LocalPlayer():IsAdmin() then
+		if !ConVarExists("mapicon_screenshotSize") then
 			CreateConVar( "mapicon_screenshotSize", "312", {FCVAR_ARCHIVE,FCVAR_USERINFO}, "Screenshot size in pixels" )
 		end
-		if !ConVarExists("mapicon_syncPlayerMapIconsWithServer") then 
+		if !ConVarExists("mapicon_syncPlayerMapIconsWithServer") then
 			CreateConVar( "mapicon_syncPlayerMapIconsWithServer", "0", {FCVAR_ARCHIVE,FCVAR_USERINFO}, "Whether or not Map Icons inside server's /data/mapicon folder should be sent to clients" )
 		end
-		if !ConVarExists("mapicon_showScreenshotArea") then 
+		if !ConVarExists("mapicon_showScreenshotArea") then
 			CreateConVar( "mapicon_showScreenshotArea", "0", {FCVAR_ARCHIVE}, "Shows a small screen of what the screenshot will look like in the top left" )
 		end
-		if !ConVarExists("mapicon_switchMapAfterScreenshot") then 
+		if !ConVarExists("mapicon_switchMapAfterScreenshot") then
 			CreateConVar( "mapicon_switchMapAfterScreenshot", "1", {FCVAR_ARCHIVE,FCVAR_USERINFO}, "Whether or not to automatically switch map after you've made a screenshot" )
 		end
-		if !ConVarExists("mapicon_cleanAlreadyExistingMapIcons") then 
+		if !ConVarExists("mapicon_cleanAlreadyExistingMapIcons") then
 			CreateConVar( "mapicon_cleanAlreadyExistingMapIcons", "1", {FCVAR_ARCHIVE}, "Whether or not to delete Map Icons (that you took) of Maps that already have a Map Icon in their map files" )
 		end
 		concommand.Add( "mapicon_screenshot", RequestAScreenshot )
 		concommand.Add( "mapicon_getMapList", getMapList )
 		concommand.Add( "mapicon_pushMapIconsToServer", sendMapIcons )
-		
+
 
 		local xmaptext = GetConVar( "mapicon_screenshotSize" ):GetInt().."x"..GetConVar( "mapicon_screenshotSize" ):GetInt()
 		if not file.Exists( "mapicon", "DATA" ) or not file.Exists( "mapicon/"..xmaptext.."/maps/thumbs/", "DATA" ) then
 			file.CreateDir("mapicon/"..xmaptext.."/maps/thumbs/")
 		end
-		
+
 		hook.Add( "HUDPaint", "mapicon_drawInfoText", function()
 			if GetConVar( "mapicon_showScreenshotArea" ):GetInt()==1 then
 				surface.SetFont( "CloseCaption_Bold" )
 				surface.SetTextColor( 255, 255, 255 )
-				surface.SetTextPos( 10, GetConVar( "mapicon_screenshotSize" ):GetInt()+8 ) 
+				surface.SetTextPos( 10, GetConVar( "mapicon_screenshotSize" ):GetInt()+8 )
 				surface.DrawText( "Screenshot Size: "..xmaptext )
 			end
 		end )
 		hook.Add( "PostRender", "take_screenshot", function()
 		if isTakingScreenshot then return end
-			if (( ScreenshotRequested ) or GetConVar( "mapicon_showScreenshotArea" ):GetInt()==1) and isTakingScreenshot == false then 
+			if (( ScreenshotRequested ) or GetConVar( "mapicon_showScreenshotArea" ):GetInt()==1) and isTakingScreenshot == false then
 				if ScreenshotRequested then
 					isTakingScreenshot = true
-					
+
 				end
 				cam.Start2D()
 					if ( ScreenshotRequested ) then
@@ -269,21 +269,21 @@ hook.Add( "InitPostEntity", "AutoMapIcon", function()
 							v:SetNoDraw(true)
 						end
 					end
-					
+
 					ent = LocalPlayer()
 					local cdata = {}
 					cdata.origin = ent:GetPos()+Vector(0,0,65)
 					cdata.angles = ent:GetAngles()
-					
+
 					cdata.x = 0
 					cdata.y = 0
 					cdata.w = GetConVar( "mapicon_screenshotSize" ):GetInt()
 					cdata.h = GetConVar( "mapicon_screenshotSize" ):GetInt()
 					cdata.aspect = 1.0
-					
+
 					cdata.fov = LocalPlayer():GetFOV()-15
 					cdata.znear = 20
-					
+
 					if not gui.IsGameUIVisible() or ScreenshotRequested then
 						render.RenderView(cdata)
 					end
@@ -298,7 +298,7 @@ hook.Add( "InitPostEntity", "AutoMapIcon", function()
 							v:SetNoDraw(false)
 						end
 					end
-					
+
 				cam.End2D()
 				ScreenshotRequested = false
 				isTakingScreenshot = false

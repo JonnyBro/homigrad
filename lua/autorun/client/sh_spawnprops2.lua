@@ -1,7 +1,3 @@
---------------------------------------------------------------------------------
--- Spawn Menu by Ce1azz feat. Anterg0                                         --
--- Subscribe naxyi - https://www.youtube.com/channel/UC6wxpRA2esoEw2xlSL9X2DA --
---------------------------------------------------------------------------------
 Props_1 = {}
 Props_1[1] = "models/props_borealis/mooring_cleat01.mdl"
 Props_1[2] = "models/props_borealis/door_wheel001a.mdl"
@@ -190,11 +186,6 @@ Props_1[184] = "models/props_wasteland/prison_shelf002a.mdl"
 Props_1[185] = "models/props_wasteland/wood_fence01a.mdl"
 Props_1[186] = "models/props_wasteland/wood_fence02a.mdl"
 
---------------------------------------------------------------------------------
--- Spawn Menu by Ce1azz feat. Anterg0                                         --
--- Subscribe naxyi - https://www.youtube.com/channel/UC6wxpRA2esoEw2xlSL9X2DA --
---------------------------------------------------------------------------------
-
 Props_2 = {}
 Props_2[1] = "models/Gibs/HGIBS.mdl"
 Props_2[2] = "models/props_c17/BriefCase001a.mdl"
@@ -334,172 +325,129 @@ Props_2[135] = "models/props_wasteland/laundry_washer003.mdl"
 Props_2[136] = "models/props_wasteland/horizontalcoolingtank04.mdl"
 Props_2[137] = "models/props_wasteland/prison_heater001a.mdl"
 
---------------------------------------------------------------------------------
--- Spawn Menu by Ce1azz feat. Anterg0                                         --
--- Subscribe naxyi - https://www.youtube.com/channel/UC6wxpRA2esoEw2xlSL9X2DA --
---------------------------------------------------------------------------------
-
 if CLIENT then
-    local CfgVars = {}
-    local WEBSITE = {}
-    CfgVars["EquipmentDecayTimer"] = 3
-    CfgVars["WeaponDecayTimer"] = 3
-    CfgVars["DrugDecayTimer"] = 3
-    local buytable = {}
-    buytable["Construction props:"] = {}
-    buytable["Construction props:"].Model = Props_1
-    buytable["Construction props:"].Data = Props_1
-    buytable["Comic props:"] = {}
-    buytable["Comic props:"].Model = Props_2
-    buytable["Comic props:"].Data = Props_2
-    local PANEL = {}
+	local CfgVars = {}
+	CfgVars["EquipmentDecayTimer"] = 3
+	CfgVars["WeaponDecayTimer"] = 3
+	CfgVars["DrugDecayTimer"] = 3
 
-    function PANEL:Init()
-        self.PanelList = vgui.Create("DPanelList", self)
-        self.PanelList:SetPadding(4)
-        self.PanelList:SetSpacing(2)
-        self.PanelList:EnableVerticalScrollbar(true)
-        self:BuildList()
-    end
+	local buytable = {}
+	buytable["Construction props:"] = {}
+	buytable["Construction props:"].Model = Props_1
+	buytable["Construction props:"].Data = Props_1
+	buytable["Comic props:"] = {}
+	buytable["Comic props:"].Model = Props_2
+	buytable["Comic props:"].Data = Props_2
 
-    local function AddComma(n)
-        local sn = tostring(n)
-        sn = string.ToTable(sn)
-        local tab = {}
+	local PANEL = {}
 
-        for i = 0, #sn - 1 do
-            if i % 3 == #sn % 3 and not (i == 0) then
-                table.insert(tab, ",")
-            end
+	function PANEL:Init()
+		self.PanelList = vgui.Create("DPanelList", self)
+		self.PanelList:SetPadding(4)
+		self.PanelList:SetSpacing(2)
+		self.PanelList:EnableVerticalScrollbar(true)
+		self:BuildList()
+	end
 
-            table.insert(tab, sn[i + 1])
-        end
+	function PANEL:BuildList()
+		self.PanelList:Clear()
+		local Categorised = {}
 
-        return string.Implode("", tab)
-    end
+		for k, v in pairs(buytable) do
+			v.Category = k
+			Categorised[v.Category] = Categorised[v.Category] or {}
+			table.insert(Categorised[v.Category], v)
+		end
 
-    function PANEL:BuildList()
-        self.PanelList:Clear()
-        local Categorised = {}
+		for CategoryName, v in SortedPairs(Categorised) do
+			local Category = vgui.Create("DCollapsibleCategory", self)
+			self.PanelList:AddItem(Category)
+			Category:SetExpanded(false)
+			Category:SetLabel(CategoryName)
+			Category:SetCookieName("EntitySpawn." .. CategoryName)
 
-        for k, v in pairs(buytable) do
-            v.Category = k
-            Categorised[v.Category] = Categorised[v.Category] or {}
-            table.insert(Categorised[v.Category], v)
-        end
+			local Content = vgui.Create("DPanelList")
+			Category:SetContents(Content)
+			Content:EnableHorizontal(true)
+			Content:SetPaintBackground(false)
+			Content:SetSpacing(2)
+			Content:SetPadding(2)
+			Content:SetAutoSize(true)
 
-        for CategoryName, v in SortedPairs(Categorised) do
-            local Category = vgui.Create("DCollapsibleCategory", self)
-            self.PanelList:AddItem(Category)
-            Category:SetExpanded(false)
-            Category:SetLabel(CategoryName)
-            Category:SetCookieName("EntitySpawn." .. CategoryName)
-            local Content = vgui.Create("DPanelList")
-            Category:SetContents(Content)
-            Content:EnableHorizontal(true)
-            Content:SetDrawBackground(false)
-            Content:SetSpacing(2)
-            Content:SetPadding(2)
-            Content:SetAutoSize(true)
-            number = 1
+			number = 1
 
-            for k, v in pairs(buytable[CategoryName].Model) do
-              
-                local Icon = vgui.Create("SpawnIcon", self)
-                local Model = buytable[CategoryName].Model[number]
+			for k, v in pairs(buytable[CategoryName].Model) do
+				local Icon = vgui.Create("SpawnIcon", self)
+				local Model = buytable[CategoryName].Model[number]
 
-                if (buytable[CategoryName].Model[number] ~= nil) then
-                    Icon:SetModel(buytable[CategoryName].Model[number])
-                else
-                    Icon:SetModel("models/error.mdl")
-                end
+				if buytable[CategoryName].Model[number] ~= nil then
+					Icon:SetModel(buytable[CategoryName].Model[number])
+				else
+					Icon:SetModel("models/error.mdl")
+				end
 
-                Icon.DoClick = function()
-                    RunConsoleCommand("gm_spawn", Model)
-                end
+				Icon.DoClick = function()
+					RunConsoleCommand("gm_spawn", Model)
+				end
 
-                local lable = vgui.Create("DLabel", Icon)
-                lable:SetFont("DebugFixedSmall")
-                lable:SetTextColor(color_black)
-                lable:SetText(Model)
-                lable:SetContentAlignment(5)
-                lable:SetWide(self:GetWide())
-                lable:AlignBottom(-42)
-                Content:AddItem(Icon)
-                number = number + 1
-            end
-        end
+				local lable = vgui.Create("DLabel", Icon)
+				lable:SetFont("DebugFixedSmall")
+				lable:SetTextColor(color_black)
+				lable:SetText(Model)
+				lable:SetContentAlignment(5)
+				lable:SetWide(self:GetWide())
+				lable:AlignBottom(-42)
 
-        self.PanelList:InvalidateLayout()
-    end
+				Content:AddItem(Icon)
 
-    function PANEL:PerformLayout()
-        self.PanelList:StretchToParent(0, 0, 0, 0)
-    end
+				number = number + 1
+			end
+		end
 
-    local CreationSheet = vgui.RegisterTable(PANEL, "Panel")
+		self.PanelList:InvalidateLayout()
+	end
 
-    local function CreateContentPanel()
-        local ctrl = vgui.CreateFromTable(CreationSheet)
+	function PANEL:PerformLayout()
+		self.PanelList:StretchToParent(0, 0, 0, 0)
+	end
 
-        return ctrl
-    end
+	local CreationSheet = vgui.RegisterTable(PANEL, "Panel")
 
-    local function RemoveSandboxTabs()
-    	local firstuser = {"superadmin"}
-        local seconduser = {"moderator","admin","superadmin","sponsor","MegaSponsor"}
+	local function CreateContentPanel()
+		local ctrl = vgui.CreateFromTable(CreationSheet)
 
-        local tabstoremovefirst = {
-	        	language.GetPhrase("spawnmenu.content_tab"),
-		        language.GetPhrase("spawnmenu.category.npcs"),
-		        language.GetPhrase("spawnmenu.category.entities"),
-		        language.GetPhrase("spawnmenu.category.weapons"),
-		        language.GetPhrase("spawnmenu.category.vehicles"),
-		        language.GetPhrase("spawnmenu.category.postprocess"),
-		        language.GetPhrase("spawnmenu.category.dupes"),
-		        language.GetPhrase("spawnmenu.category.saves")
-    	}
-        local tabstoremovesecond = {
-            language.GetPhrase("spawnmenu.content_tab"),
-            language.GetPhrase("spawnmenu.category.npcs"),
-            language.GetPhrase("spawnmenu.category.weapons"),
-            language.GetPhrase("spawnmenu.category.postprocess"),
-            language.GetPhrase("spawnmenu.category.dupes"),
-            language.GetPhrase("spawnmenu.category.saves")
-        }
+		return ctrl
+	end
 
-        if !table.HasValue(firstuser, LocalPlayer():GetUserGroup()) then 
-	    	for k, v in pairs(g_SpawnMenu.CreateMenu.Items) do
-	            if table.HasValue(tabstoremovefirst, v.Tab:GetText()) then
-	                g_SpawnMenu.CreateMenu:CloseTab(v.Tab, true)
-	                RemoveSandboxTabs()  
---------------------------------------------------------------------------------
--- Spawn Menu by Ce1azz feat. Anterg0                                         --
--- Subscribe naxyi - https://www.youtube.com/channel/UC6wxpRA2esoEw2xlSL9X2DA --
---------------------------------------------------------------------------------					
-	            end
-	        end
-	    end
-    	
-   		if !table.HasValue(seconduser, LocalPlayer():GetUserGroup()) then 
-	    	for k, v in pairs(g_SpawnMenu.CreateMenu.Items) do
-	            if table.HasValue(tabstoremovesecond, v.Tab:GetText()) then
-	                g_SpawnMenu.CreateMenu:CloseTab(v.Tab, true)
-	                RemoveSandboxTabs()
-	            end
-	        end
-	    end
-    end
+	local function RemoveSandboxTabs()
+		local firstuser = {"superadmin"}
 
-    hook.Add("SpawnMenuOpen", "blockmenutabs", RemoveSandboxTabs)
+		local seconduser = {"moderator", "admin", "superadmin", "sponsor", "MegaSponsor"}
 
-    local function BunkMenu()
-        return
-    end
+		local tabstoremovefirst = {language.GetPhrase("spawnmenu.content_tab"), language.GetPhrase("spawnmenu.category.npcs"), language.GetPhrase("spawnmenu.category.entities"), language.GetPhrase("spawnmenu.category.weapons"), language.GetPhrase("spawnmenu.category.vehicles"), language.GetPhrase("spawnmenu.category.postprocess"), language.GetPhrase("spawnmenu.category.dupes"), language.GetPhrase("spawnmenu.category.saves")}
 
-    spawnmenu.AddCreationTab("Half-Life", CreateContentPanel, "icon16/flag_orange.png", 4)
+		local tabstoremovesecond = {language.GetPhrase("spawnmenu.content_tab"), language.GetPhrase("spawnmenu.category.npcs"), language.GetPhrase("spawnmenu.category.weapons"), language.GetPhrase("spawnmenu.category.postprocess"), language.GetPhrase("spawnmenu.category.dupes"), language.GetPhrase("spawnmenu.category.saves")}
+
+		if not table.HasValue(firstuser, LocalPlayer():GetUserGroup()) then
+			for k, v in pairs(g_SpawnMenu.CreateMenu.Items) do
+				if table.HasValue(tabstoremovefirst, v.Tab:GetText()) then
+					g_SpawnMenu.CreateMenu:CloseTab(v.Tab, true)
+					RemoveSandboxTabs()
+				end
+			end
+		end
+
+		if not table.HasValue(seconduser, LocalPlayer():GetUserGroup()) then
+			for k, v in pairs(g_SpawnMenu.CreateMenu.Items) do
+				if table.HasValue(tabstoremovesecond, v.Tab:GetText()) then
+					g_SpawnMenu.CreateMenu:CloseTab(v.Tab, true)
+					RemoveSandboxTabs()
+				end
+			end
+		end
+	end
+
+	hook.Add("SpawnMenuOpen", "blockmenutabs", RemoveSandboxTabs)
+
+	spawnmenu.AddCreationTab("Half-Life", CreateContentPanel, "icon16/flag_orange.png", 4)
 end
---------------------------------------------------------------------------------
--- Spawn Menu by Ce1azz feat. Anterg0                                         --
--- Subscribe naxyi - https://www.youtube.com/channel/UC6wxpRA2esoEw2xlSL9X2DA --
---------------------------------------------------------------------------------

@@ -1,18 +1,11 @@
 if engine.ActiveGamemode() == "homigrad" then
-local util_JSONToTable = util.JSONToTable
-local util_TableToJSON = util.TableToJSON
+	file.CreateDir("homigrad/sdata")
 
-local file_Read = file.Read
-local file_Write = file.Write
+	function SData_Get(name)
+		return file.Read("homigrad/sdata/" .. name .. ".txt", "DATA") or ""
+	end
 
-file.CreateDir("homigrad")
-file.CreateDir("homigrad/sdata")
-
-function SData_Get(name)
-    return file_Read("homigrad/sdata/" .. name .. ".txt","DATA") or ""
-end
-
-function SData_Set(name,value)
-    return file_Write("homigrad/sdata/" .. name .. ".txt",value or "")
-end
+	function SData_Set(name, value)
+		return file.Write("homigrad/sdata/" .. name .. ".txt", value) or ""
+	end
 end

@@ -1,19 +1,8 @@
-/*
-*
-*	@author		: vectivus
-*	@module		: cpu
-*	@website	: https://github.com/projectrebug/
-*	@file		: cpu.lua	
-*
-*/
-
 hook.Add("PreGamemodeLoaded", "widgets_disabler_cpu", function()
-    MsgN("Disabling widgets...")
+	MsgN("Disabling widgets...")
 
-    function widgets.PlayerTick()
-        -- empty
-    end
+	function widgets.PlayerTick() end
 
-    hook.Remove("PlayerTick", "TickWidgets")
-    MsgN("Widgets disabled!")
+	hook.Remove("PlayerTick", "TickWidgets")
+	MsgN("Widgets disabled!")
 end)

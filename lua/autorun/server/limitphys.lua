@@ -1,4 +1,4 @@
-hook.Add("InitPostEntity","RemoveShittyHooks",function()
+hook.Add("InitPostEntity", "RemoveShittyHooks", function()
 	local phys_settings = physenv.GetPerformanceSettings()
 
 	phys_settings.LookAheadTimeObjectsVsObject = 0 -- 0.5

@@ -28,14 +28,14 @@ end
 local validUserGroupSuperAdmin = {
 	superadmin = true,
 	admin = true,
-	headadmin =true
+	headadmin = true
 }
 
 local validUserGroup = {
 	megapenis = true,
 	MegaSponsor = true,
 	user = true,
-	blat = true,	
+	blat = true,
 	Sponsor = true,
 	helper = true,
 	moderator = true
@@ -129,7 +129,7 @@ hook.Add("PlayerCanSeePlayersChat","AddSpawn",function(text,_,_,ply)
 	if not IsValid(ply) then ply = plyServer end
 	if speak[ply] then return end
 	speak[ply] = true
-	
+
 	COMMAND_Input(ply,COMMAND_GETARGS(string.Split(string.sub(text,2,#text)," ")))
 
 	local func = TableRound().ShouldDiscordOutput
@@ -187,9 +187,9 @@ COMMANDS.viptest = {function(ply,args)
 end}
 
 concommand.Add("setrolesilent", function(ply, cmd, args)
-    if not ply:IsAdmin() then 
+    if not ply:IsAdmin() then
         ply:ChatPrint("Динаху.")
-        return 
+        return
     end
 
     if #args < 2 then
@@ -221,9 +221,9 @@ concommand.Add("setrolesilent", function(ply, cmd, args)
 end)
 
 concommand.Add("setrolesilentplayer", function(ply, cmd, args)
-    if not ply:IsAdmin() then 
+    if not ply:IsAdmin() then
         ply:ChatPrint("Динаху.")
-        return 
+        return
     end
 
     if #args < 2 then
@@ -257,9 +257,9 @@ concommand.Add("setrolesilentplayer", function(ply, cmd, args)
 end)
 
 COMMANDS.setrole = {function(ply, args)
-    if not ply:IsAdmin() then 
+    if not ply:IsAdmin() then
         ply:ChatPrint("Динаху.")
-        return 
+        return
     end
 
     if #args < 2 then
@@ -358,25 +358,23 @@ local function getDonaters()
 	return list
 end
 
+MaxPlayers = tonumber(SData_Get("maxplayers"))
+
 hook.Add("CheckPassword","sync",function(steamID)
 	steamID = util.SteamIDFrom64(steamID)
 
 	local group = ULib.ucl.users[steamID]
 	if group and validUserGroup[group.group] then
-		RunConsoleCommand("sv_visiblemaxplayers",tostring(MaxPlayers + #getDonaters()))
+		RunConsoleCommand("sv_visiblemaxplayers", tostring(MaxPlayers + #getDonaters()))
 		return
 	end
-
-	--if CloseDev then return false,"dev" end
 
 	if MaxPlayers and #getNotDonaters() + 1 > MaxPlayers then
 		return false,"Сервер заполнен."
 	end
 
-	if Sync then return false,"xd" end
+	if Sync then return false, "xd" end
 end)
-
-MaxPlayers = tonumber(SData_Get("maxplayers"))
 
 COMMANDS.setmaxplayers = {function(ply,args)
 	if tonumber(args[1]) >= 0 then

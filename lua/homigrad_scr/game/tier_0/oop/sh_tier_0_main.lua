@@ -33,8 +33,6 @@ function oop.Inherit(class)
 end--veru simple.. maybe,я на таком чиле это делаю🤙
 
 function oop.InheritChildren(base)
-    local contentBase = base[1]
-
     for className,class in pairs(base.baseChildrens) do
         oop.Get(className)
     end
@@ -71,8 +69,6 @@ function oop.RegEx(className,base)
 
     return class
 end
-
---
 
 function oop.InsertFile(class,isFolder)
     local pathInsert = hg.GetPath(2)
@@ -118,8 +114,6 @@ function oop.GetClassName(className)
     end
 end
 
---
-
 function oop.Reg(className,base,isFolder)
     className = oop.GetClassName(className)
     local overrideClass = override[className]
@@ -149,9 +143,10 @@ function oop.Get(className)
     oop.Include(listClass[className],true)
 end
 
-ents.listClass = listClass--HAHA
+ents.listClass = listClass
 ents.RegEx = oop.RegEx
 ents.Reg = oop.Reg
 ents.RegConnect = oop.RegConnect
 ents.Get = oop.Get
+
 end
