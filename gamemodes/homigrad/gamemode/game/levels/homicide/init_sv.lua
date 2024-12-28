@@ -1,12 +1,13 @@
 local function GetFriends(play)
-	local huy = ""
+	local tbl = {}
 
 	for i, ply in pairs(homicide.t) do
 		if play == ply then continue end
-		huy = huy .. ply:Name() .. ", "
+
+		table.insert(tbl, ply:Name())
 	end
 
-	return huy
+	return tbl
 end
 
 COMMANDS.homicide_get = {
@@ -26,7 +27,7 @@ COMMANDS.homicide_get = {
 		end
 
 		net.Start("homicide_roleget")
-		net.WriteTable(role)
+			net.WriteTable(role)
 		net.Send(ply)
 	end
 }
@@ -91,8 +92,8 @@ local function makeT(ply)
 
 		print(player.GetCount())
 	elseif homicide.roundType == 4 then
-		local wep = ply:Give("weapon_deagle")
-		ply:GiveAmmo(3 * 8, wep:GetPrimaryAmmoType(), true) -- slots = bullets.
+		ply:Give("weapon_deagle")
+		ply:GiveAmmo(3 * 8, ".44 Remington Magnum", true) -- slots = bullets.
 		ply:Give("weapon_kabar")
 		ply:Give("weapon_hg_t_vxpoison")
 		ply:Give("weapon_hidebomb")
@@ -126,7 +127,7 @@ local function makeT(ply)
 
 	if #GetFriends(ply) >= 1 then
 		timer.Simple(1, function()
-			AddNotificate(ply, "Ваши товарищи " .. GetFriends(ply))
+			AddNotificate(ply, "Ваши товарищи " .. table.concat(GetFriends(ply), ", "))
 		end)
 	end
 end
@@ -381,7 +382,7 @@ function homicide.EndRound(winner)
 	PrintMessage(3, winner == 1 and "Победа предателей." or winner == 2 and "Победа невиновых." or "Ничья")
 
 	if homicide.t and #homicide.t > 0 then
-		PrintMessage(3, #homicide.t > 1 and ("Трейторами были: " .. homicide.t[1]:Name() .. ", " .. GetFriends(homicide.t[1])) or ("Трейтором был: " .. homicide.t[1]:Name()))
+		PrintMessage(3, #homicide.t > 1 and ("Трейторами были: " .. homicide.t[1]:Name() .. ", " .. table.concat(GetFriends(homicide.t[1], ", "))) or ("Трейтором был: " .. homicide.t[1]:Name()))
 	end
 end
 

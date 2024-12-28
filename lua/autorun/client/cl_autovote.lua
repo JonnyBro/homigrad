@@ -1,3 +1,4 @@
+--[[
 hook.Add("InitPostEntity", "AutoTTTMapVote", function()
 	if LocalPlayer():IsAdmin() ~= true then return end
 
@@ -5,4 +6,4 @@ hook.Add("InitPostEntity", "AutoTTTMapVote", function()
 
 	net.Start("PSY_mapvote_getGamemodeTimeLimit")
 	net.SendToServer()
-end)
+end) --]]

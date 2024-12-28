@@ -130,7 +130,7 @@ function kingkong.HUDPaint_RoundLeft()
             end
 
             if screenPos.visible then
-                draw.SimpleText(ply.roleT and "Кинг Конг" or "Людь", "HomigradFont", screenPos.x, screenPos.y, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                draw.SimpleText(ply.roleT and "Кинг Конг" or "Человек", "HomigradFont", screenPos.x, screenPos.y, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
             end
         end
     end

@@ -1,10 +1,10 @@
 if CLIENT then
 	local frame
 	local isMenuOpen = false -- Переменная для отслеживания состояния меню
-	local keyPressed = false -- Переменная для отслеживания состояния нажатия клавиши
 
 	local function OpenF4Menu()
 		if isMenuOpen then return end -- Если меню уже открыто, просто возвращаемся
+
 		-- Создаем новое окно меню
 		frame = vgui.Create("DFrame")
 		frame:SetTitle("F4")
@@ -488,11 +488,13 @@ if CLIENT then
 		crouchAnimationSettingsLabel:SetFont("DermaDefaultBold")
 		crouchAnimationSettingsLabel:Dock(TOP)
 		crouchAnimationSettingsLabel:DockMargin(0, 0, 0, 10)
+
 		local crouchAnimationButtonPanel = vgui.Create("DPanel", settingsContent)
 		crouchAnimationButtonPanel:Dock(TOP)
 		crouchAnimationButtonPanel:SetBackgroundColor(Color(32, 32, 32))
 		crouchAnimationButtonPanel:SetTall(40)
 		crouchAnimationButtonPanel:DockMargin(0, 0, 0, 10)
+
 		local crouchAnimationEnableButton = vgui.Create("DButton", crouchAnimationButtonPanel)
 		crouchAnimationEnableButton:SetText("Вкл")
 		crouchAnimationEnableButton:SetSize(70, 30)
@@ -521,12 +523,6 @@ if CLIENT then
 		end
 	end
 
-	local function CloseF4Menu()
-		if IsValid(frame) then
-			frame:Close()
-		end
-	end
-
 	hook.Add("OnPlayerChat", "OpenMenuOnChatCommand", function(ply, text)
 		if ply == LocalPlayer() and (string.lower(text) == "!levels" or string.lower(text) == "!levelnext") then
 			OpenF4Menu()
@@ -535,16 +531,9 @@ if CLIENT then
 		end
 	end)
 
-	hook.Add("Think", "ToggleF4Menu", function()
-		if input.IsKeyDown(KEY_F4) then
-			if not keyPressed then
-				keyPressed = true -- Устанавливаем состояние нажатия клавиши
-
-				if isMenuOpen then CloseF4Menu()
-				else OpenF4Menu() end
-			else
-				keyPressed = false -- Сбрасываем состояние нажатия клавиши, когда клавиша отпущена
-			end
+	hook.Add("PlayerButtonDown", "ToggleF4Menu", function(ply, button)
+		if button == KEY_F4 then
+			OpenF4Menu()
 		end
 	end)
 end

@@ -15,7 +15,7 @@ if engine.ActiveGamemode() == "homigrad" then
 		--["weapon_csmg41"] = 0.02,
 		["weapon_xm1014"] = 0.02,
 	}
-	
+
 	Vectors = {
 	["weapon_glock18"]=Vector(4,-1,2.5),
 	["weapon_csmg40"]=Vector(-14, -3,-2),
@@ -60,7 +60,7 @@ if engine.ActiveGamemode() == "homigrad" then
 	["weapon_hk_arbalet"]=Vector(13,-1,2),
 	["weapon_vector"]=Vector(2,-1,0),
 	}
-	
+
 	Vectors2 = {
 	["weapon_mp5"]=Vector(11,-2	,-2.5),
 	["weapon_csmg40"]=Vector(-32,-4 , -5),
@@ -99,22 +99,22 @@ if engine.ActiveGamemode() == "homigrad" then
 	["weapon_vector"]=Vector(12,-1,-4),
 	["none"]=Vector(0,0,0),
 	}
-	
+
 	function GiveWeaponIfNone(player)
 		local activeWeapon = player:GetActiveWeapon()
-	
+
 		if not IsValid(activeWeapon) then
 			if not player.fake and not player:HasWeapon("weapon_kingkong") and not player:HasWeapon("weapon_braaains") then
 				player:Give("weapon_hands")
 			end
 		end
 	end
-	
+
 	-- Пример вызова функции при спавне игрока
 	hook.Add("PlayerSpawn", "GiveWeaponOnSpawn", function(player)
 		GiveWeaponIfNone(player)
 	end)
-	
+
 	timer.Create("CheckWeaponTimer", 10, 0, function()
 		for _, player in ipairs(player.GetAll()) do
 			if IsValid(player) then
@@ -122,39 +122,39 @@ if engine.ActiveGamemode() == "homigrad" then
 			end
 		end
 	end)
-	
+
 	hook.Add("PlayerSwitchWeapon", "CheckWeaponOnSwitch", function(player, oldWeapon, newWeapon)
 		GiveWeaponIfNone(player)
 	end)
-	
-	
-	
+
+
+
 	vecZero = Vector(0,0,0)
 	function SpawnWeapon(ply,clip1)
 		--local guninfo = ply.GunInfo
 		--local guninfo = ply.GunInfo луа очень легкий
-	
+
 		if !IsValid(ply.wep) and table.HasValue(Guns,ply.curweapon) then
 			local rag = ply:GetNWEntity("Ragdoll")
-	
+
 			if IsValid(rag) then
 				ply.FakeShooting=true
-	
+
 				ply.wep=ents.Create("wep")
-	
+
 				ply.wep:SetModel(weapons.Get(ply.curweapon).WorldModel)
-	
+
 				ply.wep:SetOwner(ply)
-	
+
 				local vec1=rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" ))):GetPos()
 				local vec2 = vecZero
 				vec2:Set((Vectors[ply.curweapon] or Vector(0,0,0)))
-	
+
 				vec2:Rotate(rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" ))):GetAngles())
 				ply.wep:SetPos(vec1+vec2)
-	
+
 				ply.wep:SetAngles(rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" ))):GetAngles()-Angle(0,0,180))
-	
+
 				if ply.curweapon == "weapon_sar2" then
 					local ang = ply.wep:GetAngles()
 					ang:RotateAroundAxis(ang:Up(),180)
@@ -165,18 +165,18 @@ if engine.ActiveGamemode() == "homigrad" then
 					ang:RotateAroundAxis(ang:Forward(),90)
 					ply.wep:SetAngles(ang)
 				end
-	
+
 				--[[local hand = rag:GetBoneMatrix(rag:LookupBone("ValveBiped.Bip01_R_Hand"))
 				local handPos,handAng = hand:GetTranslation(),hand:GetAngles()
-	
+
 				ply.wep:SetPos(handPos)
 				ply.wep:SetAngles(handAng)
-	
+
 				local handWep = ply.wep:GetBoneMatrix(0)
 				local wepPos,wepAng = handWep:GetTranslation(),handWep:GetAngles()
-				
+
 				local lpos = ply.wep:GetPos() - wepPos
-	
+
 				ply.wep:SetPos(wepPos + lpos)
 				ply.wep:SetAngles(handAng - Angle(20,0,180))
 	--]]
@@ -192,7 +192,7 @@ if engine.ActiveGamemode() == "homigrad" then
 						ply.WepCons=cons
 					end
 				end
-	
+
 				ply.wep.curweapon = ply.curweapon
 				net.Start("ebal_chellele")
 				net.WriteEntity(ply)
@@ -203,7 +203,7 @@ if engine.ActiveGamemode() == "homigrad" then
 				ply.wep.rag = rag
 				ply.wep.Clip = ply.Info.Weapons[ply.curweapon].Clip1
 				ply.wep.AmmoType = ply.Info.Weapons[ply.curweapon].AmmoType
-	
+
 				ply:SetNWString("curweapon",ply.wep.curweapon)
 				if (TwoHandedOrNo[ply.curweapon]) then
 					ply.wep:GetPhysicsObject():SetMass(1)
@@ -224,15 +224,15 @@ if engine.ActiveGamemode() == "homigrad" then
 			end
 		end
 	end
-	
+
 	function DespawnWeapon(ply)
 		if not ply.Info then return end
-	
+
 		if not ply.Info.Weapons[ply.Info.ActiveWeapon] then return end
 		ply.Info.Weapons[ply.Info.ActiveWeapon].Clip1 = ply.wep.Clip
 		ply.Info.ActiveWeapon2=ply.curweapon
 		--if ply:Alive() and !ply.wep.pickable then
-	
+
 			if IsValid(ply.wep) and ply:Alive() then
 				ply.wep:Remove()
 				ply.wep=nil
@@ -242,14 +242,14 @@ if engine.ActiveGamemode() == "homigrad" then
 				ply.wep.curweapon=ply.curweapon
 				ply.wep=nil
 			end
-	
+
 			if IsValid(ply.WepCons) and ply:Alive() then
 				ply.WepCons:Remove()
 				ply.WepCons=nil
 			elseif IsValid(ply.WepCons) then
 				ply.WepCons=nil
 			end
-	
+
 			if IsValid(ply.WepCons2) and ply:Alive() then
 				ply.WepCons2:Remove()
 				ply.WepCons2=nil
@@ -281,13 +281,13 @@ if engine.ActiveGamemode() == "homigrad" then
 		else
 			local wep = ply:GetActiveWeapon()
 			if not IsValid(wep) then return end
-	
+
 			wep.Clip = wep:Clip1()
 			wep.AmmoType=wep:GetPrimaryAmmoType()
 			--print(wep.Clip, wep.AmmoType)
 		end
 	end
-	
+
 	function SpawnWeaponEnt(weapon, pos, ply)
 		local wep = ents.Create("wep")
 		wep:SetModel(GunsModel[weapon])
@@ -303,7 +303,7 @@ if engine.ActiveGamemode() == "homigrad" then
 		wep.canpickup=true
 		return wep
 	end
-	
+
 	function Reload(wep)
 		if not wep then return end
 		local weptable = weapons.Get(wep.curweapon)
@@ -319,32 +319,32 @@ if engine.ActiveGamemode() == "homigrad" then
 					local needed = wep.Clip-oldclip
 					wep.Amt=wep.Amt-needed
 					ply.Info.Ammo[wep.AmmoType]=wep.Amt
-	
+
 					--print(ply.Info.Ammo[wep.AmmoType])
 				end
 			end)
 		end
 	end
-	
+
 	NextShot=0
-	
-	
+
+
 	HMCD_SurfaceHardness={
 		[MAT_METAL]=.95,[MAT_COMPUTER]=.95,[MAT_VENT]=.95,[MAT_GRATE]=.95,[MAT_FLESH]=.5,[MAT_ALIENFLESH]=.3,
 		[MAT_SAND]=.1,[MAT_DIRT]=.3,[74]=.1,[85]=.2,[MAT_WOOD]=.5,[MAT_FOLIAGE]=.5,
 		[MAT_CONCRETE]=.9,[MAT_TILE]=.8,[MAT_SLOSH]=.05,[MAT_PLASTIC]=.3,[MAT_GLASS]=.6
 	}
-	
-	
+
+
 	local pos = Vector(0,0,0)
-	
-	
-	
+
+
+
 	function FireShot(wep)
 		if not IsValid(wep) then return end
-	
+
 		local weptable = weapons.Get(wep.curweapon)
-	
+
 		function wep:BulletCallbackFunc(dmgAmt,ply,tr,dmg,tracer,hard,multi)
 			if(tr.MatType==MAT_FLESH)then
 				util.Decal("Blood",tr.HitPos+tr.HitNormal,tr.HitPos-tr.HitNormal)
@@ -415,7 +415,7 @@ if engine.ActiveGamemode() == "homigrad" then
 				})
 			end
 		end
-	
+
 		if ShootWait[wep.curweapon]==nil then return nil end
 		if !IsValid(wep) then return nil end
 		if wep.Clip<=0 then
@@ -424,15 +424,15 @@ if engine.ActiveGamemode() == "homigrad" then
 		return nil end
 		if timer.Exists("reload"..wep:EntIndex()) then return nil end
 		local guninfo = wep.GunInfo
-		
+
 		wep.NextShot=wep.NextShot or NextShot
-	
+
 		if ( wep.NextShot > CurTime() ) then return end
-	
+
 		wep.NextShot = CurTime() + weptable.ShootWait
-	
+
 		local Attachment = wep:GetAttachment(wep:LookupAttachment("muzzle"))
-	
+
 		local shootOrigin = Attachment and Attachment.Pos or wep:GetPos() + wep:GetAngles():Forward() * 10
 		local shootAngles = Attachment and Attachment.Ang or wep:GetAngles()
 		local shootDir = shootAngles:Forward()
@@ -451,7 +451,7 @@ if engine.ActiveGamemode() == "homigrad" then
 			bullet.Callback=function(ply,tr)
 				wep:BulletCallbackFunc(damage,ply,tr,damage,false,true,false)
 			end
-	
+
 		--[[local bullet = {}
 			bullet.Num 			= 1
 			bullet.Src 			= shootOrigin
@@ -466,14 +466,14 @@ if engine.ActiveGamemode() == "homigrad" then
 		wep:FireBullets( bullet )
 		--wep:EmitSound( wep.GetSound, 75, 100, 1, CHAN_WEAPON)
 		if SERVER then
-			net.Start("huysound")
-			net.WriteVector(wep:GetPos())
-			net.WriteString(weptable.Primary.Sound)
-			net.WriteString(weptable.Primary.SoundFar)
-			net.WriteEntity(wep)
+			net.Start("salat_base_sound")
+				net.WriteVector(wep:GetPos())
+				net.WriteString(weptable.Primary.Sound)
+				net.WriteString(weptable.Primary.SoundFar)
+				net.WriteEntity(wep)
 			net.Broadcast()
 		end
-		if wep.curweapon!="weapon_ak74" then
+		if wep.curweapon ~= "weapon_ak74" then
 			wep:GetPhysicsObject():ApplyForceCenter(wep:GetAngles():Forward()*-damage*2+wep:GetAngles():Right()*VectorRand(-90,90)+wep:GetAngles():Up()*200)			--сделать зависимым от force потом
 		else
 			local ply = wep:GetOwner()
