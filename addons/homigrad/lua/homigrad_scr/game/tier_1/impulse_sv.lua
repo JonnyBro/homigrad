@@ -54,7 +54,7 @@ hook.Add("Player Think","StoppingImpulse",function(ply,time)
 	ply.impulseNext = time + 0.05
 
 	net.Start("info_impulse")
-	net.WriteFloat(ply.dmgimpulse)
+		net.WriteFloat(ply.dmgimpulse)
 	net.Send(ply)
 
 	ply.dmgimpulse = math.max(ply.dmgimpulse - 3,0)

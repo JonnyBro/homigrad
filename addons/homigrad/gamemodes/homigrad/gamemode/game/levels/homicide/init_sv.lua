@@ -142,20 +142,24 @@ local function makeCT(ply)
 		local wep = ply:Give("weapon_doublebarrel_dulo")
 		ply:GiveAmmo(4, "12/70 gauge", true) -- slots = bullets.
 		wep:SetClip1(wep:GetMaxClip1())
+
 		AddNotificate(ply, "Вы невиновный с дробовиком вашего деда.")
 	elseif homicide.roundType == 2 then
 		local wep = ply:Give("weapon_beretta")
 		wep:SetClip1(wep:GetMaxClip1())
+
 		AddNotificate(ply, "Вы невиновный со скрытым огнестрельным оружием.")
 	elseif homicide.roundType == 3 then
 		local wep = ply:Give("weapon_taser")
 		ply:Give("weapon_police_bat")
 		wep:SetClip1(wep:GetMaxClip1())
+
 		AddNotificate(ply, "Вы полицейский под прикрытием. Вам выдан шокер и дубинка\nВаша задача: связать преступника.")
 	elseif homicide.roundType == 4 then
 		local wep = ply:Give("weapon_deagle")
-		AddNotificate(ply, "Вы невиновный ковбой с револьвером в кобуре.")
 		wep:SetClip1(wep:GetMaxClip1())
+
+		AddNotificate(ply, "Вы невиновный ковбой с револьвером в кобуре.")
 	end
 end
 

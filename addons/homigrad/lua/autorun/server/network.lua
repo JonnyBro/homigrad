@@ -1,17 +1,16 @@
 if game.SinglePlayer() then return end
-
 module("seats_network_optimizer")
-
-hook.Add("OnEntityCreated", "seats_network_optimizer", function(seat)
-	if seat:GetClass() == "prop_vehicle_prisoner_pod" then
-		seat:AddEFlags(EFL_NO_THINK_FUNCTION)
-		seat.seats_network_optimizer = true
-	end
-end)
 
 local i
 local seats
 local last_enabled
+
+hook.Add("OnEntityCreated", "seats_network_optimizer", function(ent)
+	if ent:IsValid() and ent:GetClass() == "prop_vehicle_prisoner_pod" then
+		ent:AddEFlags(EFL_NO_THINK_FUNCTION)
+		ent.seats_network_optimizer = true
+	end
+end)
 
 hook.Add("Think", "seats_network_optimizer", function()
 	if not seats or not seats[i] then

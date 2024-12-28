@@ -31,10 +31,6 @@ net.Receive("SIX.SIDETO", function(len, pl)
 	SIX[pl:SteamID()].side = side
 end)
 
-if SERVER then
-	include("networking.luac")
-end
-
 hook.Add("Think", "SIX.SENDTOSIDE", function()
 	for k, v in pairs(SIX) do
 		if not IsValid(v.pl) or SIX[k].angle == 0 then

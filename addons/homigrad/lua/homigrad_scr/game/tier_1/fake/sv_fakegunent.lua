@@ -189,14 +189,14 @@ if engine.ActiveGamemode() == "homigrad" then
 				if !IsValid(ply.WepCons) then
 					local cons = constraint.Weld(ply.wep,rag,0,rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )),0,true)
 					if IsValid(cons) then
-						ply.WepCons=cons
+						ply.WepCons = cons
 					end
 				end
 
 				ply.wep.curweapon = ply.curweapon
-				net.Start("ebal_chellele")
-				net.WriteEntity(ply)
-				net.WriteString(ply.curweapon)
+				net.Start("hg_fake_weapon")
+					net.WriteEntity(ply)
+					net.WriteString(ply.curweapon)
 				net.Broadcast()
 				rag.wep = ply.wep
 				rag.wep:CallOnRemove("inv",remove,rag)

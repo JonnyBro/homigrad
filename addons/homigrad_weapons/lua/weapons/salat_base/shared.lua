@@ -114,15 +114,15 @@ function SWEP:DrawHUD()
 		local ammo, ammobag = self:GetMaxClip1(), self:Clip1()
 
 		if ammobag > ammo - 1 then
-			text = "Полон"
+			text = "Полный"
 		elseif ammobag > ammo - ammo / 3 then
-			text = "~Почти полон"
+			text = "Почти полон"
 		elseif ammobag > ammo / 3 then
 			text = "~Половина"
 		elseif ammobag >= 1 then
-			text = "~Почти пуст"
+			text = "Почти пуст"
 		elseif ammobag < 1 then
-			text = "Пуст"
+			text = "Пусто"
 		end
 
 		local ammomags = ply:GetAmmoCount(self:GetPrimaryAmmoType())
@@ -155,14 +155,14 @@ function SWEP:DrawHUD()
 		local textpos = (hand.Pos + hand.Ang:Forward() * 7 + hand.Ang:Up() * 5 + hand.Ang:Right() * -1):ToScreen()
 
 		if self.revolver then
-			draw.DrawText("Барабан | " .. ammobag, "HomigradFontBig", textpos.x + randomx, textpos.y + randomy, color_gray1, TEXT_ALIGN_RIGHT)
-			draw.DrawText("В запасе | " .. ammomags, "HomigradFontBig", textpos.x + randomxmag, textpos.y + 25 + randomymag, color_gray, TEXT_ALIGN_RIGHT)
+			draw.DrawText("Барабан: " .. ammobag, "HomigradFontBig", textpos.x + randomx, textpos.y + randomy, color_gray1, TEXT_ALIGN_RIGHT)
+			draw.DrawText("В запасе: " .. ammomags, "HomigradFontBig", textpos.x + randomxmag, textpos.y + 25 + randomymag, color_gray, TEXT_ALIGN_RIGHT)
 		elseif self.shotgun then
-			draw.DrawText("Патронник | " .. text, "HomigradFontBig", textpos.x + randomx, textpos.y + randomy, color_gray1, TEXT_ALIGN_RIGHT)
-			draw.DrawText("В запасе | " .. ammomags, "HomigradFontBig", textpos.x + randomxmag, textpos.y + 25 + randomymag, color_gray, TEXT_ALIGN_RIGHT)
+			draw.DrawText("Магазин: " .. text, "HomigradFontBig", textpos.x + randomx, textpos.y + randomy, color_gray1, TEXT_ALIGN_RIGHT)
+			draw.DrawText("В запасе: " .. ammomags, "HomigradFontBig", textpos.x + randomxmag, textpos.y + 25 + randomymag, color_gray, TEXT_ALIGN_RIGHT)
 		else
-			draw.DrawText("Магазин | " .. text, "HomigradFontBig", textpos.x + randomx, textpos.y + randomy, color_gray1, TEXT_ALIGN_RIGHT)
-			draw.DrawText("Магазинов в запасе | " .. math.Round(ammomags / ammo), "HomigradFontBig", textpos.x + 5 + randomxmag, textpos.y + 25 + randomymag, color_gray, TEXT_ALIGN_RIGHT)
+			draw.DrawText("Магазин: " .. text, "HomigradFontBig", textpos.x + randomx, textpos.y + randomy, color_gray1, TEXT_ALIGN_RIGHT)
+			draw.DrawText("В запасе: " .. ammomags, "HomigradFontBig", textpos.x + 5 + randomxmag, textpos.y + 25 + randomymag, color_gray, TEXT_ALIGN_RIGHT)
 		end
 	end
 end

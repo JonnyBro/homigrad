@@ -1,26 +1,24 @@
-if engine.ActiveGamemode("homigrad") then
+if engine.ActiveGamemode() ~= "homigrad" then return end
+
 AddCSLuaFile()
 
-hg = hg or {} --homigrad global table hihi
+hg = hg or {}
 
-local string_sub = string.sub
-local string_split = string.Split
-local string_find = string.find
+function hg.includeFile(path)
+	local fileName = string.GetFileFromFilename(path)
+	if string.sub(fileName, 1, 1) == "!" then return end
 
-local string_GetFileFromFilename = string.GetFileFromFilename
-
-function hg.includeFile(path)--aaaaaaaeeeeeeeeeeeee😎
-	local fileName = string_GetFileFromFilename(path)
-	if string_sub(fileName,1,1) == "!" then return end
-
-	local prefix = string_sub(fileName,1,3)
+	local prefix = string.sub(fileName, 1, 3)
 
 	if prefix ~= "sv_" and prefix ~= "cl_" and prefix ~= "sh_" then
-		prefix = string_sub(fileName,#fileName - 6,#fileName - 4)
-		if string_sub(prefix,1,1) == "_" then prefix = string_sub(prefix,2,3) .. "_" end
+		prefix = string.sub(fileName, #fileName - 6, #fileName - 4)
+
+		if string.sub(prefix, 1, 1) == "_" then
+			prefix = string.sub(prefix, 2, 3) .. "_"
+		end
 	end
 
-	if prefix ~= "sv_" and prefix ~= "cl_" and prefix ~= "sh_" then return end--xd
+	if prefix ~= "sv_" and prefix ~= "cl_" and prefix ~= "sh_" then return end --xd
 
 	if prefix == "cl_" then
 		if SERVER then
@@ -45,35 +43,30 @@ function hg.includeFile(path)--aaaaaaaeeeeeeeeeeeee😎
 	return result
 end
 
-local file_Find = file.Find
-local string_gsub = string.gsub
-local hg_includeFile = hg.includeFile
-local hg_includeDir
-
 INCLUDE_BREAK = 1
 
-function hg.includeDir(path,includes)
+function hg.includeDir(path, includes)
 	includes = includes or {}
-	if includes[path] then return end--еее
-	includes[path] = path--ультрарэп!11
+	if includes[path] then return end --еее
+	includes[path] = path --ультрарэп!11
+	local _files, _dirs = file.Find(path .. "*", "LUA")
+	local files, dirs, tier_files, tier_dirs = {}, {}, {}, {}
+	local v, v2, tier
 
-	local _files,_dirs = file_Find(path .. "*","LUA")
-	local files,dirs,tier_files,tier_dirs = {},{},{},{}
-	local v,v2,tier
-
-	for i = 1,#_files do
+	for i = 1, #_files do
 		v = _files[i]
-
 		tier = nil
-		for i,sum in pairs(string_split(v,"_")) do
-			if tier then
-				sum = string.gsub(sum,".lua","")
-				tier = tonumber(sum)
 
+		for i, sum in pairs(string.Split(v, "_")) do
+			if tier then
+				sum = string.gsub(sum, ".lua", "")
+				tier = tonumber(sum)
 				break
 			end
 
-			if sum == "tier" then tier = true end
+			if sum == "tier" then
+				tier = true
+			end
 		end
 
 		if tier then
@@ -85,20 +78,25 @@ function hg.includeDir(path,includes)
 			end
 
 			v2[#v2 + 1] = v
-
 			continue
 		end
 
 		files[#files + 1] = v
 	end
 
-	for i = 1,#_dirs do
+	for i = 1, #_dirs do
 		v = _dirs[i]
-
 		tier = nil
-		for i,sum in pairs(string_split(v,"_")) do
-			if tier then tier = tonumber(sum) break end
-			if sum == "tier" then tier = true end
+
+		for i, sum in pairs(string.Split(v, "_")) do
+			if tier then
+				tier = tonumber(sum)
+				break
+			end
+
+			if sum == "tier" then
+				tier = true
+			end
 		end
 
 		if tier then
@@ -110,7 +108,6 @@ function hg.includeDir(path,includes)
 			end
 
 			v2[#v2 + 1] = v .. "/"
-
 			continue
 		end
 
@@ -120,57 +117,55 @@ function hg.includeDir(path,includes)
 	local result
 	local empty = {}
 
-	for tier = 0,#tier_files do
+	for tier = 0, #tier_files do
 		v2 = tier_files[tier] or empty
 
-		for i = 1,#v2 do
-			result = hg_includeFile(path .. v2[i])
-			if result == INCLUDE_BREAK then return end--спалился
+		for i = 1, #v2 do
+			result = hg.includeFile(path .. v2[i])
+			if result == INCLUDE_BREAK then return end --спалился
 		end
 	end
 
-	for i = 1,#files do
-		result = hg_includeFile(path .. files[i])
+	for i = 1, #files do
+		result = hg.includeFile(path .. files[i])
 		if result == INCLUDE_BREAK then return end
 	end
 
-	for tier = 0,#tier_dirs do
+	for tier = 0, #tier_dirs do
 		v2 = tier_dirs[tier] or empty
 
-		for i = 1,#v2 do
-			hg_includeDir(path .. v2[i],includes)
+		for i = 1, #v2 do
+			hg.includeDir(path .. v2[i], includes)
 		end
 	end
 
-	for i = 1,#dirs do
-		hg_includeDir(path .. dirs[i],includes)
+	for i = 1, #dirs do
+		hg.includeDir(path .. dirs[i], includes)
 	end
 end
-hg_includeDir = hg.includeDir
 
---бесплатно!
-
-local string_sub,string_split,string_gsub,string_find = string.sub,string.Split,string.gsub,string.find
 local trace
 
 function hg.GetPath(levelUp)
 	trace = debug.traceback()
 
-	if levelUp then levelUp = 3 + levelUp end
+	if levelUp then
+		levelUp = 3 + levelUp
+	end
 
-	trace = string_split(trace,"\n")
+	trace = string.Split(trace, "\n")
 	trace = trace[levelUp or #trace]
-	trace = string_split(trace,":")[1]
-	trace = string_gsub(trace,"	","")
+	trace = string.Split(trace, ":")[1]
+	trace = string.gsub(trace, "	", "")
 
-	if string_sub(trace,1,7) == "addons/" then
-		trace = string_sub(trace,8,#trace)
-		s = string_find(trace,"/")
+	if string.sub(trace, 1, 7) == "addons/" then
+		trace = string.sub(trace, 8, #trace)
+		s = string.find(trace, "/")
 
-		return string_sub(trace,s + 5,#trace)
-	elseif string_sub(trace,1,4) == "lua/" then
-		return string_sub(trace,5,#trace)
+		return string.sub(trace, s + 5, #trace)
+	elseif string.sub(trace, 1, 4) == "lua/" then
+		return string.sub(trace, 5, #trace)
 	end
 
 	return trace
-end end
+end

@@ -18,7 +18,7 @@ SWEP.Primary.Cone = 0.006
 SWEP.Primary.Damage = 40
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "pwb/weapons/vz61/shoot.wav"
-SWEP.Primary.Force = 70/3
+SWEP.Primary.Force = 70 / 3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.05
 SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
@@ -35,7 +35,7 @@ SWEP.Weight					= 5
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
 
-SWEP.HoldType = "pistol"
+SWEP.HoldType = "smg"
 
 ------------------------------------------
 

@@ -52,7 +52,7 @@ end
 
 function SavePlyInfo(ply) -- Сохранение игрока перед его падением в фейк
     ply.Info = {}
-	
+
     local info = ply.Info
     info.HasSuit = ply:IsSuitEquipped()
     info.SuitPower = ply:GetSuitPower()
@@ -107,7 +107,7 @@ function ReturnPlyInfo(ply) -- возвращение информации иг�
 
     ply:StripWeapons()
     ply:StripAmmo()
-	
+
 	ply.slots = {}
 
     for name, wepinfo in pairs(info.Weapons or {}) do
@@ -139,7 +139,7 @@ function Faking(ply,force) -- функция падения
 
 	if not ply.fake then
 		if hook.Run("Fake",ply) ~= nil then return end
-		
+
 		ply.fake = true
 		ply:SetNWBool("fake",ply.fake)
 
@@ -170,7 +170,7 @@ function Faking(ply,force) -- функция падения
 			end
 
 			ply.walktime = CurTime()
-			
+
 			rag.bull = ents.Create("npc_bullseye")
 			rag:SetNWEntity("RagdollController",ply)
 			local bull = rag.bull
@@ -246,7 +246,7 @@ function Faking(ply,force) -- функция падения
 				--ply:ChatPrint(tostring(1 - tracea.Fraction).." 2")
 				pos:Add(-Vector(0,0,64) * (1 - tracea.Fraction))
 			end
-			
+
 			ply:SetPos(pos)
 
 			ply:DrawViewModel(true)
@@ -398,7 +398,7 @@ hook.Add("DoPlayerDeath","blad",function(ply,att,dmginfo)
 	SavePlyInfo(ply)
 
 	local rag = ply:GetNWEntity("Ragdoll")
-	
+
 	if not IsValid(rag) then
 		rag = ply:CreateRagdoll(att,dmginfo)
 		ply:SetNWEntity("Ragdoll",rag)
@@ -415,7 +415,7 @@ hook.Add("DoPlayerDeath","blad",function(ply,att,dmginfo)
 	net.Send(ply)
 
 	if IsValid(rag.bull) then rag.bull:Remove() end
-	
+
 	rag:SetNWEntity("RagdollController",Entity(-1))
 
 	if ply.IsBleeding or ply.Bloodlosing > 0 or ply.LastDMGInfo:IsDamageType(DMG_BULLET+DMG_SLASH+DMG_BLAST+DMG_ENERGYBEAM+DMG_NEVERGIB+DMG_ALWAYSGIB+DMG_PLASMA+DMG_AIRBOAT+DMG_SNIPER+DMG_BUCKSHOT) then
@@ -496,7 +496,7 @@ hook.Add("PlayerSpawn","resetfakebody",function(ply) --обнуление рег
 
 	ply:SetDuckSpeed(0.3)
 	ply:SetUnDuckSpeed(0.3)
-	
+
 	ply.slots = {}
 	if ply.UsersInventory ~= nil then
 		for plys,bool in pairs(ply.UsersInventory) do
@@ -700,7 +700,7 @@ util.AddNetworkString("custom name")
 
 net.Receive("custom name",function(len,ply)
 	if not ply:IsAdmin() then return end
-	
+
 	local name = net.ReadString()
 	if name == "" then return end
 
@@ -740,7 +740,7 @@ function PlayerMeta:CreateRagdoll(attacker,dmginfo,force) --изменение �
 			RagdollOwner(rag):KillSilent()
 		end
 	end)
-	
+
 	rag:AddEFlags(EFL_NO_DAMAGE_FORCES)
 	if IsValid(rag:GetPhysicsObject()) then
 		rag:GetPhysicsObject():SetMass(CustomWeight[rag:GetModel()] or 20)
@@ -819,14 +819,14 @@ function PlayerMeta:CreateRagdoll(attacker,dmginfo,force) --изменение �
 		end
         rag.deadbody = true
 		self.fakeragdoll = nil
-		net.Start("ebal_chellele")
-		net.WriteEntity(rag)
-		net.WriteString(rag.curweapon)
+		net.Start("hg_fake_weapon")
+			net.WriteEntity(rag)
+			net.WriteString(rag.curweapon)
 		net.Broadcast()
     else
-		net.Start("ebal_chellele")
-		net.WriteEntity(self)
-		net.WriteString(self.curweapon)
+		net.Start("hg_fake_weapon")
+			net.WriteEntity(self)
+			net.WriteString(self.curweapon)
 		net.Broadcast()
 	end
 
@@ -975,7 +975,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 				ragpos:Add(angs:Forward() * 20 + rag:GetVelocity() / 10 - vector_up * 2)
 				local walkMoment = (ply.walktime + walkTime - CurTime()) / walkTime
 				lleg_goes = walkMoment * walkTime
-				
+
 				if math.Round(lleg_goes) % 2 == 0 then
 					if ldist > 0 then
 						local shadowparams = {
@@ -1035,7 +1035,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			--потом...
 			if ply:KeyDown( IN_JUMP ) and (table.Count(constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Rope' ))>0 or ((rag.IsWeld or 0) > 0)) and ply.stamina>45 and (ply.lastuntietry or 0) < CurTime() then
 				ply.lastuntietry = CurTime() + 2
-				
+
 				rag.IsWeld = math.max((rag.IsWeld or 0) - 0.1,0)
 
 				local RopeCount = table.Count(constraint.FindConstraints( ply:GetNWEntity("Ragdoll"), 'Rope' ))
@@ -1286,7 +1286,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			angs:RotateAroundAxis(angs:Forward(),90)
 			angs:RotateAroundAxis(angs:Up(),90)
 			local speed = 30
-			
+
 			if(rag.ZacConsLH.Ent2:GetVelocity():LengthSqr()<1000) then
 				local shadowparams = {
 					secondstoarrive=0.5,
@@ -1310,7 +1310,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			angs:RotateAroundAxis(angs:Forward(),90)
 			angs:RotateAroundAxis(angs:Up(),90)
 			local speed = 30
-			
+
 			if(rag.ZacConsRH.Ent2:GetVelocity():LengthSqr()<1000)then
 				local shadowparams = {
 					secondstoarrive=0.5,
@@ -1334,7 +1334,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			angs:RotateAroundAxis(angs:Forward(),90)
 			angs:RotateAroundAxis(angs:Up(),90)
 			local speed = 30
-			
+
 			if(rag.ZacConsLH.Ent2:GetVelocity():LengthSqr()<1000)then
 				local shadowparams = {
 					secondstoarrive=0.5,
@@ -1358,7 +1358,7 @@ hook.Add("Player Think","FakeControl",function(ply,time) --управление 
 			angs:RotateAroundAxis(angs:Forward(),90)
 			angs:RotateAroundAxis(angs:Up(),90)
 			local speed = 30
-			
+
 			if(rag.ZacConsRH.Ent2:GetVelocity():LengthSqr()<1000)then
 				local shadowparams = {
 					secondstoarrive=0.5,
@@ -1387,7 +1387,9 @@ hook.Add("Player Think","VelocityPlayerFallOnPlayerCheck",function(ply,time)
 		Faking(ply)
 	end
 end)
-util.AddNetworkString("ebal_chellele")
+
+util.AddNetworkString("hg_fake_weapon")
+
 hook.Add("PlayerSwitchWeapon","fakewep",function(ply,oldwep,newwep)
 	if ply.Otrub then return true end
 
@@ -1412,9 +1414,9 @@ hook.Add("PlayerSwitchWeapon","fakewep",function(ply,oldwep,newwep)
 			ply.curweapon=nil
 			ply.FakeShooting=false
 		end
-		net.Start("ebal_chellele")
-		net.WriteEntity(ply)
-		net.WriteString(ply.curweapon or "")
+		net.Start("hg_fake_weapon")
+			net.WriteEntity(ply)
+			net.WriteString(ply.curweapon or "")
 		net.Broadcast()
 		return true
 	end
