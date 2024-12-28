@@ -287,7 +287,7 @@ if CLIENT then
 				else
 					button.DoClick = function()
 						-- Отправляем команду в чат
-						RunConsoleCommand("say", command)
+						RunConsoleCommand("say", "!" .. command)
 					end
 				end
 			end
@@ -329,14 +329,17 @@ if CLIENT then
 			inputButtonGrid:Dock(TOP)
 			inputButtonGrid:SetSpaceY(5)
 			inputButtonGrid:SetSpaceX(5)
+
 			-- Добавление кнопок с полями ввода
 			addAdminButton(inputButtonGrid, "Заразить", "virus", true)
 			addAdminButton(inputButtonGrid, "Макс игроки", "setmaxplayers", true)
+
 			local Teamlabel = vgui.Create("DLabel", inputPanel)
 			Teamlabel:SetTextColor(Color(0, 0, 0))
 			Teamlabel:SetText("Смена команды")
 			Teamlabel:SetFont("DermaDefaultBold")
 			Teamlabel:Dock(TOP)
+
 			-- Панель для команды TeamForce
 			local teamForcePanel = vgui.Create("DPanel", inputPanel)
 			teamForcePanel:DockMargin(0, 0, 0, 0)

@@ -57,8 +57,9 @@ local validUserGroup = {
 	megapenis = true
 }
 
-COMMANDS.noguilt = {function(ply,args)
+COMMANDS.noguilt = {function(ply, args)
 	if not ply:IsAdmin() then return end
+
 	local value = tonumber(args[2]) > 0
 
 	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do

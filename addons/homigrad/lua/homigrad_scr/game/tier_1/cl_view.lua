@@ -286,6 +286,7 @@ local recoil = 0
 local sprinthuy = 0
 local oldview = {}
 local whitelistSimfphys = {}
+local pointshooting = false
 
 whitelistSimfphys.gred_simfphys_brdm2 = true
 whitelistSimfphys.gred_simfphys_brdm2_atgm = true
@@ -409,10 +410,6 @@ function CalcView(ply, vec, ang, fov, znear, zfar)
 		scope = IsValid(wep) and wep.IsScope and wep:IsScope() and not wep.isClose
 
 		if scope then
-			if lply:KeyPressed(IN_WALK) then
-				pointshooting = not pointshooting
-			end
-
 			if pointshooting then
 				ScopeLerp = LerpFT(GetConVar("hg_bodycam"):GetInt() == 0 and 0.1 or 1, ScopeLerp, 0.85)
 			else
@@ -898,6 +895,12 @@ function CalcView(ply, vec, ang, fov, znear, zfar)
 end
 
 hook.Add("CalcView", "VIEW", CalcView)
+
+hook.Add("PlayerButtonDown", "TogglePointshooting", function(ply, button)
+	if button == KEY_LALT then
+		pointshooting = not pointshooting
+	end
+end)
 
 hide = {
 	["CHudHealth"] = true,

@@ -133,11 +133,11 @@ local function ToggleScoreboard(toggle)
 
 			draw.SimpleText("HOMIGRAD","HomigradFontLarge",w / 2,h / 2,Color(155,155,165,5),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			--draw.SimpleText("HOMIGRADED","HomigradFontLarge",w / 2,h / 2,Color(155,155,165,5),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-			
-			draw.SimpleText("Frags | Deaths","HomigradFont",w - 300,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+
+			-- draw.SimpleText("Убийства/Смерти","HomigradFont",w - 300,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			--draw.SimpleText("Дни Часы Минуты","HomigradFont",w - 300,20,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			--draw.SimpleText("M","HomigradFont",w - 300 + 15,15,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
-			
+
 
 			draw.SimpleText("Пинг","HomigradFont",w - 200,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 			draw.SimpleText("Команда","HomigradFont",w - 100,15,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
@@ -239,7 +239,6 @@ local function ToggleScoreboard(toggle)
 			end
 
 			local name1 = ply:Name()
-			local team = ply:Team()
 			local alive
 			local alivecol
 			local colorAdd
@@ -289,11 +288,11 @@ local function ToggleScoreboard(toggle)
 
 				draw.SimpleText(alive,"HomigradFont",100,h / 2,alivecol,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 				draw.SimpleText(name1,"HomigradFont",w / 2,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
-				
-				-- if not ply.TimeStart then
-					local kd = ply:Deaths() .. " | " .. ply:Frags()
 
-					draw.SimpleText(kd,"HomigradFont",w - 300,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+				-- if not ply.TimeStart then
+					-- local kd = ply:Frags() .. "/" .. ply:Deaths()
+
+					-- draw.SimpleText(kd,"HomigradFont",w - 300,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 				-- else
 				-- 	local time = math.floor(CurTime() - ply.TimeStart + (ply.Time or 0))
 				-- 	local dTime,hTime,mTime = math.floor(time / 60 / 60 / 24),tostring(math.floor(time / 60 / 60) % 24),tostring(math.floor(time / 60) % 60)
@@ -302,7 +301,7 @@ local function ToggleScoreboard(toggle)
 				-- 	draw.SimpleText(hTime,"HomigradFont",w - 300,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 				-- 	draw.SimpleText(mTime,"HomigradFont",w - 300 + 15,h / 2,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 				-- end
-				
+
 				draw.SimpleText(ply:Ping(),"HomigradFont",w - 200,h / 2,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 
 				local name,color = ply:PlayerClassEvent("TeamName")
@@ -375,7 +374,7 @@ local function ToggleScoreboard(toggle)
 		end
 	else
 		ToggleScoreboard_Override = nil
-		
+
 		if IsValid(HomigradScoreboard) then
 			HomigradScoreboard:Close()
 		end
@@ -384,7 +383,7 @@ local function ToggleScoreboard(toggle)
 			if not IsValid(panel) then continue end
 
 			if panel.Close then panel:Close() else panel:Remove() end
-		end 
+		end
 	end
 end
 

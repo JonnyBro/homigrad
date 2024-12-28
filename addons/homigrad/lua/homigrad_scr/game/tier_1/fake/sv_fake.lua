@@ -792,7 +792,7 @@ function PlayerMeta:CreateRagdoll(attacker,dmginfo,force) --изменение �
 
 	if not self:Alive() then
 		net.Start("pophead")
-		net.WriteEntity(rag)
+			net.WriteEntity(rag)
 		net.Send(self)
         rag.Info=self.Info
         if IsValid(self:GetActiveWeapon()) then

@@ -132,7 +132,6 @@ if engine.ActiveGamemode() == "homigrad" then
 	vecZero = Vector(0,0,0)
 	function SpawnWeapon(ply,clip1)
 		--local guninfo = ply.GunInfo
-		--local guninfo = ply.GunInfo луа очень легкий
 
 		if !IsValid(ply.wep) and table.HasValue(Guns,ply.curweapon) then
 			local rag = ply:GetNWEntity("Ragdoll")
@@ -198,6 +197,7 @@ if engine.ActiveGamemode() == "homigrad" then
 					net.WriteEntity(ply)
 					net.WriteString(ply.curweapon)
 				net.Broadcast()
+
 				rag.wep = ply.wep
 				rag.wep:CallOnRemove("inv",remove,rag)
 				ply.wep.rag = rag
