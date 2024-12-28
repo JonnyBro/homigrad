@@ -1,0 +1,44 @@
+SWEP.Base = "kaban_base" -- base 
+SWEP.PrintName = "AR15"
+SWEP.Author = "ArmaLite"
+SWEP.Instructions = "Approved by Brenton Tarrant"
+SWEP.Category = "CSS-Пушечки"
+SWEP.Spawnable = true
+SWEP.AdminOnly = false
+------------------------------------------
+SWEP.Primary.ClipSize = 30
+SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize * 2
+SWEP.Primary.Automatic = false
+SWEP.Primary.Ammo = "smg1"
+SWEP.Primary.Cone = 0.006
+SWEP.Primary.Damage = 150
+SWEP.Primary.Spread = 0
+SWEP.Primary.Sound = "weapons/aug/aug-1.wav"
+SWEP.Primary.Force = 80
+SWEP.ReloadTime = 2
+SWEP.ShootWait = 0.10
+SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
+SWEP.TwoHands = true
+SWEP.Secondary.ClipSize = -1
+SWEP.Secondary.DefaultClip = -1
+SWEP.Secondary.Automatic = false
+SWEP.Secondary.Ammo = "none"
+------------------------------------------
+SWEP.Weight = 5
+SWEP.AutoSwitchTo = false
+SWEP.AutoSwitchFrom = false
+SWEP.HoldType = "ar2"
+------------------------------------------
+SWEP.Slot = 2
+SWEP.SlotPos = 2
+SWEP.DrawAmmo = true
+SWEP.DrawCrosshair = false
+SWEP.ViewModel = "models/weapons/w_rif_m4a1.mdl"
+SWEP.WorldModel = "models/weapons/w_rif_m4a1.mdl"
+SWEP.addPos = Vector(11, -1.05, 5)
+SWEP.addAng = Angle(-8, -0.05, 0)
+SWEP.sightPos = Vector(6.3, 6, 1)
+SWEP.sightAng = Angle(-5, -2.5, 0)
+SWEP.fakeHandRight = Vector(10, -2, 0)
+SWEP.fakeHandLeft = Vector(13, -3, -7)
+SWEP.Recoil = 0.8

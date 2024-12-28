@@ -1,0 +1,45 @@
+SWEP.Base = "kaban_base" -- base 
+SWEP.PrintName = "Saiga-12"
+SWEP.Author = "Kalashnikov"
+SWEP.Instructions = "САЙГА!! БАМ БАМ БАМ!"
+SWEP.Category = "CSS-Пушечки"
+SWEP.Spawnable = true
+SWEP.AdminOnly = false
+------------------------------------------
+SWEP.Primary.ClipSize = 12
+SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize * 2
+SWEP.Primary.Automatic = true
+SWEP.Primary.Ammo = "buckshot"
+SWEP.Primary.Cone = 0.04
+SWEP.Primary.Damage = 50
+SWEP.Primary.Spread = 0
+SWEP.NumBullet = 8
+SWEP.Primary.Sound = "weapons/xm1014/xm1014-1.wav"
+SWEP.Primary.Force = 45
+SWEP.ReloadTime = 2.3
+SWEP.ShootWait = 0.256
+SWEP.ReloadSound = "weapons/shotgun/shotgun_reload1.wav"
+SWEP.TwoHands = true
+SWEP.Secondary.ClipSize = -1
+SWEP.Secondary.DefaultClip = -1
+SWEP.Secondary.Automatic = false
+SWEP.Secondary.Ammo = "none"
+------------------------------------------
+SWEP.Weight = 10
+SWEP.AutoSwitchTo = false
+SWEP.AutoSwitchFrom = false
+SWEP.HoldType = "ar2"
+------------------------------------------
+SWEP.Slot = 4
+SWEP.SlotPos = 2
+SWEP.DrawAmmo = true
+SWEP.DrawCrosshair = false
+SWEP.ViewModel = "models/weapons/salatbase/w_rif_galil.mdl"
+SWEP.WorldModel = "models/weapons/salatbase/w_rif_galil.mdl"
+SWEP.addPos = Vector(10, -1.05, 5)
+SWEP.addAng = Angle(-10, -0.05, 0)
+SWEP.sightPos = Vector(5.1, 6, 0.75)
+SWEP.sightAng = Angle(-5, -2.5, 0)
+SWEP.fakeHandRight = Vector(12, -2, 0)
+SWEP.fakeHandLeft = Vector(13, -3, -5)
+SWEP.Recoil = 2.1
