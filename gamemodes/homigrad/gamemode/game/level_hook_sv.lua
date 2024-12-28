@@ -56,7 +56,9 @@ hook.Add("PlayerDeath","level",function(ply,att,dmgInfo)
 	if func then return func(ply,att,dmgInfo) end
 end)
 
-hook.Add("Think","level",function() --creating startup error, but it does important shit.
+hook.Add("Think","level",function()
+	if not TableRound().Think then return end
+
 	local func = TableRound().Think
 	if func then func() end
 end)

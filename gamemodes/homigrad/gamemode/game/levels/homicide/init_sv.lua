@@ -132,6 +132,8 @@ local function makeT(ply)
 end
 
 local function makeCT(ply)
+	if not ply then return end
+
 	ply.roleCT = true
 	table.insert(homicide.ct, ply)
 
