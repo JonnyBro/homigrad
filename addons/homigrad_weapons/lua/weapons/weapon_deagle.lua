@@ -119,6 +119,7 @@ end
 
 function SWEP:CanFireBullet()
 	if not IsFirstTimePredicted() then return end
+
 	self.tries = self.tries or 1
 	self.tries = self.tries - 1
 

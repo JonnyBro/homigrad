@@ -9,14 +9,15 @@ ENT.JModPreferredCarryAngles = Angle(-90, 90, 0)
 
 if SERVER then
 	function ENT:Initialize()
-		self.Entity:SetModel("models/props_junk/wood_crate001a.mdl")
-		self.Entity:SetMaterial("models/mat_jack_aidbox")
-		self.Entity:PhysicsInit(SOLID_VPHYSICS)
-		self.Entity:SetMoveType(MOVETYPE_VPHYSICS)
-		self.Entity:SetSolid(SOLID_VPHYSICS)
-		self.Entity:DrawShadow(true)
+		self:SetModel("models/props_junk/wood_crate001a.mdl")
+		self:SetMaterial("models/mat_jack_aidbox")
+		self:PhysicsInit(SOLID_VPHYSICS)
+		self:SetMoveType(MOVETYPE_VPHYSICS)
+		self:SetSolid(SOLID_VPHYSICS)
+		self:DrawShadow(true)
 		self.InitialVel = self.InitialVel or Vector(0, 0, 0)
-		local Phys = self.Entity:GetPhysicsObject()
+
+		local Phys = self:GetPhysicsObject()
 
 		if IsValid(Phys) then
 			Phys:Wake()
@@ -44,16 +45,19 @@ if SERVER then
 
 	function ENT:PhysicsCollide(data, physobj)
 		if data.Speed > 2000 and data.DeltaTime > .2 then
-			self.Entity:EmitSound("Boulder.ImpactHard")
-			self.Entity:EmitSound("Canister.ImpactHard")
-			self.Entity:EmitSound("Boulder.ImpactHard")
-			self.Entity:EmitSound("Canister.ImpactHard")
-			self.Entity:EmitSound("Boulder.ImpactHard")
+			self:EmitSound("Boulder.ImpactHard")
+			self:EmitSound("Canister.ImpactHard")
+			self:EmitSound("Boulder.ImpactHard")
+			self:EmitSound("Canister.ImpactHard")
+			self:EmitSound("Boulder.ImpactHard")
+
 			util.ScreenShake(data.HitPos, 99999, 99999, .5, 500)
+
 			local Poof = EffectData()
 			Poof:SetOrigin(data.HitPos)
 			Poof:SetScale(5)
 			Poof:SetNormal(data.HitNormal)
+
 			util.Effect("eff_jack_aidimpact", Poof, true, true)
 
 			local Tr = util.QuickTrace(data.HitPos - data.OurOldVelocity, data.OurOldVelocity * 50, {self})
@@ -62,7 +66,7 @@ if SERVER then
 				util.Decal("Rollermine.Crater", Tr.HitPos + Tr.HitNormal, Tr.HitPos - Tr.HitNormal)
 			end
 		elseif data.Speed > 80 and data.DeltaTime > .2 then
-			self.Entity:EmitSound("Canister.ImpactHard")
+			self:EmitSound("Canister.ImpactHard")
 		end
 
 		if data.DeltaTime > .1 then
@@ -73,7 +77,7 @@ if SERVER then
 	end
 
 	function ENT:OnTakeDamage(dmginfo)
-		self.Entity:TakePhysicsDamage(dmginfo)
+		self:TakePhysicsDamage(dmginfo)
 	end
 
 	local function SpawnItem(itemClass, pos, owner, resourceAmt)
@@ -158,26 +162,31 @@ if SERVER then
 	end
 
 	function ENT:Use(activator, caller)
-		--if true then return end
 		local Pos = self:LocalToWorld(self:OBBCenter() + Vector(0, 0, 10))
 		local Up = self:GetUp()
 		local Right = self:GetRight()
 		local Forward = self:GetForward()
 		local Ang = self:GetAngles()
 		local AngLat = self:GetAngles()
+
 		AngLat:RotateAroundAxis(AngLat:Forward(), 90)
+
 		local AngLin = self:GetAngles()
 		AngLin:RotateAroundAxis(AngLin:Right(), 90)
+
 		self:MakeSide(Pos + Up * 15, Ang, Up)
 		self:MakeSide(Pos - Up * 15, Ang, -Up)
 		self:MakeSide(Pos + Right * 15, AngLat, Right)
 		self:MakeSide(Pos - Right * 15, AngLat, -Right)
 		self:MakeSide(Pos + Forward * 15, AngLin, Forward)
 		self:MakeSide(Pos - Forward * 15, AngLin, -Forward)
+
 		local Poof = EffectData()
 		Poof:SetOrigin(Pos)
 		Poof:SetScale(2)
+
 		util.Effect("eff_jack_aidopen", Poof, true, true)
+
 		self:EmitSound("snd_jack_aidboxopen.wav", 75, 100)
 		self:EmitSound("snd_jack_aidboxopen.wav", 75, 100)
 		self:EmitSound("snd_jack_aidboxopen.wav", 75, 100)
@@ -187,7 +196,6 @@ if SERVER then
 			{"item_ammo_pistol", 40}
 		}, Pos, activator)
 
-		--JackaGenericUseEffect(activator)
 		if activator:IsPlayer() then
 			local Wep = activator:GetActiveWeapon()
 
@@ -219,6 +227,7 @@ if SERVER then
 		Side:GetPhysicsObject():SetVelocity(self:GetPhysicsObject():GetVelocity())
 		Side:GetPhysicsObject():ApplyForceCenter(dir * 2000)
 		Side:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+
 		SafeRemoveEntityDelayed(Side, math.random(8, 16))
 	end
 
@@ -228,6 +237,7 @@ if SERVER then
 		if not self.DoneDropping then
 			if self:GetVelocity():Length() < 200 then
 				self.DoneDropping = true
+
 				self:GetPhysicsObject():SetDragCoefficient(1)
 				self:GetPhysicsObject():SetAngleDragCoefficient(1)
 				self:SetDTBool(0, false)
@@ -249,7 +259,9 @@ if SERVER then
 				Foof:SetNormal(self:GetUp())
 				Foof:SetAngles(Angle(100, 255, 100))
 				Foof:SetStart(self:GetVelocity())
+
 				util.Effect("eff_jack_gmod_aidboxsignal", Foof, true, true)
+
 				self:NextThink(Time + .1)
 
 				return true
@@ -296,8 +308,10 @@ if CLIENT then
 				if Vel:Length() > 0 then
 					local Dir = Vel:GetNormalized()
 					Dir = Dir + Vector(.01, 0, 0) -- stop the turn spasming
+
 					local Ang = Dir:Angle()
 					Ang:RotateAroundAxis(Ang:Right(), 90)
+
 					self.Parachute:SetRenderOrigin(Pos + Dir * 50)
 					self.Parachute:SetRenderAngles(Ang)
 					self.Parachute:DrawModel()

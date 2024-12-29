@@ -1,6 +1,17 @@
 util.AddNetworkString("muzzle")
 util.AddNetworkString("nomuzzle")
 
+local function GetTeamSpawns(ply)
+	local spawnsT,spawnsCT = tdm.SpawnsTwoCommand()
+
+    if ply:Team() == 1 then
+        return spawnsT
+    elseif ply:Team() == 2 then
+        return spawnsCT
+    else
+        return false
+    end
+end
 
 function scout.SpawnsTwoCommand()
 	local spawnsT = ReadDataMap("spawnpointst")
@@ -38,7 +49,7 @@ function scout.Think()
                 players[v:Team()] = players[v:Team()] or {}
                 players[v:Team()][v] = true
             end
-    
+
             /*for i,list in pairs(players) do
                 scout.SelectRandomPlayers(list[1],6,scout.GiveAidPhone)
                 scout.SelectRandomPlayers(list[2],6,scout.GiveAidPhone)
@@ -241,7 +252,7 @@ function scout.PlayerSpawn(ply,teamID)
 	if math.random(1,4) == 4 then ply:Give("morphine") end
 	ply.allowFlashlights = true
 
-	
+
 
 	--local r = math.random(1,3)
 	--ply:Give(r == 1 and "food_fishcan" or r == 2 and "food_spongebob_home" or r == 3 and "food_lays")

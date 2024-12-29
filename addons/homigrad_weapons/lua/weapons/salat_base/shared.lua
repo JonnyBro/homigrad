@@ -610,6 +610,7 @@ end
 
 function SWEP:IsScope()
 	local ply = self:GetOwner()
+
 	if ply:IsNPC() then return end
 
 	if self:IsLocal() or SERVER then
@@ -622,6 +623,7 @@ end
 if SERVER then
 	concommand.Add("suicide", function(ply)
 		if not ply:Alive() then return end
+
 		ply.suiciding = not ply.suiciding
 		ply:SetNWBool("Suiciding", ply.suiciding)
 	end)
@@ -757,6 +759,7 @@ end
 function SWEP:Holster(wep)
 	if not self:GetOwner() then return end
 	local ply = self:GetOwner()
+
 	if not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end
 
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"), Angle(0, 0, 0))

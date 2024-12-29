@@ -47,7 +47,7 @@ hook.Add("Player Think","Looting",function(ply)
 			if not IsValid(hitEnt) then return end
 			if hitEnt:IsPlayer() and hitEnt:Alive() and not hitEnt.fake then return end
 			if not hitEnt.Info then return end
-			
+
 			hitEnt.UsersInventory = hitEnt.UsersInventory or {}
 			hitEnt.UsersInventory[ply] = true
 
@@ -88,7 +88,7 @@ net.Receive("ply_take_item",function(len,ply)
 
 	local lootInfo = lootEnt.Info
 	local wepInfo = lootInfo.Weapons[wep]
-	
+
 	if not wepInfo then return end
 
 	if prekol[wep] and not ply:IsAdmin() then ply:Kick("xd))00") return end
@@ -99,15 +99,15 @@ net.Receive("ply_take_item",function(len,ply)
 			ply:GiveAmmo(wepInfo.Clip1,wepInfo.AmmoType)
 			wepInfo.Clip1 = 0
 		else
-			ply:ChatPrint("У тебя уже есть это оружие.")
+			ply:ChatPrint("У тебя уже есть этот предмет.")
 		end
 	else
 		if lootEnt:IsPlayer() and (lootEnt.curweapon == wep and not lootEnt.Otrub) then return end
-		
+
 		ply.slots = ply.slots or {}
-		
+
 		local realwep = weapons.Get(wep)
-		
+
 		if IsValid(lootEnt.wep) and lootEnt.curweapon == wep then
 			DespawnWeapon(lootEnt)
 			lootEnt.wep:Remove()
@@ -119,7 +119,7 @@ net.Receive("ply_take_item",function(len,ply)
 		if IsValid(wep1) and wep1:IsWeapon() then
 			wep1:SetClip1(wepInfo.Clip1 or 0)
 		end
-		
+
 		ply:SelectWeapon(actwep:GetClass())
 
 		if lootEnt:IsPlayer() then lootEnt:StripWeapon(wep) end

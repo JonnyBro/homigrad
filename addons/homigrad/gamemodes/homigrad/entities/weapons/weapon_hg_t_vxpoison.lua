@@ -27,20 +27,18 @@ SWEP.dwmARight = 180
 SWEP.dwmAForward = 0
 
 local function eyeTrace(ply)
-    local att1 = ply:LookupAttachment("eyes")
+	local att1 = ply:LookupAttachment("eyes")
+	if not att1 then return end
 
-    if not att1 then return end
+	local att = ply:GetAttachment(att1)
+	if not att then return end
 
-    local att = ply:GetAttachment(att1)
+	local tr = {}
+	tr.start = att.Pos
+	tr.endpos = tr.start + ply:EyeAngles():Forward() * 50
+	tr.filter = ply
 
-    if not att then return end
-
-    local tr = {}
-    tr.start = att.Pos
-    tr.endpos = tr.start + ply:EyeAngles():Forward() * 50
-    tr.filter = ply
-
-    return util.TraceLine(tr)
+	return util.TraceLine(tr)
 end
 
 function SWEP:Initialize()
@@ -48,72 +46,69 @@ function SWEP:Initialize()
 end
 
 function SWEP:PrimaryAttack()
-    if CLIENT then return end
+	if CLIENT then return end
 
-    local ent = eyeTrace(self:GetOwner()).Entity
+	local ent = eyeTrace(self:GetOwner()).Entity
 
-    if not IsValid(ent) or ent:IsWorld() or ent:IsPlayer() then return end
-
-    self:Poison(ent)
+	if not IsValid(ent) or ent:IsWorld() or ent:IsPlayer() then return end
+	self:Poison(ent)
 end
 
-function SWEP:SecondaryAttack() end
+function SWEP:SecondaryAttack()
+end
 
 if SERVER then
+	function SWEP:Poison(ent)
+		ent.poisoned = true
+		self:GetOwner():EmitSound("snd_jack_hmcd_needleprick.wav", 30)
+		self:Remove()
+		self:GetOwner():SelectWeapon("weapon_hands")
 
-    function SWEP:Poison(ent)
-        ent.poisoned = true
-        self:GetOwner():EmitSound("snd_jack_hmcd_needleprick.wav",30)
-        self:Remove()
-        self:GetOwner():SelectWeapon("weapon_hands")
-        
-        return false
-    end
+		return false
+	end
 
-    hook.Add("PlayerUse","poisoneditem",function(ply,ent)
-        if not ent.poisoned then return end
+	hook.Add("PlayerUse", "poisoneditem", function(ply, ent)
+		if not ent.poisoned then return end
 
-        ply.otravlen2 = true
-        timer.Create("Cyanid"..ply:EntIndex().."12", 30, 1, function()
-            if ply:Alive() and ply.otravlen2 then
-                ply:EmitSound("vo/npc/male01/moan0"..math.random(1,5)..".wav",60)
-            end
+		ply.otravlen2 = true
 
-            timer.Create( "Cyanid"..ply:EntIndex().."22", 10, 1, function()
-                if ply:Alive() and ply.otravlen2 then
-                    ply:EmitSound("vo/npc/male01/moan0"..math.random(1,5)..".wav",60)
-                end
-            end)
+		timer.Create("Cyanid" .. ply:EntIndex() .. "12", 30, 1, function()
+			if ply:Alive() and ply.otravlen2 then
+				ply:EmitSound("vo/npc/male01/moan0" .. math.random(1, 5) .. ".wav", 60)
+			end
 
-            timer.Create( "Cyanid"..ply:EntIndex().."32", 15, 1, function()
-                if ply:Alive() and ply.otravlen2 then
-                    ply.KillReason = "poison"
-                    ply:Kill()
-                end
-            end)
-        end)
+			timer.Create("Cyanid" .. ply:EntIndex() .. "22", 10, 1, function()
+				if ply:Alive() and ply.otravlen2 then
+					ply:EmitSound("vo/npc/male01/moan0" .. math.random(1, 5) .. ".wav", 60)
+				end
+			end)
 
-        ent.poisoned = false
-    end)
+			timer.Create("Cyanid" .. ply:EntIndex() .. "32", 15, 1, function()
+				if ply:Alive() and ply.otravlen2 then
+					ply.KillReason = "poison"
+					ply:Kill()
+				end
+			end)
+		end)
 
-    function SWEP:Think()
-        
-    end
+		ent.poisoned = false
+	end)
 
+	function SWEP:Think()
+	end
 else
+	function SWEP:DrawHUD()
+		local owner = self:GetOwner()
+		local traceResult = eyeTrace(owner)
+		local ent = traceResult.Entity
 
-    function SWEP:DrawHUD()
-        local owner = self:GetOwner()
-        local traceResult = eyeTrace(owner)
-        local ent = traceResult.Entity
+		if not traceResult.Hit or not IsValid(ent) or ent:IsWorld() or ent:IsPlayer() then return end
 
-        if not traceResult.Hit or not IsValid(ent) or ent:IsWorld() or ent:IsPlayer() then return end
-        
-        local frac = traceResult.Fraction
+		local frac = traceResult.Fraction
 
-        surface.SetDrawColor(Color(255, 255, 255, 255))
-        draw.NoTexture()
-        Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
-        draw.DrawText("Отравить предмет","TargetID",traceResult.HitPos:ToScreen().x,traceResult.HitPos:ToScreen().y - 40,color_white,TEXT_ALIGN_CENTER)
-    end
+		surface.SetDrawColor(Color(255, 255, 255, 255))
+		draw.NoTexture()
+		Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
+		draw.DrawText("Отравить предмет", "TargetID", traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y - 40, color_white, TEXT_ALIGN_CENTER)
+	end
 end

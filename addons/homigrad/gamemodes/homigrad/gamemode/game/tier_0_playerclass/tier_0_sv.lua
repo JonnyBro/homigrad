@@ -25,7 +25,7 @@ util.AddNetworkString("setupclass")
 hook.Add("PlayerInitializeSpawn","PlayerClass",function(plySend)
     for i,ply in pairs(player.GetAll()) do
         if not ply:GetPlayerClass() then continue end
-        
+
         net.Start("setupclass")
         net.WriteEntity(ply)
         net.WriteString(ply:GetNWString("Class"))
@@ -40,12 +40,17 @@ hook.Add("PlayerDeath","PlayerClass",function(ply,inf,att)
     ply:PlayerClassEvent("PlayerDeath",att)
 end)
 
-COMMANDS.playerclass = {function(ply,args)
-    for i,ply2 in pairs(player.GetListByName(args[1]) or {ply}) do
-        ply2:SetPlayerClass(args[2])
-        ply:ChatPrint(ply2:Name())
-    end
-end}
+COMMANDS.playerclass = {
+	function(ply, args)
+		local plrList = player.GetListByName(ply, args[1])
+		if not plrList then return ply:ChatPrint("Игрок(и) не найдены") end
+
+		for i, ply2 in pairs(plrList) do
+			ply2:SetPlayerClass(args[2])
+			ply:ChatPrint(ply2:Name())
+		end
+	end
+}
 
 hook.Add("Player Start Voice","PlayerClass",function(ply)
     ply:PlayerClassEvent("PlayerStartVoice")

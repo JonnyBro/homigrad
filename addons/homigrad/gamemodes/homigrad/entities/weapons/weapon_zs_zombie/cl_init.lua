@@ -8,10 +8,12 @@ end
 
 function SWEP:DrawWorldModel()
 end
+
 SWEP.DrawWorldModelTranslucent = SWEP.DrawWorldModel
 
 function SWEP:DrawHUD()
 	if GetConVar("crosshair"):GetInt() ~= 1 then return end
+
 	self:DrawCrosshairDot()
 end
 

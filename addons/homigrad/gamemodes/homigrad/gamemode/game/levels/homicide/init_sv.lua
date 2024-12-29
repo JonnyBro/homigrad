@@ -140,7 +140,7 @@ local function makeCT(ply)
 
 	if homicide.roundType == 1 then
 		local wep = ply:Give("weapon_doublebarrel_dulo")
-		ply:GiveAmmo(4, "12/70 gauge", true) -- slots = bullets.
+		ply:GiveAmmo(4, "12/70 gauge", true)
 		wep:SetClip1(wep:GetMaxClip1())
 
 		AddNotificate(ply, "Вы невиновный с дробовиком вашего деда.")
@@ -156,8 +156,7 @@ local function makeCT(ply)
 
 		AddNotificate(ply, "Вы полицейский под прикрытием. Вам выдан шокер и дубинка\nВаша задача: связать преступника.")
 	elseif homicide.roundType == 4 then
-		local wep = ply:Give("weapon_deagle")
-		wep:SetClip1(wep:GetMaxClip1())
+		ply:Give("weapon_deagle")
 
 		AddNotificate(ply, "Вы невиновный ковбой с револьвером в кобуре.")
 	end
@@ -167,8 +166,11 @@ COMMANDS.russian_roulette = {
 	function(ply, args)
 		if not ply:IsAdmin() then return end
 
-		for i, plya in pairs(player.GetListByName(args[1]) or {ply}) do
-			local wep = plya:Give("weapon_deagle", true)
+		local plrList = player.GetListByName(ply, args[1])
+		if not plrList then return ply:ChatPrint("Игрок(и) не найдены") end
+
+		for i, plr in pairs(plrList) do
+			local wep = plr:Give("weapon_deagle", true)
 			wep:SetClip1(1)
 			wep:RollDrum()
 		end

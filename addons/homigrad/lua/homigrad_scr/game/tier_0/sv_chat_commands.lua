@@ -187,23 +187,16 @@ COMMANDS.viptest = {function(ply,args)
 end}
 
 concommand.Add("setrolesilent", function(ply, cmd, args)
-    if not ply:IsAdmin() then
-        ply:ChatPrint("Динаху.")
-        return
-    end
+    if not ply:IsAdmin() then return end
 
-    if #args < 2 then
-        ply:ChatPrint("Используйте: setrolesilent <имя_игрока> <T|CT>")
-        return
-    end
+    if #args < 2 then return ply:ChatPrint("Используйте: setrolesilent <имя_игрока> <T|CT>") end
 
-    -- Ищем игрока по имени, поддержка множественного выбора или выбор самого себя
-    local targetPlayers = player.GetListByName(args[1]) or {ply}
+	local targetPlayers = player.GetListByName(ply, args[1])
+	if not targetPlayers then return ply:ChatPrint("Игрок(и) не найдены") end
 
     for _, targetPlayer in pairs(targetPlayers) do
         if not IsValid(targetPlayer) then
-            ply:ChatPrint("Игрок " .. args[1] .. " не найден.")
-            return
+            return ply:ChatPrint("Игрок " .. args[1] .. " не найден.")
         end
 
         local role = string.upper(args[2])  -- Получаем роль (T или CT)
@@ -232,7 +225,7 @@ concommand.Add("setrolesilentplayer", function(ply, cmd, args)
     end
 
     -- Ищем игрока по имени, поддержка множественного выбора или выбор самого себя
-    local targetPlayers = player.GetListByName(args[1]) or {ply}
+    local targetPlayers = player.GetListByName(ply, args[1])
 
     for _, targetPlayer in pairs(targetPlayers) do
         if not IsValid(targetPlayer) then
@@ -392,33 +385,35 @@ end}
 
 CloseDev = tobool(SData_Get("dev"))
 
-COMMANDS.closedev = {function(ply,args)
-	CloseDev = tonumber(args[1]) > 0
+COMMANDS.closedev = {
+	function(ply, args)
+		CloseDev = tonumber(args[1]) > 0
+		SData_Set("dev", tostring(CloseDev))
 
-	SData_Set("dev",tostring(CloseDev))
-
-	if CloseDev then
-		PrintMessageChat(3,"Сервер закрыт. fuck you!")
-	else
-		PrintMessageChat(3,"Сервер открыт")
+		if CloseDev then
+			PrintMessageChat(3, "Сервер закрыт")
+		else
+			PrintMessageChat(3, "Сервер открыт")
+		end
 	end
-end}
+}
 
-function player.GetListByName(name)
-	local list = {}
+function player.GetListByName(plr, name)
+	local tbl = {}
 
 	if name == "^" then
-		return
+		return {plr}
 	elseif name == "*" then
-
 		return player.GetAll()
 	end
 
-	for i,ply in pairs(player.GetAll()) do
-		if string.find(string.lower(ply:Name()),string.lower(name)) then list[#list + 1] = ply end
+	for i, ply in pairs(player.GetAll()) do
+		if string.find(string.lower(ply:Name()), string.lower(name)) then
+			tbl[#tbl + 1] = ply
+		end
 	end
 
-	return list
+	return (not table.IsEmpty(tbl) and tbl) or nil
 end
 
 COMMANDS.submat = {function(ply,args)

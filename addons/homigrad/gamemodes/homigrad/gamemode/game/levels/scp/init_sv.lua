@@ -1,6 +1,6 @@
-resource.AddWorkshop("779759026")--049
-resource.AddWorkshop("367531149")--096
-resource.AddWorkshop("830210642")--173
+resource.AddWorkshop("779759026") -- scp 049
+resource.AddWorkshop("367531149") -- scp 096
+resource.AddWorkshop("830210642") -- scp 173
 
 function scp.SpawnSCP(ply,id)
     ply:SetTeam(3)
@@ -27,7 +27,7 @@ function scp.StartRoundSV()
     local ply,key = table.Random(players)
     players[key] = nil
     scp.SpawnSCP(ply,"096")
-    
+
     local count = #players
     local countWhite = math.ceil(count * 0.25)
     local countBlue = math.ceil(count * 0.25)
@@ -78,7 +78,7 @@ function scp.StartRoundSV()
 
     for i,ent in pairs(ents.FindByClass("func_button")) do
         if ent:GetModel() ~= "*175" then continue end
-    
+
         ent:Fire("Use")
     end
 

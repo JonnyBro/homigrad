@@ -61,8 +61,10 @@ COMMANDS.noguilt = {function(ply, args)
 	if not ply:IsAdmin() then return end
 
 	local value = tonumber(args[2]) > 0
+	local plrList = player.GetListByName(ply, args[1])
+	if not plrList then return ply:ChatPrint("Игрок(и) не найдены") end
 
-	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+	for i,ply in pairs(plrList) do
 		ply.noguilt = value
 		ply:ChatPrint("Guilt Protect: " .. tostring(value))
 	end
@@ -71,43 +73,50 @@ end,1}
 COMMANDS.fake = {function(ply,args)
 	if not ply:IsAdmin() then return end
 
-	for i,ply in pairs(player.GetListByName(args[1]) or {ply}) do
+	local plrList = player.GetListByName(ply, args[1])
+	if not plrList then return ply:ChatPrint("Игрок(и) не найдены") end
+
+	for i,ply in pairs(plrList) do
 		Faking(ply)
 	end
 end,1}
 
 concommand.Add("faketarget", function(ply, cmd, args)
-    if not ply:IsAdmin() then return end
+	if not ply:IsAdmin() then return end
 
-    local targets = {}
+	local targets = {}
 
-    if args[1] == "@" then
-        local tr = ply:GetEyeTrace()
-        if IsValid(tr.Entity) then
-            if tr.Entity:IsPlayer() then
-                table.insert(targets, tr.Entity)
-            elseif tr.Entity:IsRagdoll() then
-                local owner = RagdollOwner(tr.Entity)
-                if IsValid(owner) then
-                    table.insert(targets, owner)
-                end
-            end
-        else
-            return
-        end
-    elseif args[1] then
-        targets = player.GetListByName(args[1])
-        if not targets or #targets == 0 then
-            ply:ChatPrint("No valid targets found.")
-            return
-        end
-    else
-        table.insert(targets, ply)
-    end
+	if args[1] == "@" then
+		local tr = ply:GetEyeTrace()
 
-    for _, target in ipairs(targets) do
-        Faking(target)
-    end
+		if IsValid(tr.Entity) then
+			if tr.Entity:IsPlayer() then
+				table.insert(targets, tr.Entity)
+			elseif tr.Entity:IsRagdoll() then
+				local owner = RagdollOwner(tr.Entity)
+
+				if IsValid(owner) then
+					table.insert(targets, owner)
+				end
+			end
+		else
+			return
+		end
+	elseif args[1] then
+		targets = player.GetListByName(ply, args[1])
+
+		if not targets then
+			ply:ChatPrint("No valid targets found.")
+
+			return
+		end
+	else
+		table.insert(targets, ply)
+	end
+
+	for _, target in ipairs(targets) do
+		Faking(target)
+	end
 end)
 
 

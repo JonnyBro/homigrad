@@ -62,6 +62,8 @@ if SERVER then
 
 		---
 		timer.Simple(.01, function()
+			if not self:GetPhysicsObject() then return end
+
 			self:GetPhysicsObject():SetMass(4)
 			self:GetPhysicsObject():Wake()
 		end)
@@ -93,7 +95,7 @@ if SERVER then
 	function ENT:Use(activator)
 		local Alt = activator:KeyDown(IN_WALK)
 		if Alt then
-		
+
 			if activator.JackyArmor and (#table.GetKeys(activator.JackyArmor) > 0) then return end
 
 			JMod.EZ_Equip_Armor(activator, self)

@@ -151,6 +151,7 @@ hook.Add("RenderScene", "octoweapons", function(pos, angle, fov)
 end)
 
 local whitelistweps = {
+	["weapon_physcannon"] = true,
 	["weapon_physgun"] = true,
 	["gmod_tool"] = true,
 	["gmod_camera"] = true,

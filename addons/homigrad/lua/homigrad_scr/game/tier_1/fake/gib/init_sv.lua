@@ -1,4 +1,5 @@
-if engine.ActiveGamemode() == "homigrad" then
+if engine.ActiveGamemode() ~= "homigrad" then return end
+
 local vecZero = Vector(0,0,0)
 local vecInf = Vector(0,0,0) / 0
 
@@ -111,8 +112,6 @@ function Gib_Input(rag,bone,dmgInfo)
 
 		BloodParticleExplode(rag:GetPhysicsObject(phys_bone):GetPos())
 
-		--rag:Remove()
-
 		return
 	end
 	end
@@ -160,28 +159,25 @@ hook.Add("PlayerDeath","Gib",function(ply)
 	dmgInfo = ply.LastDMGInfo
 	if not dmgInfo then return end
 
-	--разве это не смешно когда ножом башка взрывается?
-	--нет
-	
 	if dmgInfo:GetDamage() >= 350 then
 		timer.Simple(0,function()
 			local rag = ply:GetNWEntity("Ragdoll")
 			local bone = rag:LookupBone(ply.LastHitBoneName)
 
-			if not IsValid(rag) or not bone then return end--неебу как пашол нахуй
+			if not IsValid(rag) or not bone then return end
 
-			Gib_Input(rag,bone,dmgInfo)
+			Gib_Input(rag, bone, dmgInfo)
 		end)
 	end
 end)
 
 hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 	if not ent:IsRagdoll() then return end
-	
+
 	local ply = RagdollOwner(ent)
 	ply = ply and ply:Alive() and ply
 	if ply then return end
-	
+
 	local phys_bone = GetPhysicsBoneDamageInfo(ent,dmgInfo)
 	if phys_bone == 0 then return end--lol
 
@@ -192,9 +188,9 @@ hook.Add("EntityTakeDamage","Gib",function(ent,dmgInfo)
 	if bonetohitgroup[bonename] then hitgroup = bonetohitgroup[bonename] end
 
 	local mul = RagdollDamageBoneMul[hitgroup]
-	
+
 	if dmgInfo:GetDamage() * mul < 350 then return end
-	
+
 	Gib_Input(ent,ent:TranslatePhysBoneToBone(phys_bone),dmgInfo)
 end)
 
@@ -245,4 +241,3 @@ hook.Add("Think","Gib",function()
 		end
 	end
 end)
-end

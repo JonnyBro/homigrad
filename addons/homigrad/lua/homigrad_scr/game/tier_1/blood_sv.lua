@@ -17,7 +17,7 @@ BleedingEntities = BleedingEntities or {}
 
 hook.Add("HomigradDamage","phildcorn",function(ply,hitGroup,dmginfo,rag,armorMul)
 	if armorMul <= 0.75 or not dmginfo:IsDamageType(DMG_BULLET+DMG_SLASH+DMG_BLAST+DMG_ENERGYBEAM+DMG_NEVERGIB+DMG_ALWAYSGIB+DMG_PLASMA+DMG_AIRBOAT+DMG_SNIPER+DMG_BUCKSHOT) then return end
-	
+
 	local dmg
 	if dmginfo:IsDamageType(DMG_BUCKSHOT+DMG_SLASH) then dmg = dmginfo:GetDamage() * 2 else dmg = dmginfo:GetDamage() * 0.8 end
 
@@ -68,7 +68,7 @@ hook.Add("Player Think","homigrad-blood",function(ply,time)
 	local ent = IsValid(ply.fakeragdoll) and ply.fakeragdoll or ply
 
 	local neck = ent:GetBoneMatrix(ent:LookupBone("ValveBiped.Bip01_Neck1")):GetTranslation()
-	
+
 	if ply.Organs["artery"] == 0 and (ply.arteriaThink or 0) < time and ply.Blood > 0 then
 		ply.arteriaThink = time + 0.1
 		if not ply.holdingartery then
@@ -90,10 +90,10 @@ hook.Add("Player Think","homigrad-blood",function(ply,time)
 	ply.pulseStart = time
 
 	--ply:EmitSound("snd_jack_hmcd_heartpound.wav",70,100,0.05 / ply.nextPulse,CHAN_AUTO)
-	
+
 	if ply.Bloodlosing > 0 then
 		ply.Bloodlosing = ply.Bloodlosing - 0.5
-		
+
 		ply.Blood = math.max(ply.Blood - ply.Bloodlosing / 2,0)
 
 		BloodParticle(ent:GetPos() + ent:OBBCenter(),VectorRand(-15,15))
@@ -202,30 +202,29 @@ end)
 
 util.AddNetworkString("organism_info")
 
-concommand.Add("hg_organisminfo",function(ply,cmd,args)
+concommand.Add("hg_organisminfo", function(ply, cmd, args)
 	if not ply:IsAdmin() then return end
-	
-	local huyply = args[1] and player.GetListByName(args[1])[1] or ply
+	if not args[1] then return end
+
+	local plrs = player.GetListByName(ply, args[1])
+	if not plrs then return print("Игрок не найден") end
+
+	local plr = plrs[1]
 
 	net.Start("organism_info")
-	net.WriteTable(huyply.Organs)
-	net.WriteString(
-	"Кровь (мл): "..tostring(huyply.Blood).."\n"..
-	"Кровотечение (мл/удар): "..tostring(huyply.Bloodlosing).."\n"..
-	"СЛР: "..tostring(huyply.CPR).."\n"..
-	"Боль: "..tostring(huyply.pain).."\n"..
-	"Остановка сердца: "..tostring(huyply.heartstop).."\n"..
-	"o2 (1 = полный запас кислорода): "..tostring(huyply.o2).."\n"..
-	"Удары в минуту: "..tostring(huyply.heartstop and 0 or 1 / huyply.nextPulse * 60).."\n"..
-	"Игрок: "..huyply:Name()
-	)
+		net.WriteTable(plr.Organs)
+		net.WriteString("Кровь (мл): " .. tostring(plr.Blood) .. "\n" .. "Кровотечение (мл/удар): " .. tostring(plr.Bloodlosing) .. "\n" .. "СЛР: " .. tostring(plr.CPR) .. "\n" .. "Боль: " .. tostring(plr.pain) .. "\n" .. "Остановка сердца: " .. tostring(plr.heartstop) .. "\n" .. "o2 (1 = полный запас кислорода): " .. tostring(plr.o2) .. "\n" .. "Удары в минуту: " .. tostring(plr.heartstop and 0 or 1 / plr.nextPulse * 60) .. "\n" .. "Игрок: " .. plr:Name())
 	net.Send(ply)
 end)
 
-concommand.Add("hg_organism_setvalue",function(ply,cmd,args)
+concommand.Add("hg_organism_setvalue", function(ply, cmd, args)
 	if not ply:IsAdmin() then return end
-	
-	local huyply = args[3] and player.GetListByName(args[3])[1] or ply
-	
-	huyply.Organs[args[1]] = args[2]
+	if not args[1] or not args[2] or not args[3] then return end
+
+	local plrs = args[3] and player.GetListByName(ply, args[3])
+	if not plrs then return ply:ChatPrint("Игрок(и) не найдены") end
+
+	local plr = plrs[1]
+
+	plr.Organs[args[1]] = args[2]
 end)

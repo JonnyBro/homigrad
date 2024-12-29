@@ -418,11 +418,12 @@ hook.Add("DoPlayerDeath","blad",function(ply,att,dmginfo)
 
 	rag:SetNWEntity("RagdollController",Entity(-1))
 
-	if ply.IsBleeding or ply.Bloodlosing > 0 or ply.LastDMGInfo:IsDamageType(DMG_BULLET+DMG_SLASH+DMG_BLAST+DMG_ENERGYBEAM+DMG_NEVERGIB+DMG_ALWAYSGIB+DMG_PLASMA+DMG_AIRBOAT+DMG_SNIPER+DMG_BUCKSHOT) then
-		rag.IsBleeding=true
+	if ply.IsBleeding or ply.Bloodlosing > 0 or (ply.LastDMGInfo and ply.LastDMGInfo:IsDamageType(DMG_BULLET + DMG_SLASH + DMG_BLAST + DMG_ENERGYBEAM + DMG_NEVERGIB + DMG_ALWAYSGIB + DMG_PLASMA + DMG_AIRBOAT + DMG_SNIPER + DMG_BUCKSHOT)) then
+		rag.IsBleeding = true
 		rag.bloodNext = CurTime()
 		rag.Blood = ply.Blood
-		table.insert(BleedingEntities,rag)
+
+		table.insert(BleedingEntities, rag)
 	end
 
 	rag.Info = ply.Info
@@ -508,16 +509,20 @@ hook.Add("PlayerSpawn","resetfakebody",function(ply) --обнуление рег
 end)
 
 util.AddNetworkString("Unload")
-net.Receive("Unload",function(len,ply)
+
+net.Receive("Unload", function(len, ply)
 	local wep = net.ReadEntity()
 	local oldclip = wep:Clip1()
 	local ammo = wep:GetPrimaryAmmoType()
-        if wep:GetOwner() != ply then
-            ply:Kick("Забаньте этого еблана")
+
+	if wep:GetOwner() ~= ply then
+		ply:Kick("Забаньте этого еблана")
 	end
-	wep:EmitSound("snd_jack_hmcd_ammotake.wav")
+
+	wep:EmitSound("snd_jack_hmcd_ammotake.wav", nil, nil, .4)
+
 	wep:SetClip1(0)
-	ply:GiveAmmo(oldclip,ammo)
+	ply:GiveAmmo(oldclip, ammo)
 end)
 
 function Stun(Entity)
@@ -794,36 +799,45 @@ function PlayerMeta:CreateRagdoll(attacker,dmginfo,force) --изменение �
 		net.Start("pophead")
 			net.WriteEntity(rag)
 		net.Send(self)
-        rag.Info=self.Info
-        if IsValid(self:GetActiveWeapon()) then
-            self.curweapon=nil
-            if table.HasValue(Guns,self:GetActiveWeapon():GetClass()) then
-				self.curweapon=self:GetActiveWeapon():GetClass()
-				SpawnWeapon(self,self:GetActiveWeapon():Clip1()).rag = rag
+
+		rag.Info = self.Info
+
+		if IsValid(self:GetActiveWeapon()) then
+			self.curweapon = nil
+
+			if table.HasValue(Guns, self:GetActiveWeapon():GetClass()) then
+				self.curweapon = self:GetActiveWeapon():GetClass()
+				SpawnWeapon(self, self:GetActiveWeapon():Clip1()).rag = rag
 			end
+
 			rag.curweapon = self.curweapon
-        end
-        SavePlyInfo(self)
-        rag.Info=self.Info
-        rag.curweapon=self.curweapon
-        rag:SetEyeTarget(Vector(0,0,0))
-        rag:SetFlexWeight(9,0)
-        if self.IsBleeding or (self.BloodLosing or 0) > 0 then
-			rag.IsBleeding=true
+		end
+
+		SavePlyInfo(self)
+		rag.Info = self.Info
+		rag.curweapon = self.curweapon
+		rag:SetEyeTarget(Vector(0, 0, 0))
+		rag:SetFlexWeight(9, 0)
+
+		if self.IsBleeding or (self.BloodLosing or 0) > 0 then
+			rag.IsBleeding = true
 			rag.bloodNext = CurTime()
 			rag.Blood = self.Blood
-			table.insert(BleedingEntities,rag)
+			table.insert(BleedingEntities, rag)
 		end
+
 		if IsValid(rag.bull) then
 			rag.bull:Remove()
 		end
-        rag.deadbody = true
+
+		rag.deadbody = true
 		self.fakeragdoll = nil
+
 		net.Start("hg_fake_weapon")
 			net.WriteEntity(rag)
 			net.WriteString(rag.curweapon)
 		net.Broadcast()
-    else
+	else
 		net.Start("hg_fake_weapon")
 			net.WriteEntity(self)
 			net.WriteString(self.curweapon)

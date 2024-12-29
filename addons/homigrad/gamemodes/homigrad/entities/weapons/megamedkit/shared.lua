@@ -19,9 +19,9 @@ SWEP.UseHands = true
 SWEP.DrawWeaponSelection = DrawWeaponSelection
 SWEP.OverridePaintIcon = OverridePaintIcon
 
-SWEP.dwsPos = Vector(15,15,15)
+SWEP.dwsPos = Vector(15, 15, 15)
 
 SWEP.vbw = false
-SWEP.vbwPos = Vector(0,-2,7)
-SWEP.vbwAng = Angle(0,90,180)
+SWEP.vbwPos = Vector(0, -2, 7)
+SWEP.vbwAng = Angle(0, 90, 180)
 SWEP.vbwModelScale = 1.7

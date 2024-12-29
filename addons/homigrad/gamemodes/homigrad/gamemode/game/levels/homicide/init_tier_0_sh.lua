@@ -35,11 +35,11 @@ function homicide.IsMapBig()
     local skybox = 0
     for i,ent in pairs(ents.FindByClass("sky_camera")) do
         --local skyboxang = ent:GetPos():GetNormalized():Dot(maxs:GetNormalized())
-        
+
         skybox = 0--skyboxang > 0 and ent:GetPos():Distance(-mins) or ent:GetPos():Distance(-maxs)
         --maxs:Sub(skybox)
     end
-    
+
     --PrintMessage(3,tostring(mins:Distance(maxs) - skybox))
     return (mins:Distance(maxs) - skybox) > 5000
     --Vector(-10000, -2000, -2500) Vector(5000, 10000, 800)
@@ -60,7 +60,7 @@ function homicide.StartRound(data)
             roundType = math.random(1, 5) -- Устанавливаем случайный режим, если значение некорректное
         end
         homicide.roundType = roundType
-        
+
         -- Отправляем режим на клиент
         net.Start("roundType")
         net.WriteInt(homicide.roundType, 5)
@@ -173,7 +173,7 @@ function homicide.HUDPaint_RoundLeft(white2)
                 draw.DrawText( "Вы житель Хомиграда, у вас есть ваше любимое оружие. Кто-то решил уничтожить ваш город, Защитите его.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
             end
         elseif homicide.roundType == 5 then
-            draw.DrawText( "Вы житель Хомиграда, у вас есть ваше любимое оружие. Кто-то решил уничтожить ваш город, Защитите его.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )            
+            draw.DrawText( "Вы житель Хомиграда, у вас есть ваше любимое оружие. Кто-то решил уничтожить ваш город, Защитите его.", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,155,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         else
             draw.DrawText( "Найдите предателя, свяжите или убейте его для победы. Не доверяйте никому...", "HomigradFontBig", ScrW() / 2, ScrH() / 1.2, Color( 55,55,55,math.Clamp(startRound - 0.5,0,1) * 255 ), TEXT_ALIGN_CENTER )
         end
@@ -210,10 +210,10 @@ function homicide.VBWHide(ply,list)
     if (not ply:IsRagdoll() and ply:Team() == 1002) then return end -- t weps hide
 
     local blad = {}
-    
+
     for i,wep in pairs(list) do
         local wep = type(i) == "string" and weapons.Get(i) or list[i]
-        
+
         if not wep.TwoHands then continue end
 
         blad[#blad + 1] = wep

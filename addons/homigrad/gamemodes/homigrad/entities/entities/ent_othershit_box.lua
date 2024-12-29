@@ -14,22 +14,17 @@ if SERVER then
 		self:SetSolid(SOLID_VPHYSICS)
 	end
 
-    function ENT:Use()
-    
-    end
+	function ENT:Use()
+	end
 else
-    local openVgui = function(ent)
-        local panel = vgui.Create("DFrame")
-        panel:SetSize(300,400)
-        panel:Center()
-        panel:SetTitle("Бокс")
+	local openVgui = function(ent)
+		local panel = vgui.Create("DFrame")
+		panel:SetSize(300, 400)
+		panel:Center()
+		panel:SetTitle("Бокс")
+	end
 
-        
-    end
-
-    --if LocalPlayer():UserID() == 234 then openVgui() end
-
-    net.Receive("Box",function()
-        openVgui(net.ReadEntity())
-    end)
+	net.Receive("Box", function()
+		openVgui(net.ReadEntity())
+	end)
 end

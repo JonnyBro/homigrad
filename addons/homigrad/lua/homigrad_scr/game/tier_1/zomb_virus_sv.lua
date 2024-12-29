@@ -104,27 +104,21 @@ hook.Add("PostPlayerDeath","RefreshPain",function(ply)
     net.Send(ply)
 end)
 
-COMMANDS.virus = {function(ply,args)
-	if not ply:IsAdmin() then return end
+COMMANDS.virus = {
+	function(ply, args)
+		if not ply:IsAdmin() then return end
 
-	for i,fply in pairs(player.GetListByName(args[1]) or {ply}) do
-		fply.virus = fply.virus + 15
-        ply:ChatPrint("DIE BITCH")
-	end
-end,1}
+		local plrList = player.GetListByName(ply, args[1])
+		if not plrList then return ply:ChatPrint("Игрок(и) не найдены") end
 
---[[COMMANDS.blevota = {function(ply,args)
-	if not ply:IsAdmin() then return end
+		for i, fply in pairs(plrList) do
+			fply.virus = fply.virus + 15
+			ply:ChatPrint("Данный игрок заражён")
+		end
+	end,
+	1
+}
 
-	for i,fply in pairs(player.GetListByName(args[1]) or {ply}) do
-        local snd = table.Random(blevotasfx)
-        fply:EmitSound(snd)
-		timer.Create("Blevota"..fply:EntIndex(),0.1,15,function()
-            --fply.Blood = fply.Blood - 25
-            BloodParticle(fply:EyePos(),fply:EyeAngles():Forward()*150+Vector(math.random(-1,1),math.random(-1,1),math.random(-1,1))*30)
-        end)
-	end
-end,1}]]--
 
 concommand.Add( "hg_blevota", function( ply, cmd, args )
     if !ply:Alive() or ply.Otrub then return end

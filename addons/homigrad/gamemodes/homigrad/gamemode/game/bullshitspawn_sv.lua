@@ -45,7 +45,7 @@ weaponscommon = {
 
 	"weapon_knife",
 	"weapon_pipe",
-	
+
 	"med_band_small",
 	"med_band_big",
 	"blood_bag"
@@ -121,7 +121,7 @@ hook.Add("PropBreak","homigrad",function(att,ent)
 
 	local func = TableRound().ShouldSpawnLoot
 	if not func then return end
-	
+
 	local result,spawnEnt,type1 = TableRound().ShouldSpawnLoot()
 	if result == false then return end
 
@@ -236,8 +236,8 @@ end)
 
 local function randomLoot()
 	local gunchance = math.random(1,100)
-	
 	local entName = false
+
 	if gunchance < 2 then
 		entName = table.Random(weaponslegendary)
 	elseif gunchance < 5 then
@@ -251,32 +251,32 @@ local function randomLoot()
 	end
 
 	local func = TableRound().ShouldSpawnLoot
-	local should,entNamer
+	local should, entNamer
+
 	if func then
 		should, entNamer = func()
 	end
 
-	entName = should and entNamer or entName
+	entName = (should and entNamer) or entName
 
 	return entName
 end
 
-local vec = Vector(0,0,32)
-hook.Add("Boxes Think", "SpawnBoxes",function()
+local vec = Vector(0, 0, 32)
+
+hook.Add("Boxes Think", "SpawnBoxes", function()
 	if #player.GetAll() == 0 or not roundActive then return end
-	
+
 	local func = TableRound().ShouldSpawnLoot
 	if func and func() == false then return end
 
-
 	local randomWep = randomLoot()
-	local ent = ents.Create(not randomWep and "prop_physics" or randomWep)
+	local ent = ents.Create((not randomWep and "prop_physics") or randomWep)
 
-	if not randomWep then
-		ent:SetModel(KOROBKA_HUYNYI[math.random(#KOROBKA_HUYNYI)])
-	else
+	if randomWep then
 		ent:SetModel(KOROBKA_HUYNYI[math.random(#KOROBKA_HUYNYI)])
 	end
+
 	if IsValid(ent) then
 		ent:SetPos(spawns[math.random(#spawns)] + vec)
 		ent:Spawn()

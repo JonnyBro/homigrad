@@ -22,7 +22,7 @@ if engine.ActiveGamemode() == "homigrad" then
 	end
 
 	net.Receive("hg_fake_weapon", function(len)
-		net.ReadEntity().curweapon = net.ReadString()
+		net.ReadEntity().curweapon = net.ReadString() or nil
 	end)
 
 	local tblNil = {}

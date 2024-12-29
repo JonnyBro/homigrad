@@ -1,20 +1,20 @@
-SWEP.Base                   = "medkit"
+SWEP.Base = "medkit"
 
-SWEP.PrintName 				= "Заказчик"
-SWEP.Author 				= "homigrad"
-SWEP.Instructions			= "Закажи все вещи из JMOD!"
-SWEP.Category 				= "Разное"
+SWEP.PrintName = "Заказчик"
+SWEP.Author = "homigrad"
+SWEP.Instructions = "Закажи все вещи из JMOD!"
+SWEP.Category = "Разное"
 
-SWEP.Spawnable 				= true
-SWEP.AdminOnly 				= false
+SWEP.Spawnable = true
+SWEP.AdminOnly = false
 
-SWEP.Slot					= 0
-SWEP.SlotPos				= 3
-SWEP.DrawAmmo				= true
-SWEP.DrawCrosshair			= false
+SWEP.Slot = 0
+SWEP.SlotPos = 3
+SWEP.DrawAmmo = true
+SWEP.DrawCrosshair = false
 
-SWEP.ViewModel				= "models/props/cs_office/phone_p2.mdl"
-SWEP.WorldModel				= "models/props/cs_office/phone_p2.mdl"
+SWEP.ViewModel = "models/props/cs_office/phone_p2.mdl"
+SWEP.WorldModel = "models/props/cs_office/phone_p2.mdl"
 
 SWEP.ViewBack = true
 SWEP.ForceSlot1 = true
@@ -22,30 +22,33 @@ SWEP.ForceSlot1 = true
 SWEP.DrawWeaponSelection = DrawWeaponSelection
 SWEP.OverridePaintIcon = OverridePaintIcon
 
-SWEP.dwsPos = Vector(10,10,7)
-SWEP.dwsItemPos = Vector(0,3,0)
+SWEP.dwsPos = Vector(10, 10, 7)
+SWEP.dwsItemPos = Vector(0, 3, 0)
 
 SWEP.dwmARight = 90
 SWEP.dwmForward = 2
 SWEP.dwmRight = -1
 
-local STATE_BROKEN,STATE_OFF,STATE_CONNECTING=-1,0,1
+local STATE_OFF, STATE_CONNECTING = -1, 0, 1
+
 function SWEP:SetupDataTables()
-    self:NetworkVar("Int",1,"OutpostID")
-    self:NetworkVar("Int",2,"State")
+	self:NetworkVar("Int", 1, "OutpostID")
+	self:NetworkVar("Int", 2, "State")
 end
 
-function SWEP:PrimaryAttack() end
+function SWEP:PrimaryAttack()
+end
 
 if SERVER then
 	function SWEP:Initialize()
 		local Path = "/npc/combine_soldier/vo/"
-		local Files, Folders = file.Find("sound" .. Path .. "*.wav", "GAME")
-		self.Voices = Files
+		local Files, _ = file.Find("sound" .. Path .. "*.wav", "GAME")
 
-        self.NextRealThink = 0
+		self.Voices = Files
+		self.NextRealThink = 0
 		self.ConnectionlessThinks = 0
-        self:SetState(STATE_OFF)
+
+		self:SetState(STATE_OFF)
 	end
 
 	function SWEP:Speak(msg, parrot)
@@ -53,10 +56,10 @@ if SERVER then
 			for _, ply in pairs(player.GetAll()) do
 				if ply:Alive() and (ply:GetPos():DistToSqr(self:GetPos()) <= 200 * 200 or (self:UserIsAuthorized(ply) and ply.EZarmor and ply.EZarmor.effects.teamComms)) then
 					net.Start("JMod_EZradio")
-					net.WriteBool(true)
-					net.WriteBool(true)
-					net.WriteString(parrot)
-					net.WriteEntity(self)
+						net.WriteBool(true)
+						net.WriteBool(true)
+						net.WriteString(parrot)
+						net.WriteEntity(self)
 					net.Send(ply)
 				end
 			end
@@ -77,10 +80,10 @@ if SERVER then
 				for _, ply in pairs(player.GetAll()) do
 					if ply:Alive() and (ply:GetPos():DistToSqr(self:GetPos()) <= 200 * 200 or (self:UserIsAuthorized(ply) and ply.EZarmor and ply.EZarmor.effects.teamComms)) then
 						net.Start("JMod_EZradio")
-						net.WriteBool(true)
-						net.WriteBool(false)
-						net.WriteString(msg)
-						net.WriteEntity(self)
+							net.WriteBool(true)
+							net.WriteBool(false)
+							net.WriteString(msg)
+							net.WriteEntity(self)
 						net.Send(ply)
 					end
 				end
@@ -89,7 +92,6 @@ if SERVER then
 	end
 
 	function SWEP:TurnOn(activator)
-		local OldOwner = self:GetOwner()
 		JMod.SetOwner(self, activator)
 
 		self:SetState(STATE_CONNECTING)
@@ -100,12 +102,14 @@ if SERVER then
 	function SWEP:TurnOff()
 		local State = self:GetState()
 		if State == STATE_OFF then return end
+
 		self:SetState(STATE_OFF)
 		self:EmitSound("snds_jack_gmod/ezsentry_shutdown.wav", 65, 100)
 	end
 
 	function SWEP:Connect(ply)
 		if not ply then return end
+
 		local Team = 0
 
 		if engine.ActiveGamemode() == "sandbox" and ply:Team() == TEAM_UNASSIGNED then
@@ -115,6 +119,7 @@ if SERVER then
 		end
 
 		JMod.EZradioEstablish(self, tostring(Team)) -- we store team indices as strings because they might be huge (if it's a player's acct id)
+
 		local OutpostID = self:GetOutpostID()
 		local Station = JMod.EZ_RADIO_STATIONS[OutpostID]
 		self:SetState(Station.state)
@@ -126,29 +131,32 @@ if SERVER then
 		end)
 	end
 
-    function SWEP:Deploy()
-        if self:GetState() == STATE_OFF then self:TurnOn() end
-    end
+	function SWEP:Deploy()
+		if self:GetState() == STATE_OFF then
+			self:TurnOn()
+		end
+	end
 
-    function SWEP:Holster()
-        return true
-    end
+	function SWEP:Holster()
+		return true
+	end
 
-    function SWEP:PrimaryAttack() end
+	function SWEP:PrimaryAttack()
+	end
 
-    function SWEP:SecondaryAttack()
-		print(self:GetState(),JMod.EZ_STATION_STATE_READY )
-        if self:GetState() == JMod.EZ_STATION_STATE_READY then
-            net.Start("JMod_EZradio")
-            net.WriteBool(false)
-            net.WriteEntity(self)
-            net.WriteTable(JMod.Config.RadioSpecs.AvailablePackages)
-            net.Send(self:GetOwner())
-        end
-    end
+	function SWEP:SecondaryAttack()
+		print(self:GetState(), JMod.EZ_STATION_STATE_READY)
+
+		if self:GetState() == JMod.EZ_STATION_STATE_READY then
+			net.Start("JMod_EZradio")
+				net.WriteBool(false)
+				net.WriteEntity(self)
+				net.WriteTable(JMod.Config.RadioSpecs.AvailablePackages)
+			net.Send(self:GetOwner())
+		end
+	end
 
 	function SWEP:Think()
-        --if true then return end
 		local State, Time = self:GetState(), CurTime()
 
 		if self.NextRealThink < Time then
@@ -188,9 +196,9 @@ if SERVER then
 				else
 					self.ConnectionlessThinks = 0
 				end
-
 			end
 		end
+
 		return true
 	end
 
@@ -203,7 +211,7 @@ if SERVER then
 			local HitSky = util.TraceLine({
 				start = SelfPos,
 				endpos = SelfPos + Dir * 9e9,
-				filter = {self,self:GetOwner()},
+				filter = {self, self:GetOwner()},
 				mask = MASK_OPAQUE
 			}).HitSky
 
@@ -217,6 +225,7 @@ if SERVER then
 		if not ply then return false end
 		if not ply:IsPlayer() then return false end
 		if self:GetOwner() and (ply == self:GetOwner()) then return true end
+
 		local Allies = (self:GetOwner() and self:GetOwner().JModFriends) or {}
 		if table.HasValue(Allies, ply) then return true end
 
@@ -263,8 +272,7 @@ if SERVER then
 
 			if Name == "help" then
 				if State == 2 then
-					--local Msg,Num='stand near radio\nsay in chat: "status", or "supply radio: [package]"\navailable packages are:\n',1
-					local Msg, Num = 'stand near radio and say in chat "supply radio: status", or "supply radio: [package]". available packages are:', 1
+					local Msg, Num = "stand near radio and say in chat 'supply radio: status', or 'supply radio: [package]'. available packages are:", 1
 					self:Speak(Msg, ParrotPhrase)
 					local str = ""
 
@@ -312,47 +320,43 @@ if SERVER then
 		return false
 	end
 elseif CLIENT then
-    function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
-        if !IsValid(DrawModel) then
-            DrawModel = ClientsideModel( self.WorldModel, RENDER_GROUP_OPAQUE_ENTITY );
-            DrawModel:SetNoDraw( true );
-        else
-            DrawModel:SetModel( self.WorldModel )
+	function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
+		if not IsValid(DrawModel) then
+			DrawModel = ClientsideModel(self.WorldModel, RENDER_GROUP_OPAQUE_ENTITY)
+			DrawModel:SetNoDraw(true)
+		else
+			DrawModel:SetModel(self.WorldModel)
 
-            local vec = Vector(55,55,55)
-            local ang = Vector(-48,-48,-48):Angle()
+			local vec = Vector(55, 55, 55)
+			local ang = Vector(-48, -48, -48):Angle()
 
-            cam.Start3D( vec, ang, 20, x, y+35, wide, tall, 5, 4096 )
-                cam.IgnoreZ( true )
-                render.SuppressEngineLighting( true )
+			cam.Start3D(vec, ang, 20, x, y + 35, wide, tall, 5, 4096)
+				cam.IgnoreZ(true)
+				render.SuppressEngineLighting(true)
+				render.SetLightingOrigin(self:GetPos())
+				render.ResetModelLighting(50 / 255, 50 / 255, 50 / 255)
+				render.SetColorModulation(1, 1, 1)
+				render.SetBlend(255)
+				render.SetModelLighting(4, 1, 1, 1)
+				DrawModel:SetRenderAngles(Angle(0, RealTime() * 30 % 360, 0))
+				DrawModel:DrawModel()
+				DrawModel:SetRenderAngles()
+				render.SetColorModulation(1, 1, 1)
+				render.SetBlend(1)
+				render.SuppressEngineLighting(false)
+				cam.IgnoreZ(false)
+			cam.End3D()
+		end
 
-                render.SetLightingOrigin( self:GetPos() )
-                render.ResetModelLighting( 50/255, 50/255, 50/255 )
-                render.SetColorModulation( 1, 1, 1 )
-                render.SetBlend( 255 )
-
-                render.SetModelLighting( 4, 1, 1, 1 )
-
-                DrawModel:SetRenderAngles( Angle( 0, RealTime() * 30 % 360, 0 ) )
-                DrawModel:DrawModel()
-                DrawModel:SetRenderAngles()
-
-                render.SetColorModulation( 1, 1, 1 )
-                render.SetBlend( 1 )
-                render.SuppressEngineLighting( false )
-                cam.IgnoreZ( false )
-            cam.End3D()
-        end
-
-        self:PrintWeaponInfo( x + wide + 20, y + tall * 0.95, alpha )
-    end
-
-	function SWEP:Initialize()
-		local Files,Folders=file.Find("sound/npc/combine_soldier/vo/*.wav","GAME")
-		self.Voices=Files
+		self:PrintWeaponInfo(x + wide + 20, y + tall * 0.95, alpha)
 	end
 
-	local GlowSprite, StateMsgs = Material("sprites/mat_jack_basicglow"), {
+	function SWEP:Initialize()
+		local Files, _ = file.Find("sound/npc/combine_soldier/vo/*.wav", "GAME")
+		self.Voices = Files
+	end
+
+	local _, _ = Material("sprites/mat_jack_basicglow"), {
 		[STATE_CONNECTING] = "Connecting...",
 		[JMod.EZ_STATION_STATE_READY] = "Ready",
 		[JMod.EZ_STATION_STATE_DELIVERING] = "Delivering",
