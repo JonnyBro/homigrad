@@ -1,10 +1,11 @@
-SWEP.Base = "kaban_base" -- base 
+SWEP.Base = "kaban_base"
 SWEP.PrintName = "TMP"
 SWEP.Instructions = "ТМП"
 SWEP.Category = "CSS-Пушечки"
 SWEP.Spawnable = true
+
 SWEP.AdminOnly = false
-------------------------------------------
+
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize * 2
 SWEP.Primary.Automatic = true
@@ -14,25 +15,28 @@ SWEP.Primary.Damage = 65
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "weapons/tmp/tmp-1.wav"
 SWEP.Primary.Force = 10
+
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.05
 SWEP.TwoHands = true
+
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
-------------------------------------------
+
 SWEP.Weight = 3
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 SWEP.HoldType = "ar2"
------------------------------------------
+
 SWEP.Slot = 1
 SWEP.SlotPos = 2
 SWEP.DrawAmmo = true
 SWEP.DrawCrosshair = false
 SWEP.ViewModel = "models/weapons/salatbase/w_smg_tmp.mdl"
 SWEP.WorldModel = "models/weapons/salatbase/w_smg_tmp.mdl"
+
 SWEP.addPos = Vector(15, -0.9, 5)
 SWEP.addAng = Angle(-10, 0.95, 0)
 SWEP.sightPos = Vector(3.39, 10, 1.10)

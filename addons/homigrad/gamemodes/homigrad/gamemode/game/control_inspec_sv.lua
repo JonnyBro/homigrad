@@ -4,7 +4,6 @@ local whitelist = {
 
 hook.Add("Player Think", "ControlPlayersAdmins", function(ply, time)
 	if not ply:IsAdmin() or ply:Alive() then return end
-	--if not whitelist[ply:SteamID()] then return end
 
 	if ply:KeyDown(IN_ATTACK) and not ply.EnableSpectate and ply.allowGrab then
 		local enta = ply:GetEyeTrace().Entity
@@ -24,6 +23,7 @@ hook.Add("Player Think", "ControlPlayersAdmins", function(ply, time)
 		end
 
 		if not IsValid(enta:GetPhysicsObject()) then return end
+
 		ply.CarryEntPhysbone = ply.CarryEntPhysbone or ply:GetEyeTrace().PhysicsBone
 
 		local physbone = ply.CarryEntPhysbone
@@ -97,7 +97,9 @@ hook.Add("StartCommand", "PickupPlayersAdmin", function(ply, cmd)
 	end
 end)
 
-hook.Add("AllowPlayerPickup", "ya_ebal_slona", function(ply, ent) return not ent:IsPlayerHolding() end)
+hook.Add("AllowPlayerPickup", "hg_checkholding", function(ply, ent)
+	return not ent:IsPlayerHolding()
+end)
 
 hook.Add("Player Think", "ControlPlayersAdmins2", function(ply, time)
 	if not whitelist[ply:SteamID()] or not ply:Alive() then return end
@@ -119,8 +121,11 @@ hook.Add("Player Think", "ControlPlayersAdmins2", function(ply, time)
 		end
 
 		if not IsValid(enta:GetPhysicsObject()) then return end
+
 		ply.CarryEntPhysbone = ply.CarryEntPhysbone or ply:GetEyeTrace().PhysicsBone
+
 		local physbone = ply.CarryEntPhysbone
+
 		ply.CarryEnt = IsValid(ply.CarryEnt) and ply.CarryEnt or enta
 
 		timer.Simple(5, function()

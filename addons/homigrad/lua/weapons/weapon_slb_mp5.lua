@@ -1,11 +1,13 @@
-SWEP.Base = "kaban_base" -- base 
+SWEP.Base = "kaban_base"
+
 SWEP.PrintName = "MP5"
 SWEP.Author = "Heckler & Koch"
 SWEP.Instructions = "в аудио-плеере мп3, на компе мп4, в школьном рюкзаке лежит мп5"
 SWEP.Category = "CSS-Пушечки"
 SWEP.Spawnable = true
+
 SWEP.AdminOnly = false
-------------------------------------------
+
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize * 2
 SWEP.Primary.Automatic = true
@@ -15,25 +17,28 @@ SWEP.Primary.Damage = 65
 SWEP.Primary.Spread = 5
 SWEP.Primary.Sound = "weapons/mp5navy/mp5-1.wav"
 SWEP.Primary.Force = 20
+
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.0545
 SWEP.TwoHands = true
+
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
-------------------------------------------
+
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 SWEP.HoldType = "ar2"
-------------------------------------------
+
 SWEP.Slot = 2
 SWEP.SlotPos = 2
 SWEP.DrawAmmo = true
 SWEP.DrawCrosshair = false
 SWEP.ViewModel = "models/weapons/salatbase/w_smg_mp5.mdl"
 SWEP.WorldModel = "models/weapons/salatbase/w_smg_mp5.mdl"
+
 SWEP.addPos = Vector(11, 0.05, 1)
 SWEP.addAng = Angle(-8.5, 2.2, 0)
 SWEP.sightPos = Vector(7, 6.3, 1.3)

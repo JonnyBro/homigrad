@@ -1,5 +1,3 @@
-if engine.ActiveGamemode() ~= "homigrad" then return end
-
 AddCSLuaFile()
 
 hg = hg or {}
@@ -47,8 +45,11 @@ INCLUDE_BREAK = 1
 
 function hg.includeDir(path, includes)
 	includes = includes or {}
-	if includes[path] then return end --еее
-	includes[path] = path --ультрарэп!11
+
+	if includes[path] then return end
+
+	includes[path] = path
+
 	local _files, _dirs = file.Find(path .. "*", "LUA")
 	local files, dirs, tier_files, tier_dirs = {}, {}, {}, {}
 	local v, v2, tier
@@ -122,12 +123,14 @@ function hg.includeDir(path, includes)
 
 		for i = 1, #v2 do
 			result = hg.includeFile(path .. v2[i])
-			if result == INCLUDE_BREAK then return end --спалился
+
+			if result == INCLUDE_BREAK then return end
 		end
 	end
 
 	for i = 1, #files do
 		result = hg.includeFile(path .. files[i])
+
 		if result == INCLUDE_BREAK then return end
 	end
 

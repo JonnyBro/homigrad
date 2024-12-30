@@ -96,7 +96,7 @@ hook.Add("HUDPaint", "admin_hitpos", function()
 		local tr = util.QuickTrace(shootOrigin, shootAngles:Forward() * 1000, LocalPlayer())
 		local hit = tr.HitPos:ToScreen()
 
-		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetDrawColor(color_white)
 		surface.DrawRect(hit.x - 2.5, hit.y - 2.5, 5, 5)
 	end
 end)

@@ -1,11 +1,13 @@
-SWEP.Base = "kaban_base" -- base 
+SWEP.Base = "kaban_base"
+
 SWEP.PrintName = "M3 Super"
 SWEP.Author = "Benelli"
 SWEP.Instructions = "Ружье"
 SWEP.Category = "CSS-Пушечки"
 SWEP.Spawnable = true
+
 SWEP.AdminOnly = false
-------------------------------------------
+
 SWEP.Primary.ClipSize = 8
 SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize * 2
 SWEP.Primary.Automatic = false
@@ -15,28 +17,31 @@ SWEP.Primary.Damage = 45
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "weapons/m3/m3-1.wav"
 SWEP.Primary.Force = 25
+
 SWEP.ReloadTime = 2
 SWEP.ReloadSound = "weapons/shotgun/shotgun_reload1.wav"
 SWEP.ShootWait = 0.62
 SWEP.NumBullet = 8
 SWEP.Sight = true
 SWEP.TwoHands = true
+
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
-------------------------------------------
+
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 SWEP.HoldType = "shotgun"
-------------------------------------------
+
 SWEP.Slot = 3
 SWEP.SlotPos = 2
 SWEP.DrawAmmo = true
 SWEP.DrawCrosshair = false
 SWEP.ViewModel = "models/weapons/salatbase/w_shot_m3super90.mdl"
 SWEP.WorldModel = "models/weapons/salatbase/w_shot_m3super90.mdl"
+
 SWEP.addPos = Vector(10, -1.05, 5)
 SWEP.addAng = Angle(-10, -0.15, 0)
 SWEP.sightPos = Vector(3.7, 7, 0.9)

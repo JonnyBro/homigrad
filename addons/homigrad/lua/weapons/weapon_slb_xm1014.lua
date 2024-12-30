@@ -1,11 +1,13 @@
-SWEP.Base = "kaban_base" -- base 
+SWEP.Base = "kaban_base"
+
 SWEP.PrintName = "XM1014"
 SWEP.Author = "Benelli"
 SWEP.Instructions = "Ружье"
 SWEP.Category = "CSS-Пушечки"
 SWEP.Spawnable = true
+
 SWEP.AdminOnly = false
-------------------------------------------
+
 SWEP.Primary.ClipSize = 8
 SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize * 2
 SWEP.Primary.Automatic = true
@@ -15,28 +17,31 @@ SWEP.Primary.Damage = 45
 SWEP.Primary.Spread = 1.6
 SWEP.Primary.Sound = "weapons/xm1014/xm1014-1.wav"
 SWEP.Primary.Force = 20
+
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.4
 SWEP.ReloadSound = "weapons/shotgun/shotgun_reload1.wav"
 SWEP.NumBullet = 8
 SWEP.Sight = true
 SWEP.TwoHands = true
+
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
-------------------------------------------
+
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 SWEP.HoldType = "ar2"
-------------------------------------------
+
 SWEP.Slot = 2
 SWEP.SlotPos = 2
 SWEP.DrawAmmo = true
 SWEP.DrawCrosshair = false
 SWEP.ViewModel = "models/weapons/salatbase/w_shot_xm1014.mdl"
 SWEP.WorldModel = "models/weapons/salatbase/w_shot_xm1014.mdl"
+
 SWEP.addPos = Vector(10, -0.8, 5.5)
 SWEP.addAng = Angle(-8.9, -0.2, 0)
 SWEP.sightPos = Vector(4, 6, 0.77)

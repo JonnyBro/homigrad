@@ -1,5 +1,3 @@
-if engine.ActiveGamemode() ~= "homigrad" then return end
-
 local t = {}
 local n, e
 
@@ -898,7 +896,7 @@ end
 hook.Add("CalcView", "VIEW", CalcView)
 
 hook.Add("PlayerButtonDown", "TogglePointshooting", function(ply, button)
-	if button == KEY_LALT then
+	if button == KEY_LALT and ply:KeyDown(IN_ATTACK2) then
 		pointshooting = not pointshooting
 	end
 end)
@@ -917,8 +915,9 @@ end)
 
 --[[ прицелчики
 hook.Add("PostDrawOpaqueRenderables", "example", function()
-	local hand = LocalPlayer():GetAttachment(ply:LookupAttachment("anim_attachment_rh"))
-	local eye = LocalPlayer():GetAttachment(ply:LookupAttachment("eyes"))
+	local ply = LocalPlayer()
+	local hand = ply:GetAttachment(ply:LookupAttachment("anim_attachment_rh"))
+	local eye = ply:GetAttachment(ply:LookupAttachment("eyes"))
 
 	possight = hand.Pos + hand.Ang:Up() * 4.4 - hand.Ang:Forward() * -1 + hand.Ang:Right() * -0.15
 	angle = hand.Ang + Angle(-90, 0, 0)
@@ -926,7 +925,7 @@ hook.Add("PostDrawOpaqueRenderables", "example", function()
 	cam.Start3D2D(possight, angle, 1)
 		surface.SetDrawColor(255, 0, 0, 200)
 		draw.NoTexture()
-		draw.Circle(0, 0, 0.05, 25)
+		draw.RoundedBox(0, 0, 0.05, 25)
 	cam.End3D2D()
 end) --]]
 

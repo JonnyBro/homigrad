@@ -1,82 +1,93 @@
-if engine.ActiveGamemode() == "homigrad" then
-    include("shared.lua")
+include("shared.lua")
 
-    SWEP.Dealy = 0.25
+SWEP.Dealy = 0.25
 
-    function SWEP:PrimaryAttack()
-        self:SetNextPrimaryFire(CurTime() + self.Dealy)
-        self:SetNextSecondaryFire(CurTime() + self.Dealy)
+function SWEP:PrimaryAttack()
+	self:SetNextPrimaryFire(CurTime() + self.Dealy)
+	self:SetNextSecondaryFire(CurTime() + self.Dealy)
 
-        local owner = self:GetOwner()
-        if self:Heal(owner) then owner:SetAnimation(PLAYER_ATTACK1) self:Remove() self:GetOwner():SelectWeapon("weapon_hands") end
-    end
+	local owner = self:GetOwner()
 
-    function SWEP:SecondaryAttack()
-        self:SetNextPrimaryFire(CurTime() + self.Dealy)
-        self:SetNextSecondaryFire(CurTime() + self.Dealy)
+	if self:Heal(owner) then
+		owner:SetAnimation(PLAYER_ATTACK1)
 
-        local owner = self:GetOwner()
-        local trace = self:GetEyeTraceDist(150)
-        local ent = trace.Entity
-        ent = (ent:IsPlayer() and ent) or (RagdollOwner(ent)) or (ent:GetClass() == "prop_ragdoll" and ent)
-        if not ent then return end
+		self:Remove()
 
-        if self:Heal(ent) then
-            if ent:IsPlayer() then
-                local dmg = DamageInfo()
-                dmg:SetDamage(-5)
-                dmg:SetAttacker(self)
+		self:GetOwner():SelectWeapon("weapon_hands")
+	end
+end
 
-                local att = self:GetOwner()
+function SWEP:SecondaryAttack()
+	self:SetNextPrimaryFire(CurTime() + self.Dealy)
+	self:SetNextSecondaryFire(CurTime() + self.Dealy)
 
-                if GuiltLogic(att,ent,dmg,true) then
-                    att.Guilt = math.max(att.Guilt - 20,0)
-                end
-            end
-            owner:SetAnimation(PLAYER_ATTACK1)
-            self:Remove()
-            self:GetOwner():SelectWeapon("weapon_hands")
-        end
-    end
+	local owner = self:GetOwner()
+	local trace = self:GetEyeTraceDist(150)
 
-    function SWEP:GetEyeTraceDist(dist)
-        local owner = self:GetOwner()
-        if not owner or not owner:IsValid() then return end
+	local ent = trace.Entity
+	ent = (ent:IsPlayer() and ent) or RagdollOwner(ent) or (ent:GetClass() == "prop_ragdoll" and ent)
+	if not ent then return end
 
-        local trace = util.TraceLine({
-            start = owner:EyePos(),
-            endpos = owner:EyePos() + owner:EyeAngles():Forward() * dist,
-            filter = owner
-        })
+	if self:Heal(ent) then
+		if ent:IsPlayer() then
+			local dmg = DamageInfo()
+				dmg:SetDamage(-5)
+				dmg:SetAttacker(self)
+			local att = self:GetOwner()
 
-        return trace
-    end
+			if GuiltLogic(att, ent, dmg, true) then
+				att.Guilt = math.max(att.Guilt - 20, 0)
+			end
+		end
 
-    local healsound = Sound("snd_jack_bandage.wav")
+		owner:SetAnimation(PLAYER_ATTACK1)
 
-    function SWEP:Heal(ent)
-        if not ent or not ent:IsPlayer() then sound.Play(healsound,ent:GetPos(),75,100,0.5) return true end
+		self:Remove()
 
-        if ent.pain > 50 then
-            ent.painlosing = math.Clamp(ent.painlosing + 2.5,1,15)
+		self:GetOwner():SelectWeapon("weapon_hands")
+	end
+end
 
-            sound.Play(healsound,ent:GetPos(),75,100,0.5)
+function SWEP:GetEyeTraceDist(dist)
+	local owner = self:GetOwner()
+	if not owner or not owner:IsValid() then return end
 
-            return true
-        end
+	local trace = util.TraceLine({
+		start = owner:EyePos(),
+		endpos = owner:EyePos() + owner:EyeAngles():Forward() * dist,
+		filter = owner
+	})
 
-        if ent.Bloodlosing > 0 then
-            ent.Bloodlosing = math.max(ent.Bloodlosing - 30,0)
-            sound.Play(healsound,ent:GetPos(),75,100,0.5)
+	return trace
+end
 
-            return true
-        end
+local healsound = Sound("snd_jack_bandage.wav")
 
-        if ent:Health() < 150 then
-            ent:SetHealth(math.Clamp(self:GetOwner():Health() + 10,0,150))
-            sound.Play(healsound,ent:GetPos(),75,100,0.5)
+function SWEP:Heal(ent)
+	if not ent or not ent:IsPlayer() then
+		sound.Play(healsound, ent:GetPos(), 75, 100, 0.5)
 
-            return true
-        end
-    end
+		return true
+	end
+
+	if ent.pain > 50 then
+		ent.painlosing = math.Clamp(ent.painlosing + 2.5, 1, 15)
+		sound.Play(healsound, ent:GetPos(), 75, 100, 0.5)
+
+		return true
+	end
+
+	if ent.Bloodlosing > 0 then
+		ent.Bloodlosing = math.max(ent.Bloodlosing - 30, 0)
+		sound.Play(healsound, ent:GetPos(), 75, 100, 0.5)
+
+		return true
+	end
+
+	if ent:Health() < 150 then
+		ent:SetHealth(math.Clamp(self:GetOwner():Health() + 10, 0, 150))
+		sound.Play(healsound, ent:GetPos(), 75, 100, 0.5)
+
+		return true
+	end
 end

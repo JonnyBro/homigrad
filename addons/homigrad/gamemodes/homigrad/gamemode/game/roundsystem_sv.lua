@@ -1,5 +1,6 @@
 util.AddNetworkString("round_time")
 util.AddNetworkString("round_state")
+
 roundTimeStart = roundTimeStart or 0
 roundTime = roundTime or 0
 
@@ -46,20 +47,20 @@ end
 
 COMMANDS.levelrandom = {
 	function(ply, args)
-		--тупые калхозники сука
 		if tonumber(args[1]) > 0 then
 			levelrandom = true
 		else
 			levelrandom = false
 		end
 
-		PrintMessage(3, "Рандомизация режимов : " .. tostring(levelrandom))
+		PrintMessage(3, "Рандомизация режимов: " .. tostring(levelrandom))
 	end
 }
 
 COMMANDS.pointpagesrandom = {
 	function(ply, args)
 		pointPagesRandom = tonumber(args[1]) > 0
+
 		PrintMessage(3, tostring(pointPagesRandom))
 	end
 }
@@ -73,6 +74,7 @@ RoundRandomDefalut = 1
 function StartRound()
 	if SERVER and pointPagesRandom then
 		SpawnPointsPage = math.random(1, GetMaxDataPages("spawnpointst"))
+
 		SetupSpawnPointsList()
 		SendSpawnPoint()
 	end
@@ -131,7 +133,9 @@ function StartRound()
 	local tbl = TableRound()
 	local textGmod = ""
 	local text = ""
-	text = text .. "Игровой режим	: " .. tostring(tbl.Name) .. "\n"
+
+	text = text .. "Игровой режим: " .. tostring(tbl.Name) .. "\n"
+
 	RoundData = tbl.StartRound
 	RoundData = RoundData and RoundData() or {}
 	roundStarter = true
@@ -144,8 +148,10 @@ function StartRound()
 
 		if func and diff <= 0 then
 			local name = LevelRandom()
+
 			SetActiveNextRound(name)
-			text = text .. "Следующий режим	: " .. tostring(TableRound(roundActiveNameNext).Name) .. "\n"
+
+			text = text .. "Следующий режим: " .. tostring(TableRound(roundActiveNameNext).Name) .. "\n"
 			CountRoundRandom = 0
 		end
 	end
@@ -198,7 +204,9 @@ function LevelRandom()
 	for i = 1, #randoms do
 		local name, key = table.Random(randoms)
 		randoms[key] = nil
+
 		if TableRound(name).NoSelectRandom then continue end
+
 		local func = TableRound(name).CanRandomNext
 		if func and func() == false then continue end
 
@@ -210,19 +218,16 @@ local roundThink = 0
 
 function RoundEndCheck()
 	if SolidMapVote.isOpen or roundThink > CurTime() or #player.GetAll() < 2 then return end
-	roundThink = roundThink + 1
-	if not roundActive then return end
-	local func = TableRound().RoundEndCheck
 
-	if func then
-		func()
-	end
+	roundThink = roundThink + 1
+
+	if not roundActive then return end
+
+	local func = TableRound().RoundEndCheck
+	if func then func() end
 end
 
-local err
-
-local errr = function(_err)
-	err = _err
+local errr = function(err)
 	ErrorNoHaltWithStack(err)
 end
 
@@ -252,6 +257,7 @@ function EndRound(winner)
 
 		data.lastWinner = winner
 		roundActive = false
+
 		RoundTimeSync()
 		RoundStateSync(ply, data)
 
@@ -280,11 +286,7 @@ function EndRound(winner)
 			EndRound("wait")
 		else
 			local success = xpcall(StartRound, errr)
-
-			if not success then
-				-- local text = "Error Start Round '" .. roundActiveNameNext .. "'\n" .. tostring(err)
-				EndRound()
-			end
+			if not success then EndRound() end
 		end
 	end)
 end
@@ -307,6 +309,7 @@ local function donaterVoteLevelEnd(t, argv, calling_ply, args)
 
 	if winner == 1 then
 		PrintMessage(HUD_PRINTTALK, "Раунд будет закончен.")
+
 		EndRound()
 	elseif winner == 2 then
 		PrintMessage(HUD_PRINTTALK, "Раунд не будет закончен.")
@@ -329,25 +332,19 @@ COMMANDS.levelend = {
 			return
 		end
 
-		if ply:IsAdmin() or ply:IsUserGroup("helper") or ply:IsUserGroup("moderator") then
-			EndRound()
+		if ply:IsAdmin() or ply:IsUserGroup("helper") or ply:IsUserGroup("moderator") then return EndRound() end
 
-			return
-		end
-
-		local IsPidorOnline = false
+		local isAdminOnline = false
 
 		for _, v in ipairs(player.GetAll()) do
 			if v:IsAdmin() or v:IsUserGroup("blat") or v:IsUserGroup("Sponsor") or v:IsUserGroup("Helper") or v:IsUserGroup("moderator") or v:IsUserGroup("MegaSponsor") then
-				IsPidorOnline = true
+				isAdminOnline = true
 				break
 			end
 		end
 
-		if IsPidorOnline and not ply:IsUserGroup("blat") and not ply:IsUserGroup("Sponsor") and not ply:IsUserGroup("MegaSponsor") then
-			ply:ChatPrint("Вы не можете запустить голосование, так как на сервере есть админ, блатной или спонсор.")
-
-			return
+		if isAdminOnline and not ply:IsUserGroup("blat") and not ply:IsUserGroup("Sponsor") and not ply:IsUserGroup("MegaSponsor") then
+			return ply:ChatPrint("Вы не можете запустить голосование, так как на сервере есть админ, блатной или спонсор.")
 		end
 
 		if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 then
@@ -370,6 +367,7 @@ local function donaterVoteLevel(t, argv, calling_ply, args)
 
 	if winner == 1 then
 		PrintMessage(HUD_PRINTTALK, "Режим сменится в следующем раунде на " .. tostring(args[1]))
+
 		SetActiveNextRound(args[1])
 	elseif winner == 2 then
 		PrintMessage(HUD_PRINTTALK, "Смены режима не состоялось.")
@@ -384,21 +382,13 @@ concommand.Add("set_next_mode", function(ply, cmd, args)
 	local modeName = args[1]
 
 	if not modeName or not table.HasValue(LevelList, modeName) then
-		if ply then
-			ply:ChatPrint("Указанный режим не существует.")
-		end
-
-		return
+		return ply:ChatPrint("Указанный режим не существует.")
 	end
 
 	local mapName = string.lower(game.GetMap())
 
 	if modeName == "deathrun" and not string.find(mapName, "deathrun") then
-		if ply then
-			ply:ChatPrint("Режим deathrun можно запустить только на специальных картах.")
-		end
-
-		return
+		return ply:ChatPrint("Режим deathrun можно запустить только на специальных картах.")
 	end
 
 	if string.find(mapName, "deathrun") and modeName ~= "deathrun" then
@@ -411,18 +401,12 @@ concommand.Add("set_next_mode", function(ply, cmd, args)
 
 	if ply and ply:IsAdmin() or ply:IsUserGroup("moderator") then
 		if SetActiveNextRound(modeName) then
-			if ply then
-				ply:ChatPrint("Режим следующего раунда изменен на " .. modeName .. ".")
-			end
+			ply:ChatPrint("Режим следующего раунда изменен на " .. modeName .. ".")
 		else
-			if ply then
-				ply:ChatPrint("Не удалось изменить режим следующего раунда.")
-			end
+			ply:ChatPrint("Не удалось изменить режим следующего раунда.")
 		end
 	else
-		if ply then
-			ply:ChatPrint("Вы не админ. Используйте кнопку Голосование.")
-		end
+		ply:ChatPrint("Вы не админ. Используйте кнопку Голосование.")
 	end
 end)
 
@@ -430,65 +414,41 @@ concommand.Add("vote_next_mode", function(ply, cmd, args)
 	local modeName = args[1]
 
 	if not modeName or not table.HasValue(LevelList, modeName) then
-		if ply then
-			ply:ChatPrint("Указанный режим не существует.")
-		end
-
-		return
+		return ply:ChatPrint("Указанный режим не существует.")
 	end
 
 	local mapName = string.lower(game.GetMap())
 
 	if modeName == "deathrun" and not string.find(mapName, "deathrun") then
-		if ply then
-			ply:ChatPrint("Режим deathrun можно запустить только на специальных картах.")
-		end
-
-		return
+		return ply:ChatPrint("Режим deathrun можно запустить только на специальных картах.")
 	end
 
 	if string.find(mapName, "deathrun") and modeName ~= "deathrun" then
-		if ply then
-			ply:ChatPrint("На картах для deathrun можно играть только в deathrun.")
-		end
-
-		return
+		return ply:ChatPrint("На картах для deathrun можно играть только в deathrun.")
 	end
 
 	if modeName == "jailbreak" and not string.find(mapName, "jb") then
-		if ply then
-			ply:ChatPrint("Режим jailbreak можно запустить только на картах с префиксом 'jb'.")
-		end
-
-		return
+		return ply:ChatPrint("Режим jailbreak можно запустить только на картах с префиксом 'jb'.")
 	end
 
 	if string.find(mapName, "jb") and modeName ~= "jailbreak" then
-		if ply then
-			ply:ChatPrint("На картах для jailbreak можно играть только в jailbreak.")
-		end
-
-		return
+		return ply:ChatPrint("На картах для jailbreak можно играть только в jailbreak.")
 	end
 
 	if string.find(mapName, "backrooms") and modeName ~= "nextbot" then
-		if ply then
-			ply:ChatPrint("На картах для backrooms можно играть только в nextbot.")
-		end
-
-		return
+		return ply:ChatPrint("На картах для backrooms можно играть только в nextbot.")
 	end
 
-	local IsPidorOnline = false
+	local isAdminOnline = false
 
 	for _, v in ipairs(player.GetAll()) do
 		if v:IsAdmin() or v:IsUserGroup("blat") or v:IsUserGroup("Sponsor") or v:IsUserGroup("Helper") or v:IsUserGroup("MegaSponsor") or v:IsUserGroup("moderator") then
-			IsPidorOnline = true
+			isAdminOnline = true
 			break
 		end
 	end
 
-	if IsPidorOnline and not ply:IsUserGroup("blat") and not ply:IsUserGroup("Sponsor") and not ply:IsUserGroup("Helper") and not ply:IsUserGroup("moderator") and not ply:IsUserGroup("MegaSponsor") and not ply:IsAdmin() then
+	if isAdminOnline and not ply:IsUserGroup("blat") and not ply:IsUserGroup("Sponsor") and not ply:IsUserGroup("Helper") and not ply:IsUserGroup("moderator") and not ply:IsUserGroup("MegaSponsor") and not ply:IsAdmin() then
 		ply:ChatPrint("Вы не можете запустить голосование, так как на сервере есть админ, блатной, или спонсор.")
 
 		return
@@ -603,9 +563,7 @@ hook.Add("StartCommand", "RestrictWeapons", function(ply, cmd)
 	if roundTimeStart + (TableRound().CantFight or 5) - CurTime() > 0 then
 		local wep = ply:GetWeapon("weapon_hands")
 
-		if IsValid(wep) then
-			cmd:SelectWeapon(wep)
-		end
+		if IsValid(wep) then cmd:SelectWeapon(wep) end
 	end
 end)
 
@@ -615,6 +573,7 @@ hook.Add("PlayerSpawn", "hg_blackscreenonlostfocus", function(ply)
 	if PLYSPAWN_OVERRIDE then return end
 
 	ply:SendLua("if !system.HasFocus() then system.FlashWindow() end")
+
 	net.Start("close_tab")
 	net.Send(ply)
 end)
@@ -648,8 +607,11 @@ hook.Add("HUDPaint", "homigrad-roundstate", function()
 
 	if k > 0 then
 		k = math.min(k, 1)
+
 		showRoundInfoColor.a = k * 255
+
 		yellow.a = showRoundInfoColor.a
+
 		local name, nextName = TableRound().Name, TableRound(roundActiveNameNext).Name
 
 		draw.RoundedBox(5, ScrW() - 270 - math.max(#nextName, #name) * 4, ScrH() - 65, 800, 70, Color(0, 0, 0, showRoundInfoColor.a - 30))

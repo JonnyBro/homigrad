@@ -220,7 +220,7 @@ hook.Add("PostDrawOpaqueRenderables", "laser", function()
 		ply.Laser = ply.Laser or false
 
 		if IsValid(ply) and ply.Laser and not ply:GetNWInt("Otrub") and laserweps[IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() or ply.curweapon] then
-			local wep = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon() or (IsValid(ply:GetNWEntity('wep')) and ply:GetNWEntity('wep'))
+			local wep = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon() or (IsValid(ply:GetNWEntity("wep")) and ply:GetNWEntity("wep"))
 			if not IsValid(wep) then continue end
 
 			local att = wep:GetAttachment(wep:LookupAttachment("muzzle"))

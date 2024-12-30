@@ -1,4 +1,3 @@
-if engine.ActiveGamemode() == "homigrad" then
 	bullets = {
 		["weapon_m3super"] = 8,
 		["weapon_remington870"] = 12,
@@ -489,4 +488,3 @@ if engine.ActiveGamemode() == "homigrad" then
 		effectdata:SetScale( 1 )
 		util.Effect( "MuzzleEffect", effectdata )
 	end
-end

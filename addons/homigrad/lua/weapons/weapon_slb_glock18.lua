@@ -1,11 +1,13 @@
-SWEP.Base = "kaban_base" -- base 
+SWEP.Base = "kaban_base"
+
 SWEP.PrintName = "Glock-18"
 SWEP.Author = "дэбэгэ прожект (украдено у хомиграда!!!)"
 SWEP.Instructions = "Что может еще делать пистолет? СРАТЬ В ЛИЦО!"
 SWEP.Category = "CSS-Пушечки"
 SWEP.Spawnable = true
+
 SWEP.AdminOnly = false
-------------------------------------------
+
 SWEP.Primary.ClipSize = 17
 SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize * 2
 SWEP.Primary.Automatic = false
@@ -15,25 +17,28 @@ SWEP.Primary.Damage = 70
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "weapons/glock/glock18-1.wav"
 SWEP.Primary.Force = 25
+
 SWEP.ReloadTime = 2
 SWEP.ReloadSound = "weapons/pistol/pistol_reload1.wav"
 SWEP.ShootWait = 0.14
+
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
-------------------------------------------
+
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 SWEP.HoldType = "revolver"
-------------------------------------------
+
 SWEP.Slot = 1
 SWEP.SlotPos = 2
 SWEP.DrawAmmo = true
 SWEP.DrawCrosshair = false
 SWEP.ViewModel = "models/weapons/salatbase/w_pist_glock18.mdl"
 SWEP.WorldModel = "models/weapons/salatbase/w_pist_glock18.mdl"
+
 SWEP.addPos = Vector(5, 0.1, 4)
 SWEP.addAng = Angle(-1.7, 4.95, 0)
 SWEP.sightPos = Vector(3.9, 15, 1.60)

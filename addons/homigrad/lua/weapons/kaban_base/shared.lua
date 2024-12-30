@@ -3,6 +3,7 @@ SWEP.PrintName = "kaban_base"
 SWEP.Author = "Ce1azz"
 SWEP.Instructions = ""
 SWEP.Category = "Other"
+
 SWEP.Spawnable = false
 SWEP.AdminOnly = false
 
@@ -15,12 +16,14 @@ SWEP.Primary.Damage = 100
 SWEP.Primary.Spread = 2
 SWEP.Primary.Sound = "weapons/fiveseven/fiveseven-1.wav"
 SWEP.Primary.Force = 0
+
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.12
 SWEP.NextShot = 0
 SWEP.Sight = false
 SWEP.ReloadSound = "weapons/smg1/smg1_reload.wav"
 SWEP.TwoHands = false
+
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
@@ -29,6 +32,7 @@ SWEP.Secondary.Ammo = "none"
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
+
 SWEP.HoldType = ""
 SWEP.sightPos = Vector(0, 0, 0)
 SWEP.sightAng = Angle(0, 0, 0)
@@ -42,6 +46,7 @@ SWEP.ScopeAdjustPos = Vector(0, 0, 0)
 SWEP.ScopeFov = 90
 SWEP.ScopeMat = ""
 SWEP.ScopeRot = 0
+
 SWEP.UVAdjust = {0, 0}
 SWEP.UVScale = {1, 1}
 
@@ -65,10 +70,9 @@ SIB_SurfaceHardness = {
 	[MAT_GLASS] = .6
 }
 
-local vecZero = vector_origin
-local angZero = angle_zero
 SWEP.addPos = vector_origin
 SWEP.addAng = angle_zero
+
 local defaultBulletPosAng = {
 	default = {Vector(7.7, 0.4, 3.95), Angle(-3, 5.5, 0)},
 	revolver = {Vector(7.7, 0.4, 3.95), Angle(-3, 5.5, 0)},
@@ -85,8 +89,10 @@ end
 function SWEP:GetDefaultMuzzlePos()
 	local owner = self:GetOwner()
 	if not IsValid(owner) then return end
+
 	local att = owner:GetAttachment(owner:LookupAttachment("anim_attachment_rh"))
 	if not att then return end
+
 	local lpos, lang = self:GetDefaultLocalMuzzlePos()
 	local pos, ang = LocalToWorld(lpos, lang, att.Pos, att.Ang)
 
@@ -97,7 +103,9 @@ function SWEP:GetBulletSourcePos()
 	if self.addPos or self.addAng then
 		local owner = self:GetOwner()
 		if not IsValid(owner) then return end
+
 		local att = owner:GetAttachment(owner:LookupAttachment("anim_attachment_rh"))
+
 		if att then
 			local defaultlpos, defaultlang = self:GetDefaultLocalMuzzlePos()
 			local pos, ang = LocalToWorld(self.addPos or defaultlpos, self.addAng or defaultlang or angle_zero, att.Pos, att.Ang)
@@ -112,6 +120,7 @@ function SWEP:GetBulletSourcePos()
 end
 
 local mul = 1
+
 function LerpAngleFT(lerp, source, set)
 	return LerpAngle(math.min(lerp * mul, 1), source, set)
 end
@@ -119,6 +128,7 @@ end
 function SWEP:DrawHUD()
 	if SERVER then return end
 	if not self.DrawScope then return end
+
 	local view = {
 		angles = Angle(0, 0, 0)
 	}
@@ -127,6 +137,7 @@ function SWEP:DrawHUD()
 	local ScopeAng = shootAng
 	ScopeAng.z = view.angles.z or 0
 	z = 0
+
 	local rt = {
 		x = 0,
 		y = 0,
@@ -141,31 +152,38 @@ function SWEP:DrawHUD()
 	}
 
 	rt.angles[3] = rt.angles[3] - 180
+
 	render.PushRenderTarget(self.rtmat, 0, 0, 512, 512)
+
 	local old = DisableClipping(true)
+
 	render.Clear(1, 1, 1, 255)
 	render.RenderView(rt)
+
 	cam.Start2D()
-	surface.SetDrawColor(255, 255, 255, 255) -- Set the drawing color
-	surface.SetMaterial(self.ScopeMat) -- Use our cached material
-	surface.DrawTexturedRectRotated(256 + self.UVAdjust[1], 256 + self.UVAdjust[2], 512 * self.UVScale[1], 512 * self.UVScale[2], self.ScopeRot or 0) -- Actually draw the rectangl
+		surface.SetDrawColor(255, 255, 255, 255) -- Set the drawing color
+		surface.SetMaterial(self.ScopeMat) -- Use our cached material
+		surface.DrawTexturedRectRotated(256 + self.UVAdjust[1], 256 + self.UVAdjust[2], 512 * self.UVScale[1], 512 * self.UVScale[2], self.ScopeRot or 0) -- Actually draw the rectangl
 	cam.End2D()
+
 	DisableClipping(old)
 	render.PopRenderTarget()
 end
 
-
 function SWEP:BulletCallbackFunc(dmgAmt, ply, tr, dmg, tracer, hard, multi)
 	if tr.MatType == MAT_FLESH then
 		util.Decal("Blood", tr.HitPos + tr.HitNormal, tr.HitPos - tr.HitNormal)
+
 		local vPoint = tr.HitPos
+
 		local effectdata = EffectData()
-		effectdata:SetOrigin(vPoint)
+			effectdata:SetOrigin(vPoint)
 		util.Effect("BloodImpact", effectdata)
 	end
 
 	if self.NumBullet or 1 > 1 then return end
 	if tr.HitSky then return end
+
 	if hard then
 		self:RicochetOrPenetrate(tr)
 	end
@@ -173,18 +191,22 @@ end
 
 function SWEP:RicochetOrPenetrate(initialTrace)
 	local AVec, IPos, TNorm, SMul = initialTrace.Normal, initialTrace.HitPos, initialTrace.HitNormal, SIB_SurfaceHardness[initialTrace.MatType]
+
 	if not SMul then
 		SMul = .5
 	end
 
 	local ApproachAngle = -math.deg(math.asin(TNorm:Dot(AVec)))
 	local MaxRicAngle = 60 * SMul
-	-- all the way through
+
+	-- Penetrate
 	if ApproachAngle > (MaxRicAngle * 1.25) then
 		local MaxDist, SearchPos, SearchDist, Penetrated = ((self.Primary.Damage / 5) / SMul) * .25, IPos, 5, false
+
 		while (not Penetrated) and (SearchDist < MaxDist) do
 			SearchPos = IPos + AVec * SearchDist
 			local PeneTrace = util.QuickTrace(SearchPos, -AVec * SearchDist)
+
 			if (not PeneTrace.StartSolid) and PeneTrace.Hit then
 				Penetrated = true
 			else
@@ -193,93 +215,91 @@ function SWEP:RicochetOrPenetrate(initialTrace)
 		end
 
 		if Penetrated then
-			self:FireBullets(
-				{
-					Attacker = self:GetOwner(),
-					Damage = 1,
-					Force = 1,
-					Num = 1,
-					Tracer = 0,
-					TracerName = "",
-					Dir = -AVec,
-					Spread = vector_origin,
-					Src = SearchPos + AVec
-				}
-			)
-
-			self:FireBullets(
-				{
-					Attacker = self:GetOwner(),
-					Damage = self.Primary.Damage * .65,
-					Force = (self.Primary.Force / 20) / 15,
-					Num = 1,
-					Tracer = 0,
-					TracerName = "",
-					Dir = AVec,
-					Spread = vector_origin,
-					Src = SearchPos + AVec
-				}
-			)
-		end
-	elseif ApproachAngle < (MaxRicAngle * .25) then
-		-- ping whiiiizzzz
-		if math.random(1, 5) <= 2 then return end
-		sound.Play("salatbase/ricochet/ricochet" .. math.random(1, 12) .. ".wav", IPos, 70, math.random(90, 100))
-		local NewVec = AVec:Angle()
-		NewVec:RotateAroundAxis(TNorm, 180)
-		NewVec = NewVec:Forward()
-		self:FireBullets(
-			{
+			self:FireBullets({
 				Attacker = self:GetOwner(),
-				Damage = self.Primary.Damage * .85,
+				Damage = 1,
+				Force = 1,
+				Num = 1,
+				Tracer = 0,
+				TracerName = "",
+				Dir = -AVec,
+				Spread = vector_origin,
+				Src = SearchPos + AVec
+			})
+
+			self:FireBullets({
+				Attacker = self:GetOwner(),
+				Damage = self.Primary.Damage * .65,
 				Force = (self.Primary.Force / 20) / 15,
 				Num = 1,
 				Tracer = 0,
 				TracerName = "",
-				Dir = -NewVec,
+				Dir = AVec,
 				Spread = vector_origin,
-				Src = IPos + TNorm
-			}
-		)
+				Src = SearchPos + AVec
+			})
+		end
+	elseif ApproachAngle < (MaxRicAngle * .25) then -- Ricochet
+		if math.random(1, 5) <= 2 then return end
+
+		sound.Play("salatbase/ricochet/ricochet" .. math.random(1, 12) .. ".wav", IPos, 70, math.random(90, 100))
+
+		local NewVec = AVec:Angle()
+		NewVec:RotateAroundAxis(TNorm, 180)
+		NewVec = NewVec:Forward()
+
+		self:FireBullets({
+			Attacker = self:GetOwner(),
+			Damage = self.Primary.Damage * .85,
+			Force = (self.Primary.Force / 20) / 15,
+			Num = 1,
+			Tracer = 0,
+			TracerName = "",
+			Dir = -NewVec,
+			Spread = vector_origin,
+			Src = IPos + TNorm
+		})
 	end
 end
 
-local pos = vector_origin
 slbweps = slbweps or {}
+
 function SWEP:Initialize()
 	self:SetHoldType(self.HoldType)
+
 	slbweps[self] = true
+
 	if CLIENT then return end
 end
 
-hook.Add(
-	"Think",
-	"fwep-customThinker",
-	function()
-		for wep in pairs(slbweps) do
-			if not IsValid(wep) then
-				slbweps[wep] = nil
-				continue
-			end
+hook.Add("Think", "fwep-customThinker", function()
+	for wep in pairs(slbweps) do
+		if not IsValid(wep) then
+			slbweps[wep] = nil
+			continue
+		end
 
-			local owner = wep:GetOwner()
-			if not IsValid(owner) or (owner:IsPlayer() and not owner:Alive()) or owner:GetActiveWeapon() ~= wep then continue end --wtf i dont know
-			if wep.Step then
-				wep:Step()
-			end
+		local owner = wep:GetOwner()
+		if not IsValid(owner) or (owner:IsPlayer() and not owner:Alive()) or owner:GetActiveWeapon() ~= wep then continue end --wtf i dont know
+
+		if wep.Step then
+			wep:Step()
 		end
 	end
-)
+end)
 
 function SWEP:PrimaryAttack()
 	if not IsFirstTimePredicted() then return end
 	if timer.Exists("reload" .. self:EntIndex()) then return nil end
 	if self:Clip1() <= 0 then return nil end
 	if self:GetOwner():IsSprinting() then return nil end
-	local ply = self:GetOwner()
+
 	self.ShootNext = self.NextShot or NextShot
+
 	if self.NextShot > CurTime() then return end
+
 	self.NextShot = CurTime() + self.ShootWait
+
 	self:EmitSound(self.Primary.Sound)
 	self:FireShoting(self.Primary.Damage, 1, 5)
 	self:SetNWFloat("VisualRecoil", self:GetNWFloat("VisualRecoil") + self.Recoil)
@@ -293,7 +313,9 @@ function SWEP:Step()
 	self.animProg = self:GetNWFloat("VisualRecoil") or 0
 	self.animLerp = self.animLerp or Angle(0, 0, 0)
 	self.animLerp = LerpAngle(0.25, self.animLerp, Angle(5, 0, self.HoldType == "revolver" and 0 or -2) * self.animProg)
+
 	local ply = self:GetOwner()
+
 	if self:GetNWFloat("VisualRecoil") > 0 then
 		if self.HoldType ~= "revolver" then
 			ply:ManipulateBonePosition(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"), Vector(0, -self.animLerp.x / 3, -self.animLerp.x / 3), false)
@@ -301,7 +323,7 @@ function SWEP:Step()
 		end
 
 		ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"), self.animLerp * 2, false)
-		--print(animProg)
+
 		self:SetNWFloat("VisualRecoil", Lerp(4 * FrameTime(), self:GetNWFloat("VisualRecoil") or 0, 0))
 	end
 
@@ -311,59 +333,66 @@ function SWEP:Step()
 	end
 
 	local isLocal = self:IsLocal()
+
 	if isLocal then
 		self.eyeSpray = self.eyeSpray or Angle(0, 0, 0)
+
 		ply:SetEyeAngles(ply:EyeAngles() + self.eyeSpray)
+
 		self.eyeSpray = LerpAngleFT(0.5, self.eyeSpray, Angle(0, 0, 0))
+
 		local p = 0.005
+
 		self.eyeSpray = self.eyeSpray + Angle(math.Rand(-p, p), math.Rand(-p, p), 0)
 	end
 
 	if isLocal then
-		--self.eyeSpray = self.eyeSpray + Angle(math.Rand(-0.03,0.03),math.Rand(-0.03,0.03),math.Rand(-0.03,0.03))
 		if ply:GetNWInt("LeftArm") < 1 or ply:GetNWInt("RightArm") < 1 then
 			local p = 0.1
+
 			self.eyeSpray = self.eyeSpray + Angle(math.Rand(-p, p), math.Rand(-p, p), 0)
 		end
 	end
+
 	if not ply:IsSprinting() then
 		local scope = self:IsScope()
-		if SERVER then self:SetNWBool("IsScope",scope) end
 
-		if isLocal then
-			--self.eyeSpray = self.eyeSpray + Angle(math.Rand(-0.03,0.03),math.Rand(-0.03,0.03),math.Rand(-0.03,0.03))
-			if (ply:GetNWInt("LeftArm") < 1 or ply:GetNWInt("RightArm") < 1) then
-				local p = 0.3 - math.min(painlosing or 0,0.3)
-				self.eyeSpray = self.eyeSpray + Angle(math.Rand(-p,p),math.Rand(-p,p),math.Rand(-p,p))
-			end
+		if SERVER then
+			self:SetNWBool("IsScope", scope)
 		end
 
+		if isLocal then
+			if ply:GetNWInt("LeftArm") < 1 or ply:GetNWInt("RightArm") < 1 then
+				local p = 0.3 - math.min(painlosing or 0, 0.3)
+
+				self.eyeSpray = self.eyeSpray + Angle(math.Rand(-p, p), math.Rand(-p, p), math.Rand(-p, p))
+			end
+		end
 	else
-		--[[if not self.TwoHands then
+		--[[
+		if not self.TwoHands then
 			self:SetWeaponHoldType("normal")
 		else
 			self:SetWeaponHoldType("passive")
-		end--]]
+		end
+		--]]
 	end
 
 	local eyeangles = (-ply:GetEyeTrace().HitPos + ply:EyePos()):Angle()
-	eyeangles:RotateAroundAxis(eyeangles:Up(),180)
+	eyeangles:RotateAroundAxis(eyeangles:Up(), 180)
 
-	if ((CLIENT and isLocal) or SERVER) then
+	if (CLIENT and isLocal) or SERVER then
 		if not ply:GetNWBool("Suiciding") and not ply:IsSprinting() then
 			local numbr = self.TwoHands and 50 or 80
-			if eyeangles[1] > numbr then
-			end
 
-			if eyeangles[1] < -numbr then
-			end
+			if eyeangles[1] > numbr then end
+			if eyeangles[1] < -numbr then end
 		end
 	end
 
-	if not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end--;c
-	--ply:ManipulateBonePosition(ply:LookupBone("ValveBiped.Bip01_R_Upperarm"),upperarm_pos,false)
-	--ply:ManipulateBonePosition(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"),clavicle_pos,false)
+	if not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end
 end
+
 function SWEP:IsScope()
 	local ply = self:GetOwner()
 	if ply:IsNPC() then return end
@@ -379,93 +408,74 @@ function SWEP:Reload()
 	if timer.Exists("reload" .. self:EntIndex()) or self:Clip1() >= self:GetMaxClip1() or self:GetOwner():GetAmmoCount(self:GetPrimaryAmmoType()) <= 0 then return nil end
 	if self:GetOwner():IsSprinting() then return nil end
 	if self.NextShot > CurTime() then return end
+
 	self:GetOwner():SetAnimation(PLAYER_RELOAD)
 	self:EmitSound(self.ReloadSound, 60, 100, 0.8, CHAN_AUTO)
-	timer.Create(
-		"reload" .. self:EntIndex(),
-		self.ReloadTime,
-		1,
-		function()
-			if IsValid(self) and IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon() == self then
-				local oldclip = self:Clip1()
-				self:SetClip1(math.Clamp(self:Clip1() + self:GetOwner():GetAmmoCount(self:GetPrimaryAmmoType()), 0, self:GetMaxClip1()))
-				local needed = self:Clip1() - oldclip
-				self:GetOwner():SetAmmo(self:GetOwner():GetAmmoCount(self:GetPrimaryAmmoType()) - needed, self:GetPrimaryAmmoType())
-			end
+
+	timer.Create("reload" .. self:EntIndex(), self.ReloadTime, 1, function()
+		if IsValid(self) and IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon() == self then
+			local oldclip = self:Clip1()
+			self:SetClip1(math.Clamp(self:Clip1() + self:GetOwner():GetAmmoCount(self:GetPrimaryAmmoType()), 0, self:GetMaxClip1()))
+
+			local needed = self:Clip1() - oldclip
+			self:GetOwner():SetAmmo(self:GetOwner():GetAmmoCount(self:GetPrimaryAmmoType()) - needed, self:GetPrimaryAmmoType())
 		end
-	)
+	end)
 end
 
-local vecZero = vector_origin
-local angZero = angle_zero
-local hg_show_hitposmuzzle = CreateClientConVar("hg_show_hitposmuzzlearmer", 0, false, false, "Shows debug weapon hitpos", 0, 2)
+local hg_show_hitposmuzzlearmer = CreateClientConVar("hg_show_hitposmuzzlearmer", 0, false, false, "Shows debug weapon hitpos", 0, 2)
 local x = Vector(1, 0.025, 0.025)
-RoundActiveName = tostring(roundActiveName)
-hook.Add(
-	"HUDPaint",
-	"admin_hitpos",
-	function()
-		local player = LocalPlayer()
 
-		-- Always show hit position if roundactivename is scout and the weapon is weapon_slb_scout
-		if roundactivename == "scout" and IsValid(player:GetActiveWeapon()) and player:GetActiveWeapon():GetClass() == "weapon_slb_scout" then
-			local wep = player:GetActiveWeapon()
-			local att = wep:LookupAttachment("muzzle")
-			if not att then return end
-			local att = wep:GetAttachment(att)
-			if not att then return end
-			local shootOrigin, shootAngles = wep:GetBulletSourcePos()
-			local tr = util.QuickTrace(shootOrigin, shootAngles:Forward() * 1000, player)
-			local hit = tr.HitPos:ToScreen()
-			surface.SetDrawColor(color_white)
-			surface.DrawRect(hit.x - 2.5, hit.y - 2.5, 5, 5)
-			return -- Exit after drawing for scout weapon
-		end
+hook.Add("HUDPaint", "admin_hitpos", function()
+	local ply = LocalPlayer()
 
-		-- Admin check for hit position display
-		if hg_show_hitposmuzzle:GetInt() <= 0 then return end
-		if not player:IsAdmin() then return end
-		local wep = player:GetActiveWeapon()
-		if not IsValid(wep) or wep.Base ~= "kaban_base" then return end
+	-- Always show hit position if roundactivename is scout and the weapon is weapon_slb_scout or ply is admin and enabled hg_show_hitposmuzzlearmer
+	if (roundActiveName == "scout" and IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon():GetClass() == "weapon_slb_scout") or (hg_show_hitposmuzzlearmer:GetInt() > 0 and ply:IsAdmin()) then
+		local wep = ply:GetActiveWeapon()
+
 		local att = wep:LookupAttachment("muzzle")
 		if not att then return end
+
 		local att = wep:GetAttachment(att)
 		if not att then return end
+
 		local shootOrigin, shootAngles = wep:GetBulletSourcePos()
-		local tr = util.QuickTrace(shootOrigin, shootAngles:Forward() * 1000, player)
+		local tr = util.QuickTrace(shootOrigin, shootAngles:Forward() * 1000, ply)
 		local hit = tr.HitPos:ToScreen()
+
 		surface.SetDrawColor(color_white)
 		surface.DrawRect(hit.x - 2.5, hit.y - 2.5, 5, 5)
 	end
-)
+end)
 
+hook.Add("PostDrawTranslucentRenderables", "Boxxie", function()
+	if hg_show_hitposmuzzlearmer:GetInt() <= 1 then return end
+	if not LocalPlayer():IsAdmin() then return end
 
-hook.Add(
-	"PostDrawTranslucentRenderables",
-	"Boxxie",
-	function()
-		if hg_show_hitposmuzzle:GetInt() <= 1 then return end
-		if not LocalPlayer():IsAdmin() then return end
-		local wep = LocalPlayer():GetActiveWeapon()
-		if not IsValid(wep) or wep.Base ~= "kaban_base" then return end
-		local att = wep:LookupAttachment("muzzle")
-		if not att then return end
-		local att = wep:GetAttachment(att)
-		if not att then return end
-		local shootOrigin, shootAngles = wep:GetBulletSourcePos()
-		render.SetColorMaterial() -- white material for easy coloring
-		cam.IgnoreZ(true) -- makes next draw calls ignore depth and draw on top
-		render.DrawBox(shootOrigin, shootAngles, x, -x, color_white) -- draws the box
-		cam.IgnoreZ(false) -- disables previous call
-	end
-)
+	local wep = LocalPlayer():GetActiveWeapon()
+	if not IsValid(wep) or wep.Base ~= "kaban_base" then return end
+
+	local att = wep:LookupAttachment("muzzle")
+	if not att then return end
+
+	local att = wep:GetAttachment(att)
+	if not att then return end
+
+	local shootOrigin, shootAngles = wep:GetBulletSourcePos()
+
+	render.SetColorMaterial()
+	cam.IgnoreZ(true)
+	render.DrawBox(shootOrigin, shootAngles, x, -x, color_white)
+	cam.IgnoreZ(false)
+end)
 
 function SWEP:FireShoting(dmg, numbul, spread)
-	--PrintTable(self:GetAttachments())
 	if not IsValid(self) then return nil end
 	if self:Clip1() <= 0 then return nil end
 	if timer.Exists("reload" .. self:EntIndex()) then return nil end
-	--[[local obj = self:LookupAttachment("muzzle")
+
+	--[[
+	local obj = self:LookupAttachment("muzzle")
 	local Attachment = self:GetAttachment(obj)
 	local cone = self.Primary.Cone
 	local shootOrigin = Attachment.Pos
@@ -477,7 +487,9 @@ function SWEP:FireShoting(dmg, numbul, spread)
 	local ang = angZero
 	ang:Set(self.addAng)
 	shootAngles:Add(ang)
-	local shootDir = shootAngles:Forward()]]
+	local shootDir = shootAngles:Forward()
+	--]]
+
 	if self:GetOwner():IsPlayer() then
 		self:GetOwner():LagCompensation(true)
 	end
@@ -485,8 +497,10 @@ function SWEP:FireShoting(dmg, numbul, spread)
 	local shootOrigin, shootAngles = self:GetBulletSourcePos()
 	local shootDir = shootAngles:Forward()
 	local ply = self:GetOwner()
+
 	local bullet = {}
 	local cone = self.Primary.Cone
+
 	bullet.Num = self.NumBullet or 1
 	bullet.Src = shootOrigin
 	bullet.Dir = shootDir
@@ -498,11 +512,13 @@ function SWEP:FireShoting(dmg, numbul, spread)
 	bullet.AmmoType = self.Primary.Ammo
 	bullet.Attacker = ply
 	bullet.IgnoreEntity = ply:GetVehicle() or nil
+
 	bullet.Callback = function(ply, tr)
 		self:BulletCallbackFunc(dmg or 25, ply, tr, dmg, false, true, false)
 	end
 
 	self:FireBullets(bullet)
+
 	if self:GetOwner():IsPlayer() then
 		self:GetOwner():LagCompensation(false)
 	end
@@ -516,21 +532,19 @@ function SWEP:FireShoting(dmg, numbul, spread)
 		self.eyeSpray:Add(Angle(-self.Primary.Force / 400, math.Rand(-self.Primary.Force / 400, self.Primary.Force / 400), 0))
 	end
 
-	-- Make a muzzle flash
 	if self.DoFlash then
 		local ef = EffectData()
-		ef:SetEntity(self)
-		ef:SetAttachment(1) -- self:LookupAttachment( "muzzle" )
-		ef:SetFlags(1) -- Sets the Combine AR2 Muzzle flash
+			ef:SetEntity(self)
+			ef:SetAttachment(1) -- self:LookupAttachment("muzzle") -why not?
+			ef:SetFlags(1)
 		util.Effect("MuzzleFlash", ef)
 	end
-	--self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-	--ply:SetAnimation(PLAYER_ATTACK1)
 end
 
 function SWEP:Think()
 	local ply = self:GetOwner()
 	local t = {}
+
 	if not self.TwoHands then
 		t.start = ply:GetShootPos() + ply:GetAngles():Right() * 2.5
 	else
@@ -539,11 +553,15 @@ function SWEP:Think()
 
 	t.endpos = t.start + Angle(0, ply:GetAngles().y, ply:GetAngles().z):Forward() * 100
 	t.filter = player.GetAll()
+
 	Thinking = Thinking or 0
+
 	if CurTime() then
 		Thinking = CurTime() + 1
+
 		local tr = util.TraceLine(t)
 		self.dist = (tr.HitPos - t.start):Length()
+
 		if not self:GetOwner():IsSprinting() then
 			if self.dist <= 45 and not self:GetOwner():KeyPressed(IN_RELOAD) then
 				if not self.TwoHands then
@@ -577,7 +595,9 @@ end
 
 function SWEP:Deploy()
 	self:SetHoldType("passive")
+
 	local obj = self:LookupAttachment("muzzle")
+
 	if not obj then
 		self:GetOwner():ChatPrint("лох скачай контент")
 
@@ -593,7 +613,9 @@ end
 
 function SWEP:Holster(wep)
 	if not IsFirstTimePredicted() then return end
+
 	local ply = self:GetOwner()
+
 	ply:ManipulateBonePosition(ply:LookupBone("ValveBiped.Bip01_R_Clavicle"), Vector(0, 0, 0), true)
 	ply:ManipulateBoneAngles(ply:LookupBone("ValveBiped.Bip01_R_Hand"), Angle(0, 0, 0), true)
 

@@ -1,11 +1,13 @@
-SWEP.Base = "kaban_base" -- base 
+SWEP.Base = "kaban_base"
+
 SWEP.PrintName = "P220"
 SWEP.Author = "Пистолет"
 SWEP.Instructions = "Что может еще делать пистолет? СТРЕЛЯТЬ В ЛИЦО!"
 SWEP.Category = "CSS-Пушечки"
 SWEP.Spawnable = true
+
 SWEP.AdminOnly = false
-------------------------------------------
+
 SWEP.Primary.ClipSize = 13
 SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize * 2
 SWEP.Primary.Automatic = false
@@ -15,25 +17,28 @@ SWEP.Primary.Damage = 70
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "weapons/p228/p228-1.wav"
 SWEP.Primary.Force = 30
+
 SWEP.ReloadTime = 2
 SWEP.ReloadSound = "weapons/pistol/pistol_reload1.wav"
 SWEP.ShootWait = 0.156
+
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
-------------------------------------------
+
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 SWEP.HoldType = "revolver"
-------------------------------------------
+
 SWEP.Slot = 1
 SWEP.SlotPos = 2
 SWEP.DrawAmmo = true
 SWEP.DrawCrosshair = false
 SWEP.ViewModel = "models/weapons/salatbase/w_pist_p228.mdl"
 SWEP.WorldModel = "models/weapons/salatbase/w_pist_p228.mdl"
+
 SWEP.addPos = Vector(5, 0.2, 3.8)
 SWEP.addAng = Angle(-1.9, 4.92, 0)
 SWEP.sightPos = Vector(4.1, 15, 1.55)

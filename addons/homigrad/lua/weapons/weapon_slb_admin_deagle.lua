@@ -1,12 +1,15 @@
-SWEP.Base = "kaban_base" -- base 
+SWEP.Base = "kaban_base"
+
 SWEP.PrintName = "Ковбойка 1488"
-SWEP.Author = "Секретные наработки израиля в сфере ядерных технологий"
+SWEP.Author = "Секретные наработки Израиля в сфере ядерных технологий"
 SWEP.Instructions = "22 калибр"
 SWEP.Category = "CSS-Пушечки"
-SWEP.Spawnable = true
-SWEP.AdminSpawnable = true 
+
 SWEP.AdminOnly = true
-------------------------------------------
+
+SWEP.Spawnable = true
+SWEP.AdminSpawnable = true
+
 SWEP.Primary.ClipSize = 1488
 SWEP.Primary.DefaultClip = SWEP.Primary.ClipSize * 1488
 SWEP.Primary.Automatic = true
@@ -16,25 +19,28 @@ SWEP.Primary.Damage = 79039137553
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "weapons/ak74/ak47-1.wav"
 SWEP.Primary.Force = 0
+
 SWEP.ReloadTime = 0
 SWEP.ReloadSound = "weapons/pistol/pistol_reload1.wav"
 SWEP.ShootWait = 0
+
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
-------------------------------------------
+
 SWEP.Weight = 0
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 SWEP.HoldType = "revolver"
-------------------------------------------
+
 SWEP.Slot = 1
 SWEP.SlotPos = 2
 SWEP.DrawAmmo = true
 SWEP.DrawCrosshair = false
 SWEP.ViewModel = "models/weapons/salatbase/w_pist_deagle.mdl"
 SWEP.WorldModel = "models/weapons/salatbase/w_pist_deagle.mdl"
+
 SWEP.addPos = Vector(5, 0.1, 4)
 SWEP.addAng = Angle(-2.4, 4.95, 0)
 SWEP.sightPos = Vector(4.5, 10, 1.20)

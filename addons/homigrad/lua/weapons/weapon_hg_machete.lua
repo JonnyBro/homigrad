@@ -4,8 +4,8 @@ SWEP.PrintName = "Machete"
 SWEP.Category = "Ближний Бой"
 SWEP.Instructions = ""
 
-SWEP.Spawnable= true
-SWEP.AdminSpawnable= true
+SWEP.Spawnable = true
+SWEP.AdminSpawnable = true
 SWEP.AdminOnly = false
 
 SWEP.ViewModelFOV = 60
@@ -20,8 +20,6 @@ SWEP.Slot = 1
 SWEP.SlotPos = 2
 
 SWEP.UseHands = true
-
----SWEP.HoldType = "knife"
 
 SWEP.FiresUnderwater = false
 

@@ -1,21 +1,21 @@
-if engine.ActiveGamemode() == "homigrad" then
 include("shared.lua")
 
 local healsound1 = Sound("snd_jack_hmcd_bandage.wav")
 local healsound2 = Sound("snd_jack_hmcd_bandage.wav")
 
 function SWEP:Heal(ent)
-	if not ent or not ent:IsPlayer() then 
-		if table.HasValue(BleedingEntities,ent) then
-			sound.Play(healsound1,ent:GetPos(),75,100,0.5)
+	if not ent or not ent:IsPlayer() then
+		if table.HasValue(BleedingEntities, ent) then
+			sound.Play(healsound1, ent:GetPos(), 75, 100, 0.5)
+
 			return true
 		else
 			return
 		end
 	end
-	
+
 	if ent.Bloodlosing > 0 then
-		ent.Bloodlosing = math.max(ent.Bloodlosing - 65,0)
+		ent.Bloodlosing = math.max(ent.Bloodlosing - 65, 0)
 
 		if ent.Bloodlosing == 0 then
 			ent:EmitSound(healsound1)
@@ -25,5 +25,4 @@ function SWEP:Heal(ent)
 
 		return true
 	end
-end
 end

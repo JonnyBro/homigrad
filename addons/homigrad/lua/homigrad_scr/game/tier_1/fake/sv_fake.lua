@@ -1,4 +1,3 @@
-if engine.ActiveGamemode() == "homigrad" then
 local PlayerMeta = FindMetaTable("Player")
 local EntityMeta = FindMetaTable("Entity")
 
@@ -1574,5 +1573,3 @@ hook.Add("Player Think","holdentity",function(ply,time)
 
 	end--]]
 end)
-
-end
