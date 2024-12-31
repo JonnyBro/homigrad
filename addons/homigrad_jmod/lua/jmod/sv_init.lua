@@ -5,7 +5,7 @@ if force_workshop:GetBool() then
 end
 
 local function JackaSpawnHook(ply)
-	if JMod.Иди_Нахуй then return end
+	if JMod.hgFaking then return end
 	ply.JModSpawnTime = CurTime()
 	ply.JModFriends = ply.JModFriends or {}
 

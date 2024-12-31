@@ -1,5 +1,3 @@
-if engine.ActiveGamemode() ~= "homigrad" then return end
-
 hook.Add("HomigradDamage", "ImpulseShock", function(ply, hitGroup, dmginfo)
 	local dmg = dmginfo:GetDamage()
 
@@ -26,7 +24,6 @@ hook.Add("HomigradDamage", "ImpulseShock", function(ply, hitGroup, dmginfo)
 	net.Send(ply)
 
 	local force = dmginfo:GetDamageForce() / 5
-
 	if hitGroup == HITGROUP_RIGHTLEG or hitGroup == HITGROUP_LEFTLEG then end --shotguns imbalanced shit --if ply.dmgimpulse > 12 then timer.Simple(0,function() if not ply.fake then Faking(ply,force) end end) end
 
 	if hitGroup == HITGROUP_CHEST then

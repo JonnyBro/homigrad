@@ -21,7 +21,6 @@ SETFOV()
 cvars.AddChangeCallback("hg_fov", function(cmd, _, value)
 	timer.Simple(0, function()
 		SETFOV()
-		print("hg: change fov")
 	end)
 end)
 

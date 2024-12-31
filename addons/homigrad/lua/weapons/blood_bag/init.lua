@@ -84,7 +84,7 @@ function SWEP:Think()
 
 			ent.bloodtype = ent.bloodtype or math.random(1, 8)
 
-			owner:ChatPrint((self.bloodinside and bloodtranslate[self.bloodtype] .. " -> " .. bloodtranslate[ent.bloodtype]) or bloodtranslate[ent.bloodtype] .. " -> пакет для крови")
+			owner:ChatPrint((self.bloodinside and "Из пакета: " .. bloodtranslate[self.bloodtype] .. " -> " .. "Себе: " .. bloodtranslate[ent.bloodtype]) or "Свою: " .. bloodtranslate[ent.bloodtype] .. " -> В пакет")
 		end
 
 		if ent then
@@ -113,15 +113,13 @@ function SWEP:Think()
 
 			ent.bloodtype = ent.bloodtype or math.random(1, 8)
 
-			owner:ChatPrint((self.bloodinside and bloodtranslate[self.bloodtype] .. " -> " .. bloodtranslate[ent.bloodtype]) or bloodtranslate[ent.bloodtype] .. " -> пакет для крови")
-			--local compatible = bloodtypes[bloodtranslate[self.bloodtype]][bloodtranslate[ent.bloodtype]]
-			--owner:ChatPrint(not self.bloodinside and tostring(blood_compatibility))
+			owner:ChatPrint((self.bloodinside and "Из пакета: " .. bloodtranslate[self.bloodtype] .. " -> " .. "Человеку: " .. bloodtranslate[ent.bloodtype]) or "Человек: " .. bloodtranslate[ent.bloodtype] .. " -> В пакет")
 		end
 
 		if ent then
 			if self.zabortime and (self.zabortime + 2) <= CurTime() then
 				self:Heal(ent)
-				self:SetSkin(not self.bloodinside and 1 or 0)
+				self:SetSkin((not self.bloodinside and 1) or 0)
 			end
 		end
 	else
@@ -133,7 +131,7 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:PostInit()
-	self.bloodinside = math.random(1, 5) > 2 and true or false
+	self.bloodinside = (math.random(1, 5) > 2 and true) or false
 
 	if self.bloodinside then
 		self.bloodtype = math.random(1, 8)
@@ -143,7 +141,7 @@ function SWEP:PostInit()
 		net.Broadcast()
 	end
 
-	self:SetSkin(not self.bloodinside and 1 or 0)
+	self:SetSkin((not self.bloodinside and 1) or 0)
 end
 
 function SWEP:SecondaryAttack()
