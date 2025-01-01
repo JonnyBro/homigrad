@@ -301,7 +301,7 @@ local function ToggleMenu(toggle)
 					net.WriteBool(plr.Laser)
 				net.SendToServer()
 
-				local str = (ply.Laser and "on") or "off"
+				local str = (lply.Laser and "on") or "off"
 
 				LocalPlayer():EmitSound("items/nvg_" .. str .. ".wav", nil, nil, .5)
 			end)

@@ -215,6 +215,8 @@ function SpawnWeapon(ply, clip1)
 					end
 				end
 			end
+
+			return ply.wep
 		end
 	end
 end

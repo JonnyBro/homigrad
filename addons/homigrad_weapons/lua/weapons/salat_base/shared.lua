@@ -1,16 +1,3 @@
-skins = {
-	megapenis = true,
-	meagsponsor = true,
-	donator = true,
-	superadmin = true,
-	microdonater = true,
-	blat = true,
-	headadmin = true,
-	admin = true
-}
-
-local vecZero = Vector(0, 0, 0)
-local angZero = Angle(0, 0, 0)
 SWEP.Base = "weapon_base"
 
 SWEP.PrintName = "salat_base"
@@ -61,8 +48,10 @@ SWEP.vbwPos = false
 SWEP.vbwAng = false
 SWEP.Suppressed = false
 
-local hg_skins = CreateClientConVar("hg_skins", "1", true, false, "ubrat govno", 0, 1)
-local hg_show_hitposmuzzle = CreateClientConVar("hg_show_hitposmuzzle", "0", false, false, "huy", 0, 1)
+local hg_show_hitposmuzzle = CreateClientConVar("hg_show_hitposmuzzle", "0", false, false, "admin only debug for weapons", 0, 1)
+
+local vecZero = Vector(0, 0, 0)
+local angZero = Angle(0, 0, 0)
 
 hook.Add("HUDPaint", "admin_hitpos", function()
 	if hg_show_hitposmuzzle:GetBool() and LocalPlayer():IsAdmin() then
@@ -170,9 +159,7 @@ end
 function SWEP:DrawWorldModel()
 	self:DrawModel()
 
-	if not hg_skins:GetBool() then return end
-
-	if IsValid(self:GetOwner()) and self:GetOwner():IsPlayer() and skins[self:GetOwner():GetUserGroup()] then
+	if IsValid(self:GetOwner()) and self:GetOwner():IsPlayer() then
 		self:DrawModel()
 	end
 end

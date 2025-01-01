@@ -209,12 +209,12 @@ local reasons = {
 	["poison"] = "Вы были отравлены."
 }
 
-hook.Add("PlayerDeath", "plymessage", function(ply, hitgroup, dmginfo)
+hook.Add("PlayerDeath", "plymessage", function(ply, inflictor, attacker)
 	local att = ply.LastAttacker
 	local boneName = bonenames[ply.LastHitBoneName]
 	local add = boneName and " в " .. boneName or ""
 	local reason = ply.KillReason
-	local dmgInfo = dmgInfo or ply.LastDMGInfo
+	local dmginfo = ply.LastDMGInfo
 
 	if ply == att then
 		ply:ChatPrint("Вы совершили самоубийство" .. add)
@@ -222,7 +222,7 @@ hook.Add("PlayerDeath", "plymessage", function(ply, hitgroup, dmginfo)
 		ply:ChatPrint(reasons[reason] or "Вы умерли при загадочных обстоятельствах.")
 	elseif att then
 		local dmgtype = "от ранения"
-		dmgtype = dmgInfo:IsDamageType(DMG_BULLET + DMG_BUCKSHOT) and (dmgInfo:IsDamageType(DMG_BUCKSHOT) and "от ранения осколками/дробью" or "от огнестрельного ранения") or dmgInfo:IsExplosionDamage() and "от взрыва" or dmgInfo:IsDamageType(DMG_SLASH) and "от ножевого ранения" or dmgInfo:IsDamageType(DMG_CLUB + DMG_GENERIC) and "от ранения тупым оружием" or dmgtype
+		dmgtype = dmginfo:IsDamageType(DMG_BULLET + DMG_BUCKSHOT) and (dmginfo:IsDamageType(DMG_BUCKSHOT) and "от ранения осколками/дробью" or "от огнестрельного ранения") or dmginfo:IsExplosionDamage() and "от взрыва" or dmginfo:IsDamageType(DMG_SLASH) and "от ножевого ранения" or dmginfo:IsDamageType(DMG_CLUB + DMG_GENERIC) and "от ранения тупым оружием" or dmgtype
 
 		ply:ChatPrint("Вы умерли " .. dmgtype .. add)
 		ply:ChatPrint("Вас убил игрок " .. att:Name())

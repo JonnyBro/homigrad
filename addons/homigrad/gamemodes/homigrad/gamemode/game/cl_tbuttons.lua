@@ -65,9 +65,9 @@ local focus_range = 25
 
 -- Отрисовка HUD
 function TBHUD:Draw(client)
-	RoundActiveName = tostring(roundActiveName)
+	local ply = LocalPlayer()
 
-	if RoundActiveName ~= "homicide" then return end
+	if roundActiveName ~= "homicide" then return end
 	if not ply.roleT then return end
 
 	if self.buttons_count ~= 0 then

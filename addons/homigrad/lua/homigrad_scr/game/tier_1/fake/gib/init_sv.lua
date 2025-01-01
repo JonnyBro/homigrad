@@ -214,7 +214,7 @@ hook.Add("Think", "Gib", function()
 
 					util.Decal("Blood", traceResult.HitPos + traceResult.HitNormal, traceResult.HitPos - traceResult.HitNormal, ply)
 				else
-					BloodParticle(ent:GetPos() + ent:OBBCenter(), ent:GetVelocity() + Vector(math.math.Rand(-5, 5), math.math.Rand(-5, 5), 0))
+					BloodParticle(ent:GetPos() + ent:OBBCenter(), ent:GetVelocity() + Vector(math.Rand(-5, 5), math.Rand(-5, 5), 0))
 				end
 			end
 

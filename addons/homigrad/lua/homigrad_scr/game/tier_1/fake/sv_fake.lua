@@ -29,21 +29,26 @@ RagdollDamageBoneMul = {
 
 -- Хитгруппы костей
 bonetohitgroup = {
-	["ValveBiped.Bip01_Head1"] = 1,
-	["ValveBiped.Bip01_R_UpperArm"] = 5,
-	["ValveBiped.Bip01_R_Forearm"] = 5,
-	["ValveBiped.Bip01_R_Hand"] = 5,
-	["ValveBiped.Bip01_L_UpperArm"] = 4,
-	["ValveBiped.Bip01_L_Forearm"] = 4,
-	["ValveBiped.Bip01_L_Hand"] = 4,
-	["ValveBiped.Bip01_Pelvis"] = 3,
-	["ValveBiped.Bip01_Spine2"] = 2,
-	["ValveBiped.Bip01_L_Thigh"] = 6,
-	["ValveBiped.Bip01_L_Calf"] = 6,
-	["ValveBiped.Bip01_L_Foot"] = 6,
-	["ValveBiped.Bip01_R_Thigh"] = 7,
-	["ValveBiped.Bip01_R_Calf"] = 7,
-	["ValveBiped.Bip01_R_Foot"] = 7
+	["ValveBiped.Bip01_Head1"] = HITGROUP_HEAD,
+
+	["ValveBiped.Bip01_R_UpperArm"] = HITGROUP_RIGHTARM,
+	["ValveBiped.Bip01_R_Forearm"] = HITGROUP_RIGHTARM,
+	["ValveBiped.Bip01_R_Hand"] = HITGROUP_RIGHTARM,
+
+	["ValveBiped.Bip01_L_UpperArm"] = HITGROUP_LEFTARM,
+	["ValveBiped.Bip01_L_Forearm"] = HITGROUP_LEFTARM,
+	["ValveBiped.Bip01_L_Hand"] = HITGROUP_LEFTARM,
+
+	["ValveBiped.Bip01_Pelvis"] = HITGROUP_STOMACH,
+	["ValveBiped.Bip01_Spine2"] = HITGROUP_CHEST,
+
+	["ValveBiped.Bip01_L_Thigh"] = HITGROUP_LEFTLEG,
+	["ValveBiped.Bip01_L_Calf"] = HITGROUP_LEFTLEG,
+	["ValveBiped.Bip01_L_Foot"] = HITGROUP_LEFTLEG,
+
+	["ValveBiped.Bip01_R_Thigh"] = HITGROUP_RIGHTLEG,
+	["ValveBiped.Bip01_R_Calf"] = HITGROUP_RIGHTLEG,
+	["ValveBiped.Bip01_R_Foot"] = HITGROUP_RIGHTLEG
 }
 
 function GetFakeWeapon(ply)
