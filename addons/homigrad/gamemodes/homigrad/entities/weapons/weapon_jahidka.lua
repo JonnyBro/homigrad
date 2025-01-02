@@ -1,9 +1,11 @@
 SWEP.Base = "weapon_base"
 
-SWEP.PrintName = "Шакидка"
-SWEP.Author = "homigrad"
-SWEP.Instructions = "Пояс смертника, исход всегда один"
-SWEP.Category = "Примочки убийцы"
+if CLIENT then
+	SWEP.PrintName = language.GetPhrase("hg.jahidka.name")
+	SWEP.Author = "Secret Society"
+	SWEP.Instructions = language.GetPhrase("hg.jahidka.inst")
+	SWEP.Category = language.GetPhrase("hg.category.traitor")
+end
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
@@ -58,12 +60,12 @@ if SERVER then
 			util.ScreenShake(SelfPos, 99999, 99999, 1, 3000)
 			sound.Play("BaseExplosionEffect.Sound", SelfPos, 120, math.random(90, 110))
 
-			for i = 1, 4 do
+			for _ = 1, 4 do
 				sound.Play("explosions/doi_ty_01_close.wav", SelfPos, 140, math.random(80, 110))
 			end
 
 			timer.Simple(.1, function()
-				for i = 1, 5 do
+				for _ = 1, 5 do
 					local Tr = util.QuickTrace(SelfPos, VectorRand() * 20)
 
 					if Tr.Hit then

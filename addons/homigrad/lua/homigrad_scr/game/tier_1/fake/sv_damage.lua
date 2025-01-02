@@ -180,25 +180,33 @@ hook.Add("EntityTakeDamage", "ragdamage", function(ent, dmginfo)
 end)
 
 local bonenames = {
-	["ValveBiped.Bip01_Head1"] = "голову",
-	["ValveBiped.Bip01_Spine"] = "спину",
-	["ValveBiped.Bip01_R_Hand"] = "правую руку",
-	["ValveBiped.Bip01_R_Forearm"] = "правое предплечье",
-	["ValveBiped.Bip01_R_Foot"] = "правую ногу",
-	["ValveBiped.Bip01_R_Thigh"] = "правое бедро",
-	["ValveBiped.Bip01_R_Calf"] = "правую голень",
-	["ValveBiped.Bip01_R_Shoulder"] = "правое плечо",
-	["ValveBiped.Bip01_R_Elbow"] = "правый локоть",
-	["ValveBiped.Bip01_L_Hand"] = "левую руку",
-	["ValveBiped.Bip01_L_Forearm"] = "левое предплечье",
-	["ValveBiped.Bip01_L_Foot"] = "левую ногу",
-	["ValveBiped.Bip01_L_Thigh"] = "левое бедро",
-	["ValveBiped.Bip01_L_Calf"] = "левую голень",
-	["ValveBiped.Bip01_L_Shoulder"] = "левое плечо",
-	["ValveBiped.Bip01_L_Elbow"] = "левый локоть"
+	["ValveBiped.Bip01_Head1"] = "hg.bones.head",
+	["ValveBiped.Bip01_Spine"] = "hg.bones.spine",
+	["ValveBiped.Bip01_Spine2"] = "hg.bones.spine",
+	["ValveBiped.Bip01_Pelvis"] = "hg.bones.pelvis",
+
+	["ValveBiped.Bip01_R_Hand"] = "hg.bones.rhand",
+	["ValveBiped.Bip01_R_Forearm"] = "hg.bones.rforearm",
+	["ValveBiped.Bip01_R_Shoulder"] = "hg.bones.rshoulder",
+	["ValveBiped.Bip01_R_UpperArm"] = "hg.bones.rshoulder",
+	["ValveBiped.Bip01_R_Elbow"] = "hg.bones.relbow",
+
+	["ValveBiped.Bip01_R_Foot"] = "hg.bones.rfoot",
+	["ValveBiped.Bip01_R_Thigh"] = "hg.bones.rthigh",
+	["ValveBiped.Bip01_R_Calf"] = "hg.bones.rcalf",
+
+	["ValveBiped.Bip01_L_Hand"] = "hg.bones.lhand",
+	["ValveBiped.Bip01_L_Forearm"] = "hg.bones.lforearm",
+	["ValveBiped.Bip01_L_Shoulder"] = "hg.bones.lshoulder",
+	["ValveBiped.Bip01_L_UpperArm"] = "hg.bones.lshoulder",
+	["ValveBiped.Bip01_L_Elbow"] = "hg.bones.lelbow",
+
+	["ValveBiped.Bip01_L_Foot"] = "hg.bones.lfoot",
+	["ValveBiped.Bip01_L_Thigh"] = "hg.bones.lthigh",
+	["ValveBiped.Bip01_L_Calf"] = "hg.bones.lcalf"
 }
 
-local reasons = {
+local deathreasons = {
 	["blood"] = "Вы умерли от кровопотери.",
 	["pain"] = "Вы умерли от болевого шока.",
 	["painlosing"] = "Вы умерли от передоза обезболивающим.",
@@ -218,8 +226,8 @@ hook.Add("PlayerDeath", "plymessage", function(ply, inflictor, attacker)
 
 	if ply == att then
 		ply:ChatPrint("Вы совершили самоубийство" .. add)
-	elseif reason then
-		ply:ChatPrint(reasons[reason] or "Вы умерли при загадочных обстоятельствах.")
+	elseif reason then -- TODO: нетворк
+		ply:ChatPrint(deathreasons[reason] or "Вы умерли при загадочных обстоятельствах.")
 	elseif att then
 		local dmgtype = "от ранения"
 		dmgtype = dmginfo:IsDamageType(DMG_BULLET + DMG_BUCKSHOT) and (dmginfo:IsDamageType(DMG_BUCKSHOT) and "от ранения осколками/дробью" or "от огнестрельного ранения") or dmginfo:IsExplosionDamage() and "от взрыва" or dmginfo:IsDamageType(DMG_SLASH) and "от ножевого ранения" or dmginfo:IsDamageType(DMG_CLUB + DMG_GENERIC) and "от ранения тупым оружием" or dmgtype

@@ -1,9 +1,11 @@
 SWEP.Base = "weapon_hg_granade_base"
 
-SWEP.PrintName = "Светошумовая Граната"
-SWEP.Author = "homigrad"
-SWEP.Instructions = "Специальное средство несмертельного действия, оказывающие на человека светозвуковое и осколочное воздействие."
-SWEP.Category = "Гранаты"
+if CLIENT then
+	SWEP.PrintName = language.GetPhrase("hg.flashbang.name")
+	SWEP.Author = "homigrad"
+	SWEP.Instructions = language.GetPhrase("hg.flashbang.inst")
+	SWEP.Category = language.GetPhrase("hg.category.grenades")
+end
 
 SWEP.Slot = 4
 SWEP.SlotPos = 2

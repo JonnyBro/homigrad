@@ -1,9 +1,11 @@
 SWEP.Base = "weapon_base"
 
-SWEP.PrintName = "Установка миномёта"
-SWEP.Author = "homigrad"
-SWEP.Instructions = "Установить миномёт"
-SWEP.Category = "Разное"
+if CLIENT then
+	SWEP.PrintName = language.GetPhrase("hg.gredmimomet.name")
+	SWEP.Author = "homigrad"
+	SWEP.Instructions = language.GetPhrase("hg.gredmimomet.inst")
+	SWEP.Category = language.GetPhrase("hg.category.other")
+end
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
@@ -69,6 +71,7 @@ function SWEP:Initialize()
 
 	if SERVER then
 		local _, ent = table.Random(list)
+
 		self:SetNWString("Gred", ent)
 	end
 end
@@ -91,38 +94,33 @@ if SERVER then
 		self:Remove()
 	end
 
+	--[[ This hook doesn't exist?
 	hook.Add("Gred Emplacment Use", "Mimomet", function(ent, ply)
 		if not ply:KeyDown(IN_WALK) or not list[ent:GetClass()] then return end
 		if ply:HasWeapon("weapon_gredmimomet") then return true end
 
 		ply:Give("weapon_gredmimomet"):SetNWString("Gred", ent:GetClass())
+
 		ent:Remove()
 
 		return true
 	end)
+	--]]
 else
 	function SWEP:PrimaryAttack()
 	end
 
 	function SWEP:OnRemove()
-		if IsValid(self.model) then
-			self.model:Remove()
-		end
-
-		if IsValid(self.model2) then
-			self.model2:Remove()
-		end
+		if IsValid(self.model) then self.model:Remove() end
+		if IsValid(self.model2) then self.model2:Remove() end
 	end
 
 	function SWEP:DrawWorldModel()
 		self:SetWeaponHoldType("normal")
+
 		local owner = self:GetOwner()
 
-		if not IsValid(owner) then
-			self:DrawModel()
-
-			return
-		end
+		if not IsValid(owner) then return self:DrawModel() end
 
 		local mdl = self.worldModel
 
@@ -142,6 +140,7 @@ else
 
 		mdl:SetRenderOrigin(matrix:GetTranslation())
 		mdl:SetRenderAngles(matrix:GetAngles() + Angle(90, 180, 0))
+
 		mdl:DrawModel()
 	end
 
@@ -180,35 +179,25 @@ else
 		model2:SetColor(hit and green or red)
 	end
 
-	local white = Color(255, 255, 255)
 	local hg_hint = CreateClientConVar("hg_hint", "1", true, false)
 
 	function SWEP:DrawHUD()
 		local ent = scripted_ents.Get(self:GetNWString("Gred"))
 
-		if not ent then
-			draw.SimpleText("wait??", "DebugFixedSmall", ScrW() / 2, ScrH() - 175, white, TEXT_ALIGN_CENTER)
+		if not ent then return draw.SimpleText("something is not right...", "DebugFixedSmall", ScrW() / 2, ScrH() - 175, color_white, TEXT_ALIGN_CENTER) end
 
-			return
-		end
-
-		draw.SimpleText(ent.PrintName, "ChatFont", ScrW() / 2, ScrH() - 175, white, TEXT_ALIGN_CENTER)
+		draw.SimpleText(ent.PrintName, "ChatFont", ScrW() / 2, ScrH() - 175, color_white, TEXT_ALIGN_CENTER)
 
 		if not hg_hint:GetBool() then return end
 
-		draw.SimpleText("Обращай внимания на калибр, выбирай 'HE'", "DebugFixedSmall", ScrW() / 2, ScrH() - 150, white, TEXT_ALIGN_CENTER)
-		draw.SimpleText("Что-бы забрать зажми 'ALT' и нажми 'E'", "DebugFixedSmall", ScrW() / 2, ScrH() - 125, white, TEXT_ALIGN_CENTER)
-		draw.SimpleText("Убрать подсказки hg_hint 0", "DebugFixedSmall", ScrW() / 2, ScrH() - 100, white, TEXT_ALIGN_CENTER)
+		draw.SimpleText("#hg.gredmimomet.hud1", "DebugFixedSmall", ScrW() / 2, ScrH() - 150, color_white, TEXT_ALIGN_CENTER)
+		draw.SimpleText("#hg.sweps.pickup", "DebugFixedSmall", ScrW() / 2, ScrH() - 125, color_white, TEXT_ALIGN_CENTER)
+		draw.SimpleText("#hg.sweps.hint", "DebugFixedSmall", ScrW() / 2, ScrH() - 100, color_white, TEXT_ALIGN_CENTER)
 	end
 
 	function SWEP:Holster()
-		if IsValid(self.model) then
-			self.model:Remove()
-		end
-
-		if IsValid(self.model2) then
-			self.model2:Remove()
-		end
+		if IsValid(self.model) then self.model:Remove() end
+		if IsValid(self.model2) then self.model2:Remove() end
 	end
 
 	function SWEP:OwnerChanged()

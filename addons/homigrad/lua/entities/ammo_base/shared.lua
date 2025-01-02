@@ -3,7 +3,7 @@ ENT.Base = "base_gmodentity"
 
 ENT.PrintName = "hg_ammo_base"
 
-ENT.Spawnable = true
+ENT.Spawnable = false
 
 ENT.AmmoCount = 10
 ENT.AmmoType = "9х19 mm Parabellum"

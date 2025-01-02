@@ -5,4 +5,4 @@ ENT.PrintName = "armor"
 
 DEFINE_BASECLASS("base_anim")
 
-ENT.Spawnable = "true"
+ENT.Spawnable = "false"

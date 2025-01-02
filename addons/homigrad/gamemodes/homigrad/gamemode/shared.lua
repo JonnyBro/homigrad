@@ -20,15 +20,13 @@ function GM:CreateTeams()
 	team.SetUp(1, "Terrorists", Color(255, 0, 0))
 	team.SetUp(2, "Counter Terrorists", Color(0, 0, 255))
 	team.SetUp(3, "Other", Color(0, 255, 0))
+
 	team.MaxTeams = 3
 end
 
 function OpposingTeam(team)
-	if team == 1 then
-		return 2
-	elseif team == 2 then
-		return 1
-	end
+	if team == 1 then return 2
+	elseif team == 2 then return 1 end
 end
 
 function ReadPoint(point)

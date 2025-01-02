@@ -2,10 +2,12 @@ AddCSLuaFile()
 
 SWEP.Base = "medkit"
 
-SWEP.PrintName = "Стяжки"
-SWEP.Author = "z"
-SWEP.Instructions = "Связать человека"
-SWEP.Category = "Разное"
+if CLIENT then
+	SWEP.PrintName = language.GetPhrase("hg.handcuffs.name")
+	SWEP.Author = "z"
+	SWEP.Instructions = language.GetPhrase("hg.handcuffs.inst")
+	SWEP.Category = language.GetPhrase("hg.category.tools")
+end
 
 SWEP.Slot = 5
 SWEP.SlotPos = 3
@@ -19,9 +21,9 @@ SWEP.dwmRight = 1
 SWEP.dwmUp = -1
 
 if SERVER then
-	util.AddNetworkString("huyvalues")
+	util.AddNetworkString("hg_cuffs")
 else
-	net.Receive("huyvalues", function(len)
+	net.Receive("hg_cuffs", function(len)
 		local ent = net.ReadEntity()
 		ent.CuffPly = net.ReadEntity()
 		ent.CuffTime = net.ReadFloat()
@@ -49,7 +51,7 @@ function SWEP:PrimaryAttack()
 			self.CuffPly = ply
 			self.CuffTime = CurTime()
 
-			net.Start("huyvalues")
+			net.Start("hg_cuffs")
 				net.WriteEntity(self)
 				net.WriteEntity(ply)
 				net.WriteFloat(CurTime())

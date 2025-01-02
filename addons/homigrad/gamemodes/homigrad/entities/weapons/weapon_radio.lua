@@ -1,9 +1,11 @@
 SWEP.Base = "weapon_base"
 
-SWEP.PrintName = "Рация"
-SWEP.Author = "homigrad"
-SWEP.Instructions = "Используется для того чтобы координироваться со своей командой"
-SWEP.Category = "Разное"
+if CLIENT then
+	SWEP.PrintName = language.GetPhrase("hg.radio.name")
+	SWEP.Author = "homigrad"
+	SWEP.Instructions = language.GetPhrase("hg.radio.inst")
+	SWEP.Category = language.GetPhrase("hg.category.tools")
+end
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
@@ -30,7 +32,6 @@ SWEP.DrawCrosshair = false
 SWEP.ViewModel = "models/sirgibs/ragdoll/css/terror_arctic_radio.mdl"
 SWEP.WorldModel = "models/sirgibs/ragdoll/css/terror_arctic_radio.mdl"
 
-
 SWEP.DrawWeaponSelection = DrawWeaponSelection
 SWEP.OverridePaintIcon = OverridePaintIcon
 
@@ -44,6 +45,8 @@ SWEP.vbwAng = Angle(-90, 0, -90)
 SWEP.vbwModelScale = 1
 
 if SERVER then
+	util.AddNetworkString("hg_radio_cl")
+
 	homigrad_weapons = homigrad_weapons or {}
 
 	function SWEP:Initialize()
@@ -71,9 +74,6 @@ if SERVER then
 		if output:Team() == input:Team() or output:Team() == 1002 then return true end
 	end
 
-	local CurTime = CurTime
-	local GetAll = player.GetAll
-
 	function SWEP:CanTransmit()
 		local owner = self:GetOwner()
 
@@ -91,7 +91,7 @@ if SERVER then
 		if Transmit then
 			local lisens = self.lisens
 
-			for i, input in pairs(GetAll()) do
+			for i, input in pairs(player.GetAll()) do
 				if not self:CanLisen(output, input) then
 					if lisens[input] then
 						lisens[input] = nil
@@ -99,7 +99,11 @@ if SERVER then
 					end
 				elseif not lisens[input] then
 					lisens[input] = true
-					input:ChatPrint("Вещает : " .. output:Nick())
+
+					net.Start("hg_radio_cl")
+						net.WriteString(output:Name())
+					net.Send(input)
+
 					self:BippSound(input, 100)
 				end
 			end
@@ -110,6 +114,7 @@ if SERVER then
 
 			for input in pairs(lisens) do
 				lisens[input] = nil
+
 				self:BippSound(input, 80)
 			end
 
@@ -125,7 +130,7 @@ if SERVER then
 
 		if IsValid(wep) and wep:CanLisen(output, input, isChat) then
 			if isChat then
-				for i, input in pairs(GetAll()) do
+				for i, input in pairs(player.GetAll()) do
 					if not wep:CanLisen(output, input, isChat) then continue end
 
 					wep:BippSound(input, 140)
@@ -136,17 +141,22 @@ if SERVER then
 		end
 	end)
 else
-	local white = Color(255, 255, 255)
 	local hg_hint = CreateClientConVar("hg_hint", "1", true, false)
 
 	function SWEP:DrawHUD()
 		if LocalPlayer():InVehicle() or not hg_hint:GetBool() then return end
 
-		draw.SimpleText("В голосовой", "DebugFixedSmall", ScrW() / 2 - 200, ScrH() - 175, white)
-		draw.SimpleText("Зажми ПКМ и говори", "DebugFixedSmall", ScrW() / 2 + 200, ScrH() - 175, white, TEXT_ALIGN_RIGHT)
-		draw.SimpleText("В чат", "DebugFixedSmall", ScrW() / 2 - 200, ScrH() - 150, white)
-		draw.SimpleText("Просто пиши и держи в руках", "DebugFixedSmall", ScrW() / 2 + 200, ScrH() - 150, white, TEXT_ALIGN_RIGHT)
-		draw.SimpleText("Сидя в машине нужно просто говорить", "DebugFixedSmall", ScrW() / 2, ScrH() - 125, white, TEXT_ALIGN_CENTER)
-		draw.SimpleText("Убрать подсказки hg_hint 0", "DebugFixedSmall", ScrW() / 2, ScrH() - 100, white, TEXT_ALIGN_CENTER)
+		draw.SimpleText("#hg.radio.hud1", "DebugFixedSmall", ScrW() / 2 - 200, ScrH() - 175, color_white)
+		draw.SimpleText("#hg.radio.hud2", "DebugFixedSmall", ScrW() / 2 + 200, ScrH() - 175, color_white, TEXT_ALIGN_RIGHT)
+		draw.SimpleText("#hg.radio.hud3", "DebugFixedSmall", ScrW() / 2 - 200, ScrH() - 150, color_white)
+		draw.SimpleText("#hg.radio.hud4", "DebugFixedSmall", ScrW() / 2 + 200, ScrH() - 150, color_white, TEXT_ALIGN_RIGHT)
+		draw.SimpleText("#hg.radio.hud5", "DebugFixedSmall", ScrW() / 2, ScrH() - 125, color_white, TEXT_ALIGN_CENTER)
+		draw.SimpleText("#hg.sweps.hint", "DebugFixedSmall", ScrW() / 2, ScrH() - 100, color_white, TEXT_ALIGN_CENTER)
 	end
+
+	net.Receive("hg_radio_cl", function()
+		local name = net.ReadString()
+
+		LocalPlayer():ChatPrint(language.GetPhrase("hg.radio.speaking"):format(name))
+	end)
 end

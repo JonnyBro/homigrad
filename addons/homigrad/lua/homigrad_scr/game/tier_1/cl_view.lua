@@ -900,7 +900,7 @@ hook.Add("PlayerButtonDown", "TogglePointshooting", function(ply, button)
 	end
 end)
 
-hide = {
+local hide = {
 	["CHudHealth"] = true,
 	["CHudBattery"] = true,
 	["CHudAmmo"] = true,

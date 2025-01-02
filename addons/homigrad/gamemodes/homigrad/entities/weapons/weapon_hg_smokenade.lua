@@ -1,9 +1,11 @@
 SWEP.Base = "weapon_hg_granade_base"
 
-SWEP.PrintName = "Дымовая граната"
-SWEP.Author = "homigrad"
-SWEP.Instructions = "Пиротехническое средство для пуска дыма, предназначенное для подачи сигналов, указания места посадки, маскировки объектов при выполнении манёвров (в том числе в ходе уличных беспорядков)"
-SWEP.Category = "Гранаты"
+if CLIENT then
+	SWEP.PrintName = language.GetPhrase("hg.smoke.name")
+	SWEP.Author = "homigrad"
+	SWEP.Instructions = language.GetPhrase("hg.smoke.inst")
+	SWEP.Category = language.GetPhrase("hg.category.grenades")
+end
 
 SWEP.Slot = 4
 SWEP.SlotPos = 2

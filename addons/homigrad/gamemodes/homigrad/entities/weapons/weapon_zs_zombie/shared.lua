@@ -1,8 +1,9 @@
-
 SWEP.ZombieOnly = true
 SWEP.IsMelee = true
 
-SWEP.PrintName = "Zombie"
+if CLIENT then
+	SWEP.PrintName = language.GetPhrase("hg.zombie.name")
+end
 
 SWEP.ViewModel = Model("models/Weapons/v_zombiearms.mdl")
 SWEP.WorldModel = ""

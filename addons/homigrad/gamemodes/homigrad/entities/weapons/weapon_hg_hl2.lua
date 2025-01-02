@@ -1,9 +1,11 @@
 SWEP.Base = "weapon_hg_granade_base"
 
-SWEP.PrintName = "Осколочная граната 'MK3A3'"
-SWEP.Author = "homigrad"
-SWEP.Instructions = "Основная граната Солдата Альянса. Имеет очень убойную силу и разлёт осколков. Без светового сигнала."
-SWEP.Category = "Гранаты"
+if CLIENT then
+	SWEP.PrintName = language.GetPhrase("hg.hl2nade.name")
+	SWEP.Author = "homigrad"
+	SWEP.Instructions = language.GetPhrase("hg.hl2nade.inst")
+	SWEP.Category = language.GetPhrase("hg.category.grenades")
+end
 
 SWEP.Slot = 4
 SWEP.SlotPos = 2

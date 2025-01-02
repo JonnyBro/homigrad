@@ -53,13 +53,13 @@ local function rolldrum(ply, wpn)
 
 	if CLIENT then
 		net.Start("hg_rolldrum")
-		net.WriteEntity(wep)
-		net.WriteInt(wep.tries, 4)
+			net.WriteEntity(wep)
+			net.WriteInt(wep.tries, 4)
 		net.SendToServer()
 	else
 		net.Start("hg_rolldrum")
-		net.WriteEntity(wep)
-		net.WriteInt(wep.tries, 4)
+			net.WriteEntity(wep)
+			net.WriteInt(wep.tries, 4)
 		net.Send(ply)
 	end
 end

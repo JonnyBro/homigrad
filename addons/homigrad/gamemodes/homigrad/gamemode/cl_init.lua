@@ -97,8 +97,8 @@ hook.Add("HUDPaint", "spectate", function()
 
 			local tw = surface.GetTextSize(ent:GetName())
 			draw.SimpleText(ent:GetName(), "HomigradFont", ScrW() / 2 - tw / 2, ScrH() - 100, TEXT_ALING_CENTER, TEXT_ALING_CENTER)
-			tw = surface.GetTextSize("Здоровье: " .. ent:Health())
-			draw.SimpleText("Здоровье: " .. ent:Health(), "HomigradFont", ScrW() / 2 - tw / 2, ScrH() - 75, TEXT_ALING_CENTER, TEXT_ALING_CENTER)
+			tw = surface.GetTextSize(language.GetPhrase("hg.spec.health"):format(ent:Health()))
+			draw.SimpleText(language.GetPhrase("hg.spec.health"):format(ent:Health()), "HomigradFont", ScrW() / 2 - tw / 2, ScrH() - 75, TEXT_ALING_CENTER, TEXT_ALING_CENTER)
 
 			local func = TableRound().HUDPaint_Spectate
 
@@ -114,7 +114,7 @@ hook.Add("HUDPaint", "spectate", function()
 		end
 
 		keyOld = key
-		draw.SimpleText("ALT - вкл/выкл отображение ников", "HomigradFont", 15, ScrH() - 15, showRoundInfoColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		draw.SimpleText(string.format(language.GetPhrase("hg.spec.names"), string.upper(input.LookupBinding("+walk"))), "HomigradFont", 15, ScrH() - 15, showRoundInfoColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 		local key = input.IsButtonDown(KEY_F)
 
 		if not lply:Alive() and keyOld2 ~= key and key then
@@ -151,7 +151,7 @@ hook.Add("HUDPaint", "spectate", function()
 				func()
 			end
 
-			--ESP
+			-- ESP
 			for _, v in ipairs(player.GetAll()) do
 				if not v:Alive() or v == ent then continue end
 
@@ -238,23 +238,22 @@ hook.Add("PostDrawOpaqueRenderables", "laser", function()
 			local tr = util.TraceLine(t)
 
 			cam.Start3D(EyePos(), EyeAngles())
+				render.SetMaterial(mat)
+				render.DrawBeam(tr.StartPos, tr.HitPos, 1, 0, 15.5, Color(255, 0, 0))
 
-			render.SetMaterial(mat)
-			render.DrawBeam(tr.StartPos, tr.HitPos, 1, 0, 15.5, Color(255, 0, 0))
-			local Size = math.random(3, 4)
-			render.SetMaterial(mat2)
+				local Size = math.random(3, 4)
+				render.SetMaterial(mat2)
 
-			local tra = util.TraceLine({
-				start = tr.HitPos - (tr.HitPos - EyePos()):GetNormalized(),
-				endpos = EyePos(),
-				filter = {LocalPlayer(), ply, wep, ply:GetNWEntity("Ragdoll")},
-				mask = MASK_SHOT
-			})
+				local tra = util.TraceLine({
+					start = tr.HitPos - (tr.HitPos - EyePos()):GetNormalized(),
+					endpos = EyePos(),
+					filter = {LocalPlayer(), ply, wep, ply:GetNWEntity("Ragdoll")},
+					mask = MASK_SHOT
+				})
 
-			if not tra.Hit then
-				render.DrawSprite(tr.HitPos, Size, Size, Color(255, 0, 0))
-			end
-
+				if not tra.Hit then
+					render.DrawSprite(tr.HitPos, Size, Size, Color(255, 0, 0))
+				end
 			cam.End3D()
 		end
 	end
@@ -278,13 +277,13 @@ local function ToggleMenu(toggle)
 		wepMenu:SetKeyboardInputEnabled(false)
 
 		if wep:GetClass() ~= "weapon_hands" then
-			wepMenu:AddOption("Выкинуть", function()
+			wepMenu:AddOption("#hg.cmenu.drop", function()
 				LocalPlayer():ConCommand("say *drop")
 			end)
 		end
 
 		if wep:Clip1() > 0 then
-			wepMenu:AddOption("Разрядить", function()
+			wepMenu:AddOption("#hg.cmenu.unload", function()
 				net.Start("Unload")
 					net.WriteEntity(wep)
 				net.SendToServer()
@@ -292,7 +291,7 @@ local function ToggleMenu(toggle)
 		end
 
 		if laserweps[wep:GetClass()] then
-			wepMenu:AddOption("Вкл/Выкл Лазер", function()
+			wepMenu:AddOption("#hg.cmenu.laser", function()
 				local plr = LocalPlayer()
 
 				plr.Laser = not plr.Laser
@@ -312,35 +311,30 @@ local function ToggleMenu(toggle)
 		plyMenu:MakePopup()
 		plyMenu:SetKeyboardInputEnabled(false)
 
-		plyMenu:AddOption("Меню Брони", function()
+		plyMenu:AddOption("#hg.cmenu.armor", function()
 			LocalPlayer():ConCommand("jmod_ez_inv")
 		end)
 
-		plyMenu:AddOption("Меню Патрон", function()
+		plyMenu:AddOption("#hg.cmenu.armor", function()
 			LocalPlayer():ConCommand("hg_ammomenu")
 		end)
 
 		local EZarmor = LocalPlayer().EZarmor
 
 		if JMod.GetItemInSlot(EZarmor, "eyes") then
-			plyMenu:AddOption("Активировать Маску/Забрало", function()
+			plyMenu:AddOption("#hg.cmenu.head", function()
 				LocalPlayer():ConCommand("jmod_ez_toggleeyes")
 			end)
 		end
 	else
-		if IsValid(wepMenu) then
-			wepMenu:Remove()
-		end
-
-		if IsValid(plyMenu) then
-			plyMenu:Remove()
-		end
+		if IsValid(wepMenu) then wepMenu:Remove() end
+		if IsValid(plyMenu) then plyMenu:Remove() end
 	end
 end
 
 local active, oldValue
 
-hook.Add("Think", "Thinkhuyhuy", function()
+hook.Add("Think", "hg_cmenu_think", function()
 	active = input.IsKeyDown(KEY_C)
 
 	if oldValue ~= active then
@@ -378,11 +372,6 @@ hook.Add("OnEntityCreated", "homigrad-colorragdolls", function(ent)
 			end
 		end)
 	end
-end)
-
-
-hook.Add("HUDShouldDraw", "HideHUD_ammo", function(name)
-	if name == "CHudAmmo" then return false end
 end)
 
 net.Receive("remove_jmod_effects", function(len)

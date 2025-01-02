@@ -1,9 +1,11 @@
 SWEP.Base = "weapon_hg_granade_base"
 
-SWEP.PrintName = "Коктейль Молотова"
-SWEP.Author = "homigrad"
-SWEP.Instructions = "Стеклянная бутылка, содержащая горючую жидкость и запал"
-SWEP.Category = "Гранаты"
+if CLIENT then
+	SWEP.PrintName = language.GetPhrase("hg.molotov.name")
+	SWEP.Author = "homigrad"
+	SWEP.Instructions = language.GetPhrase("hg.molotov.inst")
+	SWEP.Category = language.GetPhrase("hg.category.grenades")
+end
 
 SWEP.Slot = 4
 SWEP.SlotPos = 2

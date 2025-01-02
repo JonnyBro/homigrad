@@ -1,12 +1,13 @@
 include("shared.lua")
 
 function SWEP:Cuff(ent)
-	local bone = ent:LookupBone("ValveBiped.Bip01_L_Hand")
+	local lHand = ent:LookupBone("ValveBiped.Bip01_L_Hand")
+	local rHand = ent:LookupBone("ValveBiped.Bip01_R_Hand")
 	local ent1, ent2
 
 	if bone then
-		ent1 = ent:GetPhysicsObjectNum(ent:TranslateBoneToPhysBone(bone))
-		ent2 = ent:GetPhysicsObjectNum(ent:TranslateBoneToPhysBone(ent:LookupBone("ValveBiped.Bip01_R_Hand")))
+		ent1 = ent:GetPhysicsObjectNum(ent:TranslateBoneToPhysBone(lHand))
+		ent2 = ent:GetPhysicsObjectNum(ent:TranslateBoneToPhysBone(rHand))
 
 		ent1:SetPos(ent2:GetPos())
 	end

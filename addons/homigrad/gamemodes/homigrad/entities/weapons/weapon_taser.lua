@@ -1,11 +1,15 @@
 SWEP.Base = "medkit"
-SWEP.PrintName = "Электрошокер"
-SWEP.Author = "homigrad"
-SWEP.Instructions = "Электрическое возбуждение передается нервным клеткам, вызывая в основном болевой шок, а также кратковременные судороги и состояние «ошарашенности», дезориентации."
+
+if CLIENT then
+	SWEP.PrintName = language.GetPhrase("hg.taser.name")
+	SWEP.Author = "homigrad"
+	SWEP.Instructions = language.GetPhrase("hg.taser.inst")
+	SWEP.Category = language.GetPhrase("hg.category.tools")
+end
+
 SWEP.Slot = 2
 SWEP.SlotPos = 4
 SWEP.Spawnable = true
-SWEP.Category = "Разное"
 
 SWEP.ViewModel = "models/realistic_police/taser/w_taser.mdl"
 SWEP.WorldModel = "models/realistic_police/taser/w_taser.mdl"

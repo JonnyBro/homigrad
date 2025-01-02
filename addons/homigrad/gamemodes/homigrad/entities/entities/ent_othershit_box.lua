@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 ENT.Type = "anim"
-ENT.PrintName = "Бокс"
+ENT.PrintName = "Some box"
 ENT.Author = "DarkRP"
 ENT.Spawnable = true
 ENT.AdminSpawnable = false
@@ -21,7 +21,7 @@ else
 		local panel = vgui.Create("DFrame")
 		panel:SetSize(300, 400)
 		panel:Center()
-		panel:SetTitle("Бокс")
+		panel:SetTitle("Container")
 	end
 
 	net.Receive("Box", function()

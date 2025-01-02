@@ -1,9 +1,11 @@
 SWEP.Base = "medkit"
 
-SWEP.PrintName = "Заказчик"
-SWEP.Author = "homigrad"
-SWEP.Instructions = "Закажи все вещи из JMOD!"
-SWEP.Category = "Разное"
+if CLIENT then
+	SWEP.PrintName = language.GetPhrase("hg.phone.name")
+	SWEP.Author = "homigrad"
+	SWEP.Instructions = language.GetPhrase("hg.phone.inst")
+	SWEP.Category = language.GetPhrase("hg.category.tools")
+end
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
@@ -41,8 +43,7 @@ end
 
 if SERVER then
 	function SWEP:Initialize()
-		local Path = "/npc/combine_soldier/vo/"
-		local Files, _ = file.Find("sound" .. Path .. "*.wav", "GAME")
+		local Files, _ = file.Find("sound/npc/combine_soldier/vo/*.wav", "GAME")
 
 		self.Voices = Files
 		self.NextRealThink = 0
@@ -145,8 +146,6 @@ if SERVER then
 	end
 
 	function SWEP:SecondaryAttack()
-		print(self:GetState(), JMod.EZ_STATION_STATE_READY)
-
 		if self:GetState() == JMod.EZ_STATION_STATE_READY then
 			net.Start("JMod_EZradio")
 				net.WriteBool(false)

@@ -1,9 +1,11 @@
 SWEP.Base = "weapon_base"
 
-SWEP.PrintName = "Перцовка"
-SWEP.Author = "homigrad"
-SWEP.Instructions = "Гражданское газовое оружие самообороны, снаряженное слезоточивыми и раздражающими веществами (ирритантами)"
-SWEP.Category = "Разное"
+if CLIENT then
+	SWEP.PrintName = language.GetPhrase("hg.per4ik.name")
+	SWEP.Author = "homigrad"
+	SWEP.Instructions = language.GetPhrase("hg.per4ik.inst")
+	SWEP.Category = language.GetPhrase("hg.category.tools")
+end
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false

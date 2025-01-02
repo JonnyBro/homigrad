@@ -1,9 +1,11 @@
 SWEP.Base = "weapon_base"
 
-SWEP.PrintName = "Молоток"
-SWEP.Author = "homigrad"
-SWEP.Instructions = "Ударный ручной инструмент, применяемый для забивания гвоздей, разбивания предметов и других работ\n\nЛКМ - бить, ПКМ+Е - изменить режим (забивание/отдирание гвоздей), ПКМ - забить/отдереть гвоздь (в зависимости от режима)"
-SWEP.Category = "Разное"
+if CLIENT then
+	SWEP.PrintName = language.GetPhrase("hg.molotok.name")
+	SWEP.Author = "homigrad"
+	SWEP.Instructions = language.GetPhrase("hg.molotok.inst")
+	SWEP.Category = language.GetPhrase("hg.category.tools")
+end
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
@@ -66,6 +68,33 @@ SWEP.ShouldDecal = false
 SWEP.HoldTypeWep = "melee2"
 SWEP.DamageType = DMG_CLUB
 
+local bonenames = {
+	["ValveBiped.Bip01_Head1"] = "hg.bones.head",
+	["ValveBiped.Bip01_Spine"] = "hg.bones.spine",
+	["ValveBiped.Bip01_Spine2"] = "hg.bones.spine",
+	["ValveBiped.Bip01_Pelvis"] = "hg.bones.pelvis",
+
+	["ValveBiped.Bip01_R_Hand"] = "hg.bones.rhand",
+	["ValveBiped.Bip01_R_Forearm"] = "hg.bones.rforearm",
+	["ValveBiped.Bip01_R_Shoulder"] = "hg.bones.rshoulder",
+	["ValveBiped.Bip01_R_UpperArm"] = "hg.bones.rshoulder",
+	["ValveBiped.Bip01_R_Elbow"] = "hg.bones.relbow",
+
+	["ValveBiped.Bip01_R_Foot"] = "hg.bones.rfoot",
+	["ValveBiped.Bip01_R_Thigh"] = "hg.bones.rthigh",
+	["ValveBiped.Bip01_R_Calf"] = "hg.bones.rcalf",
+
+	["ValveBiped.Bip01_L_Hand"] = "hg.bones.lhand",
+	["ValveBiped.Bip01_L_Forearm"] = "hg.bones.lforearm",
+	["ValveBiped.Bip01_L_Shoulder"] = "hg.bones.lshoulder",
+	["ValveBiped.Bip01_L_UpperArm"] = "hg.bones.lshoulder",
+	["ValveBiped.Bip01_L_Elbow"] = "hg.bones.lelbow",
+
+	["ValveBiped.Bip01_L_Foot"] = "hg.bones.lfoot",
+	["ValveBiped.Bip01_L_Thigh"] = "hg.bones.lthigh",
+	["ValveBiped.Bip01_L_Calf"] = "hg.bones.lcalf"
+}
+
 function SWEP:Deploy()
 	if not IsFirstTimePredicted() then return end
 
@@ -110,7 +139,7 @@ local function TwoTrace(ply)
 
 	return tRes1, tRes2
 end
-
+-- TODO: разобраться как оно работает для описания
 function SWEP:PrimaryAttack()
 	self:GetOwner():SetAnimation(PLAYER_ATTACK1)
 
@@ -309,9 +338,9 @@ function SWEP:Think()
 				self.modechanged = true
 				self.mode = not (self.mode or false)
 
-				net.Start("molotok_mode")
-				net.WriteEntity(self)
-				net.WriteBool(self.mode)
+				net.Start("hg_molotok_mode")
+					net.WriteEntity(self)
+					net.WriteBool(self.mode)
 				net.Send(ply)
 
 				ply:ChatPrint(not self.mode and "Режим забивания" or "Режим отдирания")
@@ -323,40 +352,16 @@ function SWEP:Think()
 end
 
 if SERVER then
-	util.AddNetworkString("molotok_mode")
-	util.AddNetworkString("wtf_huy")
+	util.AddNetworkString("hg_molotok_mode")
 
-	hook.Add("Fake Up", "molotok", function(ply, rag)
+	hook.Add("Fake Up", "hg_molotok", function(ply, rag)
 		if (rag.IsWeld or 0) > 0 then return false end
 	end)
 else
-	net.Receive("molotok_mode", function(len)
+	net.Receive("hg_molotok_mode", function(len)
 		net.ReadEntity().mode = net.ReadBool()
 	end)
 end
-
-local bonenames = {
-	["ValveBiped.Bip01_Head1"] = "голову",
-	["ValveBiped.Bip01_Spine"] = "спину",
-	["ValveBiped.Bip01_Spine2"] = "спину",
-	["ValveBiped.Bip01_Pelvis"] = "живот",
-	["ValveBiped.Bip01_R_Hand"] = "правую кисть",
-	["ValveBiped.Bip01_R_Forearm"] = "правое предплечье",
-	["ValveBiped.Bip01_R_UpperArm"] = "правое предплечье",
-	["ValveBiped.Bip01_R_Foot"] = "правую ногу",
-	["ValveBiped.Bip01_R_Thigh"] = "правое бедро",
-	["ValveBiped.Bip01_R_Calf"] = "правую голень",
-	["ValveBiped.Bip01_R_Shoulder"] = "правое плечо",
-	["ValveBiped.Bip01_R_Elbow"] = "правый локоть",
-	["ValveBiped.Bip01_L_Hand"] = "левую кисть",
-	["ValveBiped.Bip01_L_Forearm"] = "левое предплечье",
-	["ValveBiped.Bip01_L_UpperArm"] = "левое предплечье",
-	["ValveBiped.Bip01_L_Foot"] = "левую ногу",
-	["ValveBiped.Bip01_L_Thigh"] = "левое бедро",
-	["ValveBiped.Bip01_L_Calf"] = "левую голень",
-	["ValveBiped.Bip01_L_Shoulder"] = "левое плечо",
-	["ValveBiped.Bip01_L_Elbow"] = "левый локоть"
-}
 
 function SWEP:DrawHUD()
 	local owner = self:GetOwner()
@@ -380,5 +385,5 @@ function SWEP:DrawHUD()
 	surface.SetDrawColor(Color(255 * hitEnt, 255 * hitEnt, 255 * hitEnt, 255 * hit))
 	draw.NoTexture()
 	Circle(traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y, 5 / frac, 32)
-	draw.DrawText(not tRes1 and "" or isRag and ("Прибить " .. tostring(bonenames[traceResult.Entity:GetBoneName(traceResult.Entity:TranslatePhysBoneToBone(traceResult.PhysicsBone))])) or (tobool(hitEnt) and tobool(hit)) and "Прибить проп" or "", "TargetID", traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y - 40, color_white, TEXT_ALIGN_CENTER)
+	draw.DrawText(not tRes1 and "" or isRag and (language.GetPhrase("hg.molotok.nailin"):format(language.GetPhrase(bonenames[traceResult.Entity:GetBoneName(traceResult.Entity:TranslatePhysBoneToBone(traceResult.PhysicsBone))]))) or (tobool(hitEnt) and tobool(hit)) and "#hg.molotok.nailinprop" or "", "TargetID", traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y - 40, color_white, TEXT_ALIGN_CENTER)
 end

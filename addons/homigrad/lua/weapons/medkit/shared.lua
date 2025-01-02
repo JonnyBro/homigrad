@@ -30,6 +30,7 @@ SWEP.DrawCrosshair = false
 SWEP.DrawWeaponSelection = DrawWeaponSelection
 SWEP.OverridePaintIcon = OverridePaintIcon
 
+SWEP.Delay = 0.25
 SWEP.dwsPos = Vector(15, 15, 15)
 
 SWEP.vbw = false

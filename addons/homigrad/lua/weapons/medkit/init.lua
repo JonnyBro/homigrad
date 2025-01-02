@@ -1,10 +1,8 @@
 include("shared.lua")
 
-SWEP.Dealy = 0.25
-
 function SWEP:PrimaryAttack()
-	self:SetNextPrimaryFire(CurTime() + self.Dealy)
-	self:SetNextSecondaryFire(CurTime() + self.Dealy)
+	self:SetNextPrimaryFire(CurTime() + self.Delay)
+	self:SetNextSecondaryFire(CurTime() + self.Delay)
 
 	local owner = self:GetOwner()
 
@@ -18,8 +16,8 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-	self:SetNextPrimaryFire(CurTime() + self.Dealy)
-	self:SetNextSecondaryFire(CurTime() + self.Dealy)
+	self:SetNextPrimaryFire(CurTime() + self.Delay)
+	self:SetNextSecondaryFire(CurTime() + self.Delay)
 
 	local owner = self:GetOwner()
 	local trace = self:GetEyeTraceDist(150)

@@ -1,11 +1,13 @@
 SWEP.Base = "medkit"
 
-SWEP.PrintName = "Тетродотоксин"
-SWEP.Author = "homigrad"
-SWEP.Instructions = "Вколоть в позвоночник и ждать..."
+if CLIENT then
+	SWEP.PrintName = language.GetPhrase("hg.syringepoison.name")
+	SWEP.Author = "Secret Society"
+	SWEP.Instructions = language.GetPhrase("hg.syringepoison.inst")
+	SWEP.Category = language.GetPhrase("hg.category.traitor")
+end
 
 SWEP.Spawnable = true
-SWEP.Category = "Примочки убийцы"
 
 SWEP.Slot = 3
 SWEP.SlotPos = 0

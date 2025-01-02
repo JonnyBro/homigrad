@@ -1,8 +1,10 @@
 AddCSLuaFile()
 
 ENT.Type = "anim"
-ENT.PrintName = "Фонарик"
+
+ENT.PrintName = "Flashlight"
 ENT.Author = "JMOD"
+
 ENT.Spawnable = true
 ENT.AdminSpawnable = false
 

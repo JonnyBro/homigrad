@@ -1,5 +1,3 @@
-if engine.ActiveGamemode() ~= "homigrad" then return end
-
 LimitAutoBalance = 1
 
 function NeedAutoBalance(addT, addCT)
@@ -39,12 +37,14 @@ function AutoBalanceTwoTeam()
 
 		if favorT then
 			local ply = table.Random(team.GetPlayers(1))
+
 			ply:SetTeam(2)
-			ply:ChatPrint("Тебя перекинуло в CT команду, из-за неравенства команд.")
+			ply:ChatPrint("#hg.autobalance.t")
 		else
 			local ply = table.Random(team.GetPlayers(2))
+
 			ply:SetTeam(1)
-			ply:ChatPrint("Тебя перекинуло T команду, из-за неравенства команд.")
+			ply:ChatPrint("#hg.autobalance.ct")
 		end
 	end
 end

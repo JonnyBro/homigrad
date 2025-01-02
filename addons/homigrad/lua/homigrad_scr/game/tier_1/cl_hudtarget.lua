@@ -1,6 +1,6 @@
 nodraw_players = nodraw_players or {}
 
-hook.Add("Think", "ShouldDrawNoclipe", function()
+hook.Add("Think", "ShouldDrawNoclip", function()
 	local lply = LocalPlayer()
 
 	for i, ply in pairs(player.GetAll()) do

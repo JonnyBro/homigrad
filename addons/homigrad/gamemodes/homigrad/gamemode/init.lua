@@ -4,6 +4,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 util.AddNetworkString("remove_jmod_effects")
+
 local specColor = Vector(0.25, 0.25, 0.25)
 
 function GM:PlayerSpawn(ply)
@@ -80,6 +81,7 @@ function GM:PlayerSpawn(ply)
 	if ply:Team() == 1002 then
 		ply:SetModel("models/player/gman_high.mdl")
 		ply:SetPlayerColor(specColor)
+
 		ply:Give("weapon_hands")
 		ply:Give("weapon_physgun")
 
@@ -145,7 +147,7 @@ function GM:PlayerDeathThink(ply)
 	if key ~= ply.oldKeyWalk and key then
 		ply.EnableSpectate = not ply.EnableSpectate
 
-		ply:ChatPrint(ply.EnableSpectate and "Наблюдение за игроками." or "Свободный полёт.")
+		ply:ChatPrint(ply.EnableSpectate and "#hg.spec.orbit" or "#hg.spec.free")
 	end
 
 	ply.oldKeyWalk = key
@@ -236,11 +238,11 @@ COMMANDS.afk = {
 		local ent = ply:GetEyeTrace().Entity
 		if ent == game.GetWorld() then ent = ply end
 
-		local plyy = RagdollOwner(ent) or ent or false
+		local plr = RagdollOwner(ent) or ent or false
 
-		if plyy then
-			plyy:SetTeam(1002)
-			plyy:KillSilent()
+		if plr then
+			plr:SetTeam(1002)
+			plr:KillSilent()
 		end
 	end
 }
@@ -249,10 +251,9 @@ COMMANDS.teamforce = {
 	function(ply, args)
 		local teamID = tonumber(args[2])
 		local plrList = player.GetListByName(ply, args[1])
-		if not plrList then return ply:ChatPrint("Игрок(и) не найдены") end
+		if not plrList then return ply:ChatPrint("#hg.commands.playernotfound") end
 
 		for i, ply in pairs(plrList) do
-
 			ply:SetTeam(teamID)
 		end
 	end
@@ -272,7 +273,7 @@ local function PlayerCanJoinTeam(ply, teamID)
 	local favorT, count = NeedAutoBalance(addT, addCT)
 
 	if count and ((teamID == 1 and favorT) or (teamID == 2 and not favorT)) then
-		ply:ChatPrint("Команда полная.")
+		ply:ChatPrint("#hg.commands.teamisfull")
 
 		return false
 	end
@@ -300,10 +301,10 @@ end
 
 COMMANDS.scared = {
 	function(ply, args)
-		local value = tonumber(args[1]) > 0
+		local value = tonumber(args[1]) == 1 and true or false
 
 		ply:SetNWBool("scared", value)
-		ply:ChatPrint(value and "включён" or "выключен")
+		ply:ChatPrint(value and "#hg.commands.enabled" or "hg.commands.disabled")
 	end
 }
 
@@ -318,7 +319,7 @@ COMMANDS.nortv = {
 
 		disableRTV = not value
 
-		PrintMessageChat(3, "change map: " .. tostring(value))
+		PrintMessageChat(3, "#hg.commands.nortv" .. " " .. value and "#hg.commands.enabled" or "hg.commands.disabled")
 	end,
 	2
 }
@@ -381,13 +382,13 @@ resource.AddWorkshop("864612139") -- https://steamcommunity.com/sharedfiles/file
 
 COMMANDS.roll = {
 	function(ply, args)
-		if not args[1] then return ply:ChatPrint("Введите число") end
+		if not args[1] then return ply:ChatPrint("#hg.commands.roll.nonumber") end
 
 		local r = math.random(1, tonumber(args[1]))
 
 		for i, ply2 in pairs(player.GetAll()) do
 			if GAMEMODE:PlayerCanSeePlayersChat("gg", false, ply2, ply) then
-				PrintMessageChat(ply2, r)
+				PrintMessageChat(ply2, "#hg.commands.roll" .. " " .. r)
 			end
 		end
 	end,
@@ -395,19 +396,11 @@ COMMANDS.roll = {
 }
 
 concommand.Add("fullup", function(ply, cmd, args)
-	if not ply:IsAdmin() and not ply:IsUserGroup("helper") and not ply:IsUserGroup("moderator") then
-		if CLIENT then
-			chat.AddText(Color(255, 0, 0), "Только для админов")
-		else
-			ply:PrintMessage(HUD_PRINTCONSOLE, "Только для админов.")
-		end
-
-		return
-	end
+	if not ply:IsAdmin() and not ply:IsUserGroup("helper") and not ply:IsUserGroup("moderator") then return print("no") end
 
 	if args[1] then
 		local targets = player.GetListByName(ply, args[1])
-		if not targets then return ply:ChatPrint("Игрок(и) с таким именем не найден.") end
+		if not targets then return ply:ChatPrint("#hg.commands.playernotfound") end
 
 		names = {}
 
@@ -433,10 +426,10 @@ concommand.Add("fullup", function(ply, cmd, args)
 	end
 
 	for _, plr in ipairs(player.GetAll()) do
-		plr:ChatPrint(ply:Nick() .. " восстановил параметры игрока(ов) " .. names .. ".")
+		plr:ChatPrint(ply:Nick() .. " " .. "#hg.commands.fullup.chat" .. " " .. names)
 	end
 
-	print(string.format("%s использовал команду 'FullUP' на игроке %s", ply:Nick(), names))
+	print(string.format("%s used 'fullup' on %s", ply:Nick(), names))
 end)
 
 concommand.Add("sfullup", function(ply, cmd, args)
@@ -444,7 +437,7 @@ concommand.Add("sfullup", function(ply, cmd, args)
 
 	if args[1] then
 		local targets = player.GetListByName(ply, args[1])
-		if not targets then return ply:ChatPrint("Игрок(и) с таким именем не найден.") end
+		if not targets then return ply:ChatPrint("#hg.commands.playernotfound") end
 
 		for _, plr in pairs(targets) do
 			plr.stamina = 100

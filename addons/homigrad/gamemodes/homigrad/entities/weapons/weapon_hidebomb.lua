@@ -1,9 +1,11 @@
 SWEP.Base = "weapon_base"
 
-SWEP.PrintName = "Бомба в пропе"
-SWEP.Author = "homigrad"
-SWEP.Instructions = "ЛКМ, чтобы заложить в проп/поставить\nПКМ, чтобы взорвать"
-SWEP.Category = "Примочки убийцы"
+if CLIENT then
+	SWEP.PrintName = language.GetPhrase("hg.hidebomb.name")
+	SWEP.Author = "Secret Society"
+	SWEP.Instructions = language.GetPhrase("hg.hidebomb.inst")
+	SWEP.Category = language.GetPhrase("hg.category.traitor")
+end
 
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
