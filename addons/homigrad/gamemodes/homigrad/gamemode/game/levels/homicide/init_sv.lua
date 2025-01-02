@@ -139,7 +139,7 @@ local function makeCT(ply)
 	table.insert(homicide.ct, ply)
 
 	if homicide.roundType == 1 then
-		local wep = ply:Give("weapon_doublebarrel_dulo")
+		local wep = ply:Give("weapon_remington870")
 		ply:GiveAmmo(4, "12/70 gauge", true)
 		wep:SetClip1(wep:GetMaxClip1())
 

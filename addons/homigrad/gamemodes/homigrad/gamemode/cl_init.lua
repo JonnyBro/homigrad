@@ -315,7 +315,7 @@ local function ToggleMenu(toggle)
 			LocalPlayer():ConCommand("jmod_ez_inv")
 		end)
 
-		plyMenu:AddOption("#hg.cmenu.armor", function()
+		plyMenu:AddOption("#hg.cmenu.ammo", function()
 			LocalPlayer():ConCommand("hg_ammomenu")
 		end)
 

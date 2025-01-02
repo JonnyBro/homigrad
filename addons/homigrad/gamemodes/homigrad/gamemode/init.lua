@@ -426,7 +426,7 @@ concommand.Add("fullup", function(ply, cmd, args)
 	end
 
 	for _, plr in ipairs(player.GetAll()) do
-		plr:ChatPrint(ply:Nick() .. " " .. "#hg.commands.fullup.chat" .. " " .. names)
+		plr:ChatPrint(ply:Nick() .. " used 'fullup' on " .. names)
 	end
 
 	print(string.format("%s used 'fullup' on %s", ply:Nick(), names))

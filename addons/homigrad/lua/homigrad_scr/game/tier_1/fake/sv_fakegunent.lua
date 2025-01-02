@@ -1,8 +1,8 @@
 bullets = {
 	["weapon_m3super"] = 8,
 	["weapon_remington870"] = 12,
-	["weapon_doublebarrel_dulo"] = 12,
-	["weapon_doublebarrel"] = 12,
+	-- ["weapon_doublebarrel_dulo"] = 12,
+	-- ["weapon_doublebarrel"] = 12,
 	["weapon_xm1014"] = 8,
 }
 
@@ -10,8 +10,8 @@ cir = {
 	["weapon_m3super"] = 0.02,
 	["weapon_ak74"] = 0.1,
 	["weapon_remington870"] = 0.1,
-	["weapon_doublebarrel_dulo"] = 0.1,
-	["weapon_doublebarrel"] = 0.1,
+	-- ["weapon_doublebarrel_dulo"] = 0.1,
+	-- ["weapon_doublebarrel"] = 0.1,
 	--["weapon_csmg41"] = 0.02,
 	["weapon_xm1014"] = 0.02,
 }
@@ -88,8 +88,8 @@ Vectors2 = {
 	["weapon_m3super"] = Vector(15, -3.5, -2),
 	["weapon_mp7"] = Vector(6, -2, 0),
 	["weapon_remington870"] = Vector(10, -2, -2),
-	["weapon_doublebarrel"] = Vector(10, -2, -2),
-	["weapon_doublebarrel_dulo"] = Vector(10, -2, -2),
+	-- ["weapon_doublebarrel"] = Vector(10, -2, -2),
+	-- ["weapon_doublebarrel_dulo"] = Vector(10, -2, -2),
 	["weapon_xm1014"] = Vector(14, -2, -2),
 	["weapon_sar2"] = Vector(12, -2, 2),
 	["weapon_civil_famas"] = Vector(9, -2, -3),
