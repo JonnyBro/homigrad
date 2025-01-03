@@ -6,9 +6,9 @@ roundTime = roundTime or 0
 
 function RoundTimeSync(ply)
 	net.Start("round_time")
-	net.WriteFloat(roundTimeStart)
-	net.WriteFloat(roundTime)
-	net.WriteFloat(roundTimeLoot or 0)
+		net.WriteFloat(roundTimeStart)
+		net.WriteFloat(roundTime)
+		net.WriteFloat(roundTimeLoot or 0)
 	net.Broadcast()
 
 	if ply then

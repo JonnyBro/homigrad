@@ -208,11 +208,7 @@ function nextbot.PlayerInitialSpawn(ply)
 end
 
 function nextbot.PlayerCanJoinTeam(ply, teamID)
-	if teamID == 3 then
-		ply:ChatPrint("Нельзя")
-
-		return false
-	end
+	if teamID == 3 then return false end
 
 	if not nextbot.twoteams then
 		if teamID == 2 then return false end

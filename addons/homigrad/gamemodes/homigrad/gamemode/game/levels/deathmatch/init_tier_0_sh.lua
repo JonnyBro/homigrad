@@ -17,7 +17,7 @@ end
 function dm.StartRound(data)
 	team.SetColor(1, red)
 	team.SetColor(2, blue)
-	team.SetColor(1, green)
+	team.SetColor(3, green)
 
 	game.CleanUpMap(false)
 

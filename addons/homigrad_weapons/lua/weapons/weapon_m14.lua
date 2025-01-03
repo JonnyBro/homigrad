@@ -1,5 +1,4 @@
-if engine.ActiveGamemode() == "homigrad" then
-SWEP.Base = 'salat_base' -- base
+SWEP.Base = "salat_base"
 
 SWEP.PrintName 				= "TMP"
 SWEP.Instructions			= ""
@@ -18,8 +17,8 @@ SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 40
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "pwb/weapons/tmp/shoot.wav"
---SWEP.Primary.SoundFar = "weapons/m14/m14_dist.wav"
-SWEP.Primary.Force = 270/3
+SWEP.Primary.SoundFar = "pwb/weapons/tmp/shoot.wav"
+SWEP.Primary.Force = 270 / 3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.06
 SWEP.ReloadSound = "weapons/ar2/ar2_reload.wav"
@@ -49,8 +48,9 @@ SWEP.DrawCrosshair			= false
 SWEP.ViewModel				= "models/pwb/weapons/w_tmp.mdl"
 SWEP.WorldModel				= "models/pwb/weapons/w_tmp.mdl"
 
-SWEP.addAng = Angle( 1.8, 0.9, 0 )
+SWEP.Supressed = true
+
+SWEP.addAng = Angle(1.8, 0.9, 0)
 SWEP.addPos = Vector(0,0,0)
 SWEP.vbwPos = Vector(12,-1.7,-12)
 SWEP.vbwAng = Angle(10,-30,0)
-end

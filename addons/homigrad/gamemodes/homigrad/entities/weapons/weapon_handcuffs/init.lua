@@ -14,7 +14,7 @@ function SWEP:Cuff(ent)
 
 	local cuff = ents.Create("prop_physics")
 
-	local ang = ent:GetPhysicsObjectNum(4):GetAngles()
+	local ang = ent:GetPhysicsObjectNum(4):GetAngles() -- TODO: Errors out
 	ang:RotateAroundAxis(ang:Forward(), 90)
 
 	cuff:SetModel("models/freeman/flexcuffs.mdl")

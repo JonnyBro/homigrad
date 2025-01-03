@@ -160,8 +160,7 @@ local function makeCT(ply)
 
 		AddNotificate(ply, "Вы полицейский под прикрытием. Вам выдан шокер и дубинка\nВаша задача: связать преступника.")
 	elseif homicide.roundType == 4 then
-		local wep = ply:Give("weapon_deagle")
-		wep:SetClip1(wep:GetMaxClip1())
+		ply:Give("weapon_deagle")
 		ply:GiveAmmo(6, ".44 Remington Magnum", true)
 
 		AddNotificate(ply, "Вы невиновный ковбой с револьвером в кобуре.")

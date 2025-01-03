@@ -4,7 +4,7 @@ SWEP.Base = "medkit"
 
 if CLIENT then
 	SWEP.PrintName = language.GetPhrase("hg.handcuffs.name")
-	SWEP.Author = "z"
+	SWEP.Author = "homigrad"
 	SWEP.Instructions = language.GetPhrase("hg.handcuffs.inst")
 	SWEP.Category = language.GetPhrase("hg.category.tools")
 end
@@ -45,9 +45,9 @@ function SWEP:PrimaryAttack()
 
 		local traceResult = util.TraceLine(tr)
 		local ent = traceResult.Entity
-		local ply = RagdollOwner(ent) and ent
+		local ply = RagdollOwner(ent) or ent
 
-		if IsValid(ent) and ply then
+		if IsValid(ent) and ply then -- TODO: Always false if :48 has `and`
 			self.CuffPly = ply
 			self.CuffTime = CurTime()
 

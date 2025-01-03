@@ -117,7 +117,7 @@ changeClass = {
 
 function tdm.RemoveItems()
 	for i, ent in pairs(ents.GetAll()) do
-		if ent:GetName() == "biboran" then
+		if IsValid(ent) and ent:GetName() == "biboran" then
 			ent:Remove()
 		end
 	end

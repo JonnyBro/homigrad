@@ -2,11 +2,11 @@
 AddCSLuaFile()
 ENT.Base = "ent_jack_gmod_ezgrenade"
 ENT.Author = "Jackarunda, TheOnly8Z"
-ENT.PrintName = "EZHG F1 Granade"
+ENT.PrintName = "EZHG Stielhandgranate24 Granade"
 ENT.Category = "JModHomigrad"
 ENT.Spawnable = true
 ENT.JModPreferredCarryAngles = Angle(0, -140, 0)
-ENT.Model = "models/pwb/weapons/w_f1_thrown.mdl"
+ENT.Model = "models/stielhandgranate24/stielhandgranate24.mdl"
 ENT.SpoonScale = 2
 
 if SERVER then

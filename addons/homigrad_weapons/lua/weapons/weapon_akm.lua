@@ -1,4 +1,3 @@
-if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
 SWEP.PrintName 				= "АКМ"
@@ -52,6 +51,5 @@ SWEP.WorldModel				= "models/pwb/weapons/w_akm.mdl"
 
 SWEP.vbwPos = Vector(5,-6,-6)
 
-SWEP.addAng = Angle(-0.1,0,0)
+SWEP.addAng = Angle(0,0,0)
 SWEP.addPos = Vector(0,0,0)
-end

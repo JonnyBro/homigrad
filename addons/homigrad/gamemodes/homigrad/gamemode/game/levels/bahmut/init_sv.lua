@@ -322,11 +322,7 @@ function bahmut.PlayerSpawn(ply, teamID)
 end
 
 function bahmut.PlayerCanJoinTeam(ply, teamID)
-	if teamID == 3 then
-		ply:ChatPrint("Иди нахуй")
-
-		return false
-	end
+	if teamID == 3 then return false end
 end
 
 function bahmut.PlayerDeath(ply, inf, att)

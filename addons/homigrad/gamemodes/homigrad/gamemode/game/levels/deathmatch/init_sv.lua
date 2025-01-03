@@ -1,3 +1,21 @@
+function dm.Spawns()
+	local points = {}
+
+	for _, point in pairs(ReadDataMap("dm")) do
+		table.insert(points, point)
+	end
+
+	for _, ent in pairs(ents.FindByClass("info_player*")) do
+		table.insert(points, ent:GetPos())
+	end
+
+	for _, ent in pairs(ents.FindByClass("info_node*")) do
+		table.insert(points, ent:GetPos())
+	end
+
+	return points
+end
+
 function dm.StartRoundSV()
 	tdm.RemoveItems()
 
@@ -10,10 +28,10 @@ function dm.StartRoundSV()
 		ply:SetTeam(1)
 	end
 
-	local aviable = ReadDataMap("dm")
-	aviable = #aviable ~= 0 and aviable or homicide.Spawns()
+	local available = dm.Spawns()
+	available = #available ~= 0 and available or homicide.Spawns()
 
-	tdm.SpawnCommand(team.GetPlayers(1), aviable, function(ply)
+	tdm.SpawnCommand(team.GetPlayers(1), available, function(ply)
 		ply:Freeze(true)
 	end)
 
@@ -72,7 +90,7 @@ function dm.PlayerSpawn(ply, teamID)
 		ply:Give("med_band_big")
 		ply:Give("shina")
 
-		ply:SetAmmo(90, (r == 1 and 46) or (r == 2 and 44) or (r == 3 and 47) or (r >= 5 and 45))
+		ply:SetAmmo(200, (r == 1 and 46) or (r == 2 and 44) or (r == 3 and 47) or (r >= 5 and 45))
 	elseif roundDmType == 2 then
 		local r = math.random(1, 4)
 		local p = math.random(1, 4)
@@ -85,8 +103,8 @@ function dm.PlayerSpawn(ply, teamID)
 		ply:Give("weapon_hg_rgd5")
 		ply:Give("shina")
 
-		ply:SetAmmo(90, (p <= 3 and 49) or (p == 4 and "5.7×28 mm"))
-		ply:SetAmmo(90, 41)
+		ply:SetAmmo(200, (p <= 3 and 49) or (p == 4 and "5.7×28 mm"))
+		ply:SetAmmo(200, 41)
 	elseif roundDmType == 3 then
 		ply:Give("weapon_deagle")
 		ply:Give("weapon_kabar")
@@ -94,7 +112,7 @@ function dm.PlayerSpawn(ply, teamID)
 		ply:Give("med_band_big")
 		ply:Give("shina")
 
-		ply:SetAmmo(90, ".44 Remington Magnum")
+		ply:SetAmmo(200, ".44 Remington Magnum")
 	elseif roundDmType == 4 then
 		local r = math.random(1, 3)
 
@@ -105,7 +123,7 @@ function dm.PlayerSpawn(ply, teamID)
 		ply:Give("shina")
 		ply:Give("weapon_hidebomb")
 
-		ply:SetAmmo(50, 49)
+		ply:SetAmmo(200, 49)
 	else
 		local r = math.random(1, 3)
 
@@ -116,7 +134,7 @@ function dm.PlayerSpawn(ply, teamID)
 		ply:Give("shina")
 		ply:Give("weapon_hidebomb")
 
-		ply:SetAmmo(50, 49)
+		ply:SetAmmo(200, 49)
 	end
 
 	ply:Give("weapon_radio")

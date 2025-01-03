@@ -6,6 +6,8 @@ SpawnPointsList = {
 	spawnpointst = {"red", Color(255, 0, 0)},
 	spawnpointsct = {"blue", Color(0, 0, 255)},
 
+	dm = {"dm", Color(155, 155, 255)},
+
 	bahmut_vagner = {"vagner", Color(255, 0, 0)},
 	bahmut_nato = {"nato", Color(0, 0, 255)},
 

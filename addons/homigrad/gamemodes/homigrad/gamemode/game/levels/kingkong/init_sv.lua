@@ -4,6 +4,7 @@ local function makeT(ply)
 	table.insert(kingkong.t, ply)
 
 	ply:Give("weapon_kingkong")
+
 	ply:Give("medkit")
 	ply:Give("med_band_small")
 	ply:Give("med_band_big")

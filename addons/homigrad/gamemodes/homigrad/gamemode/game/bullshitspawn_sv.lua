@@ -6,12 +6,11 @@ for _, mdl in pairs(boxes) do
 	newTbl[mdl] = true
 end
 
-weaponscommon = {"weapon_binokle", "weapon_molotok", "ent_drop_flashlight", "weapon_knife", "weapon_pipe", "med_band_small", "med_band_big", "blood_bag", "*ammo*"}
-weaponsuncommon = {"weapon_glock18", "weapon_per4ik", "weapon_hg_crowbar", "weapon_hg_fubar", "weapon_bat", "weapon_hg_metalbat", "weapon_hg_hatchet", "weapon_doublebarrel", "*ammo*", "ent_jack_gmod_ezarmor_respirator", "ent_jack_gmod_ezarmor_lhead", "medkit"}
-weaponsrare = {"weapon_beretta", "weapon_remington870", "weapon_glock", "weapon_t", "weapon_hg_molotov", "*ammo*", "weapon_hg_sleagehammer", "weapon_hg_fireaxe", "ent_jack_gmod_ezarmor_gasmask", "ent_jack_gmod_ezarmor_mltorso"}
-weaponsveryrare = {"weapon_m3super", "ent_jack_gmod_ezarmor_mtorso", "ent_jack_gmod_ezarmor_mhead"}
-weaponslegendary = {"weapon_xm1014", "weapon_ar15", "weapon_civil_famas"}
-
+local weaponscommon = {"weapon_binokle", "weapon_molotok", "ent_drop_flashlight", "weapon_knife", "weapon_pipe", "med_band_small", "med_band_big", "blood_bag", "*ammo*"}
+local weaponsuncommon = {"weapon_glock18", "weapon_per4ik", "weapon_hg_crowbar", "weapon_hg_fubar", "weapon_bat", "weapon_hg_metalbat", "weapon_hg_hatchet", "weapon_doublebarrel", "*ammo*", "ent_jack_gmod_ezarmor_respirator", "ent_jack_gmod_ezarmor_lhead", "medkit"}
+local weaponsrare = {"weapon_beretta", "weapon_remington870", "weapon_glock", "weapon_t", "weapon_hg_molotov", "*ammo*", "weapon_hg_sleagehammer", "weapon_hg_fireaxe", "ent_jack_gmod_ezarmor_gasmask", "ent_jack_gmod_ezarmor_mltorso"}
+local weaponsveryrare = {"weapon_m3super", "ent_jack_gmod_ezarmor_mtorso", "ent_jack_gmod_ezarmor_mhead"}
+local weaponslegendary = {"weapon_xm1014", "weapon_ar15", "weapon_civil_famas"}
 local ammos = {"ent_ammo_.44magnum", "ent_ammo_12/70gauge", "ent_ammo_762x39mm", "ent_ammo_556x45mm", "ent_ammo_9х19mm"}
 
 hook.Add("PropBreak", "homigrad", function(att, ent)
@@ -103,7 +102,7 @@ hook.Add("PropBreak", "homigrad", function(att, ent)
 	end
 
 	if type1 then
-		--sound.Emit(ent,sndsDrop[type1],50,0.5) --круто на наверное такое не нужно
+		--sound.Emit(ent,sndsDrop[type1],50,0.5) -- круто на наверное такое не нужно
 	end
 end)
 
@@ -175,6 +174,9 @@ hook.Add("Boxes Think", "SpawnBoxes", function()
 
 	local randomWep = randomLoot()
 	local ent = ents.Create((not randomWep and "prop_physics") or randomWep)
+
+	print(randomLoot)
+	print(ent)
 
 	if randomWep then
 		ent:SetModel(boxes[math.random(#boxes)])
