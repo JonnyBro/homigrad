@@ -1,5 +1,3 @@
-print("Кнопочки загружены!")
-
 TBHUD = {}
 TBHUD.buttons = {}
 TBHUD.buttons_count = 0

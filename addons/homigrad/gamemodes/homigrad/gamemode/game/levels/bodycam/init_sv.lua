@@ -340,11 +340,7 @@ function bodycam.PlayerInitialSpawn(ply)
 end
 
 function bodycam.PlayerCanJoinTeam(ply, teamID)
-	if teamID == 3 then
-		ply:ChatPrint("Иди нахуй")
-
-		return false
-	end
+	if teamID == 3 then return false end
 end
 
 function bodycam.PlayerDeath(ply, inf, att)

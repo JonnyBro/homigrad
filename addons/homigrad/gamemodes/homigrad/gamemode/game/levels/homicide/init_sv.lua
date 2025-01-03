@@ -37,6 +37,7 @@ function homicide.PlayerCanJoinTeam(ply, teamID)
 		if teamID == 2 then
 			ply.forceCT = nil
 			ply.forceT = true
+
 			ply:ChatPrint("ты будешь за дбгшера некст раунд")
 
 			return false
@@ -45,16 +46,13 @@ function homicide.PlayerCanJoinTeam(ply, teamID)
 		if teamID == 3 then
 			ply.forceT = nil
 			ply.forceCT = true
+
 			ply:ChatPrint("ты будешь за хомисайдера некст раунд")
 
 			return false
 		end
 	else
-		if teamID == 2 or teamID == 3 then
-			ply:ChatPrint("Иди нахуй")
-
-			return false
-		end
+		if teamID == 2 or teamID == 3 then return false end
 	end
 
 	return true
@@ -64,12 +62,15 @@ local function makeT(ply)
 	if not ply then return end
 
 	ply.roleT = true
+
 	table.insert(homicide.t, ply)
-	local shouldGiveJahidka = math.random() < 0.25 -- 25% шанс на выдачу оружия
+
+	local shouldGiveJahidka = math.random() < 0.25 -- 25% chance to give weapon_jahidka
 
 	if homicide.roundType == 1 or homicide.roundType == 2 then
 		local wep = ply:Give("weapon_hk_usps")
 		wep:SetClip1(wep:GetMaxClip1())
+
 		ply:Give("weapon_kabar")
 		ply:Give("weapon_hg_t_vxpoison")
 		ply:Give("weapon_hidebomb")
@@ -80,8 +81,9 @@ local function makeT(ply)
 		end
 	elseif homicide.roundType == 3 then
 		local wep = ply:Give("weapon_hk_arbalet")
-		ply:GiveAmmo(6, "XBowBolt", true) -- slots = bolts.
+		ply:GiveAmmo(6, "XBowBolt", true)
 		wep:SetClip1(wep:GetMaxClip1())
+
 		ply:Give("weapon_kabar")
 		ply:Give("weapon_hg_t_syringepoison")
 		ply:Give("weapon_hg_t_vxpoison")
@@ -93,7 +95,8 @@ local function makeT(ply)
 		print(player.GetCount())
 	elseif homicide.roundType == 4 then
 		ply:Give("weapon_deagle")
-		ply:GiveAmmo(3 * 8, ".44 Remington Magnum", true) -- slots = bullets.
+		ply:GiveAmmo(24, ".44 Remington Magnum", true)
+
 		ply:Give("weapon_kabar")
 		ply:Give("weapon_hg_t_vxpoison")
 		ply:Give("weapon_hidebomb")
@@ -107,6 +110,7 @@ local function makeT(ply)
 	elseif homicide.roundType == 5 then
 		local wep = ply:Give("weapon_hk_usps")
 		wep:SetClip1(wep:GetMaxClip1())
+
 		ply:Give("weapon_kabar")
 		ply:Give("weapon_hg_t_vxpoison")
 		ply:Give("weapon_hidebomb")
@@ -156,7 +160,9 @@ local function makeCT(ply)
 
 		AddNotificate(ply, "Вы полицейский под прикрытием. Вам выдан шокер и дубинка\nВаша задача: связать преступника.")
 	elseif homicide.roundType == 4 then
-		ply:Give("weapon_deagle")
+		local wep = ply:Give("weapon_deagle")
+		wep:SetClip1(wep:GetMaxClip1())
+		ply:GiveAmmo(6, ".44 Remington Magnum", true)
 
 		AddNotificate(ply, "Вы невиновный ковбой с револьвером в кобуре.")
 	end
@@ -210,9 +216,12 @@ sound.Add({
 
 function homicide.StartRoundSV()
 	RunConsoleCommand("sv_gravity", "600")
+
 	tdm.RemoveItems()
 	tdm.DirectOtherTeam(2, 1, 1)
+
 	homicide.police = false
+
 	roundTimeStart = CurTime()
 	roundTime = math.max(math.ceil(#player.GetAll() / 2), 1) * 60
 
@@ -228,6 +237,7 @@ function homicide.StartRoundSV()
 
 	homicide.ct = {}
 	homicide.t = {}
+
 	local countT = 0
 	local countCT = 0
 	local aviable = homicide.Spawns()
@@ -239,12 +249,14 @@ function homicide.StartRoundSV()
 		if ply.forceT then
 			ply.forceT = nil
 			countT = countT + 1
+
 			makeT(ply)
 		end
 
 		if ply.forceCT then
 			ply.forceCT = nil
 			countCT = countCT + 1
+
 			makeCT(ply)
 		end
 	end)
@@ -262,7 +274,7 @@ function homicide.StartRoundSV()
 
 		for _, ply in ipairs(players) do
 			local r = math.random(1, 15)
-			--  local p = math.random(1, 6)
+
 			ply:Give(r == 1 and "weapon_xm1014" or r == 2 and "weapon_ar15" or r == 3 and "weapon_rpk" or r == 4 and "weapon_xm8_lmg" or r == 5 and "weapon_l1a1" or r == 6 and "weapon_galil" or r == 7 and "weapon_civil_famas" or r == 8 and "weapon_ump" or r == 9 and "weapon_mp5" or r == 10 and "weapon_minu14" or r == 11 and "weapon_m1a1" or r == 12 and "weapon_m14" or r == 13 and "weapon_vector" or r == 14 and "weapon_ck98" or r == 15 and "weapon_cppsh41", true)
 			ply:GiveAmmo(20, r == 1 and "12/70 gauge" or r == 2 and "5.56x45 mm" or r == 3 and "7.62x39 mm" or r == 4 and "ar2" or r == 5 and "ar2" or r == 6 and "5.56x45 mm" or r == 7 and "5.56x45 mm" or r == 8 and "9х19 mm Parabellum" or r == 9 and "9х19 mm Parabellum" or r == 10 and "12/70 gauge" or r == 11 and "9х19 mm Parabellum" or r == 12 and "9х19 mm Parabellum" or r == 13 and "9х19 mm Parabellum" or r == 14 and "7.62x39 mm" or r == 15 and "9х19 mm Parabellum", true)
 		end
@@ -274,6 +286,7 @@ function homicide.StartRoundSV()
 	for i = 1, count do
 		local ply = table.Random(players)
 		table.RemoveByValue(players, ply)
+
 		makeT(ply)
 	end
 
@@ -292,6 +305,7 @@ function homicide.StartRoundSV()
 		for i, ply in pairs(homicide.t) do
 			if not IsValid(ply) then
 				table.remove(homicide.t, i)
+
 				continue
 			end
 
@@ -301,6 +315,7 @@ function homicide.StartRoundSV()
 		for i, ply in pairs(homicide.ct) do
 			if not IsValid(ply) then
 				table.remove(homicide.ct, i)
+
 				continue
 			end
 
@@ -315,22 +330,19 @@ function homicide.StartRoundSV()
 	}
 end
 
--- local aviable = ReadDataMap("spawnpointsct")
 COMMANDS.forcepolice = {
 	function(ply)
-		if not ply:IsAdmin() then
-			PrintMessage(3, "Пошел нахуй, ОПку не взломал еще.")
-
-			return
-		end
+		if not ply:IsAdmin() then return end
 
 		homicide.police = false
+
 		roundTime = 0
 	end
 }
 
 function homicide.RoundEndCheck()
 	tdm.Center()
+
 	local TAlive = tdm.GetCountLive(homicide.t)
 
 	local Alive = tdm.GetCountLive(team.GetPlayers(1), function(ply)
@@ -392,12 +404,12 @@ function homicide.EndRound(winner)
 	end
 end
 
--- local empty = {}
 function homicide.PlayerSpawn(ply, teamID)
 	local teamTbl = homicide[homicide.teamEncoder[teamID]]
 	local color = teamID == 1 and Color(math.random(55, 165), math.random(55, 165), math.random(55, 165)) or teamTbl[2]
 	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
 	ply:SetPlayerColor(color:ToVector())
+
 	ply:Give("weapon_hands")
 
 	timer.Simple(0, function()
@@ -427,11 +439,7 @@ function homicide.PlayerCanJoinTeam(ply, teamID)
 			return false
 		end
 	else
-		if teamID == 2 or teamID == 3 then
-			ply:ChatPrint("Иди нахуй")
-
-			return false
-		end
+		if teamID == 2 or teamID == 3 then return false end
 	end
 
 	return true
@@ -453,7 +461,7 @@ function homicide.SyncRole(ply, teamID)
 	end
 
 	net.Start("homicide_roleget")
-	net.WriteTable(role)
+		net.WriteTable(role)
 	net.Send(ply)
 end
 
@@ -462,9 +470,7 @@ function homicide.PlayerDeath(ply, inf, att)
 end
 
 local common = {"food_lays", "weapon_pipe", "weapon_bat", "med_band_big", "med_band_small", "medkit", "food_monster", "food_fishcan", "food_spongebob_home"}
-
 local uncommon = {"medkit", "weapon_molotok", "weapon_per4ik", "painkiller"}
-
 local rare = {"weapon_glock18", "weapon_gurkha", "weapon_t", "weapon_deagle", "weapon_minu14"}
 
 function homicide.ShouldSpawnLoot()

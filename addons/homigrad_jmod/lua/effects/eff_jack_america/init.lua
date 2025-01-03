@@ -152,7 +152,6 @@ end
 function EFFECT:Render()
 	local TimeLeft = self.TimeToDie - CurTime()
 	local TimeFraction = TimeLeft / (0.1 * self.Scale)
-	local ReverseFraction = 1 - TimeFraction
 	render.SetMaterial(Shit)
 	render.DrawSprite(self.Position, 5000 * TimeFraction * self.Scale, 5000 * TimeFraction * self.Scale, Color(255, 255, 255, 255 * TimeFraction))
 	render.DrawSprite(self.Position, 15000 * TimeFraction * self.Scale, 15000 * TimeFraction * self.Scale, Color(255, 255, 255, 255 * TimeFraction))

@@ -215,11 +215,7 @@ function nextbot.PlayerCanJoinTeam(ply, teamID)
 	end
 
 	if not nextbot.twoteams then
-		if teamID == 2 then
-			ply:ChatPrint("Нельзя")
-
-			return false
-		end
+		if teamID == 2 then return false end
 
 		return true
 	else
