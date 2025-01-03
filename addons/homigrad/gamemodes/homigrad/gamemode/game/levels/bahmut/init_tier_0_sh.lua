@@ -4,7 +4,7 @@ bahmut = {}
 bahmut.Name = "Конфликт Хомиграда"
 
 bahmut.red = {
-	"ЧВК\"ВАГНЕР\"", Color(60, 75, 60), weapons = {"megamedkit", "weapon_binokle", "weapon_gurkha", "weapon_hands", "med_band_big", "med_band_small", "medkit", "painkiller", "weapon_hg_rgd5", "weapon_handcuffs", "weapon_radio", "shina"},
+	"ЧВК 'ВАГНЕР'", Color(60, 75, 60), weapons = {"megamedkit", "weapon_binokle", "weapon_gurkha", "weapon_hands", "med_band_big", "med_band_small", "medkit", "painkiller", "weapon_hg_rgd5", "weapon_handcuffs", "weapon_radio", "shina"},
 	main_weapon = {"weapon_ak74u", "weapon_akm", "weapon_galil", "weapon_rpk", "weapon_galilsar", "weapon_slb_g3sg1", "weapon_slb_sg550", "weapon_slb_awp"},
 	secondary_weapon = {"weapon_p220", "weapon_deagle", "weapon_glock"},
 	models = {"models/knyaje pack/sso_politepeople/sso_politepeople.mdl"}
@@ -34,7 +34,6 @@ function bahmut.StartRound()
 	bahmut.points = {}
 
 	if not file.Read("homigrad/maps/controlpoint/" .. game.GetMap() .. ".txt", "DATA") and SERVER then
-		print("Скажите админу чтоб тот создал !point control_point или хуярьтесь без Точек Захвата.")
 		PrintMessage(HUD_PRINTCENTER, "Скажите админу чтоб тот создал !point control_point или хуярьтесь без Точек Захвата.")
 	end
 

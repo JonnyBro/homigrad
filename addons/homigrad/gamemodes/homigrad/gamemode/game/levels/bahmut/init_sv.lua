@@ -1,8 +1,8 @@
 bahmut.ragdolls = {}
 
 function bahmut.SpawnsTwoCommand()
-	local spawnsT = ReadDataMap("spawnpointst")
-	local spawnsCT = ReadDataMap("spawnpointsct")
+	local spawnsT = ReadDataMap("bahmut_vagner")
+	local spawnsCT = ReadDataMap("bahmut_nato")
 
 	if #spawnsT == 0 then
 		for i, ent in RandomPairs(ents.FindByClass("info_player_terrorist")) do
