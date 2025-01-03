@@ -235,6 +235,7 @@ if SERVER then
 		return false
 	end
 
+	--[[
 	local function retrieve_commit_time(commit)
 		local time = -1
 		if not commit.commit and commit.commit.author and commit.commit.author.date then
@@ -350,6 +351,7 @@ if SERVER then
 			end
 		end)
 	end
+	--]]
 
 	function EasyChat.Init()
 		EasyChat.Transliterator = include("easychat/unicode_transliterator.lua")
@@ -2680,15 +2682,15 @@ if CLIENT then
 		end)
 
 		hook.Add("OnPauseMenuShow", TAG, function()
-    			if IsValid(EasyChat.Settings) and EasyChat.Settings:IsVisible() then
-        			EasyChat.Settings:SetVisible(false)
+			if IsValid(EasyChat.Settings) and EasyChat.Settings:IsVisible() then
+				EasyChat.Settings:SetVisible(false)
 				return false
-    			end
+			end
 
-   		 	if EasyChat.IsOpened() then
-        			close_chatbox()
+			if EasyChat.IsOpened() then
+				close_chatbox()
 				return false
-    		 	end
+			end
 		end)
 
 		hook.Add("GUIMousePressed", TAG, function(mouse_code)
