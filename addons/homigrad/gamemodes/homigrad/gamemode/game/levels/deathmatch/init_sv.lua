@@ -5,14 +5,6 @@ function dm.Spawns()
 		table.insert(points, point)
 	end
 
-	for _, ent in pairs(ents.FindByClass("info_player*")) do
-		table.insert(points, ent:GetPos())
-	end
-
-	for _, ent in pairs(ents.FindByClass("info_node*")) do
-		table.insert(points, ent:GetPos())
-	end
-
 	return points
 end
 
