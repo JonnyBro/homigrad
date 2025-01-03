@@ -274,8 +274,8 @@ function homicide.StartRoundSV()
 		for _, ply in ipairs(players) do
 			local r = math.random(1, 15)
 
-			ply:Give(r == 1 and "weapon_xm1014" or r == 2 and "weapon_ar15" or r == 3 and "weapon_rpk" or r == 4 and "weapon_xm8_lmg" or r == 5 and "weapon_l1a1" or r == 6 and "weapon_galil" or r == 7 and "weapon_civil_famas" or r == 8 and "weapon_ump" or r == 9 and "weapon_mp5" or r == 10 and "weapon_minu14" or r == 11 and "weapon_m1a1" or r == 12 and "weapon_m14" or r == 13 and "weapon_vector" or r == 14 and "weapon_ck98" or r == 15 and "weapon_cppsh41", true)
-			ply:GiveAmmo(20, r == 1 and "12/70 gauge" or r == 2 and "5.56x45 mm" or r == 3 and "7.62x39 mm" or r == 4 and "ar2" or r == 5 and "ar2" or r == 6 and "5.56x45 mm" or r == 7 and "5.56x45 mm" or r == 8 and "9х19 mm Parabellum" or r == 9 and "9х19 mm Parabellum" or r == 10 and "12/70 gauge" or r == 11 and "9х19 mm Parabellum" or r == 12 and "9х19 mm Parabellum" or r == 13 and "9х19 mm Parabellum" or r == 14 and "7.62x39 mm" or r == 15 and "9х19 mm Parabellum", true)
+			local wep = ply:Give(r == 1 and "weapon_xm1014" or r == 2 and "weapon_ar15" or r == 3 and "weapon_rpk" or r == 4 and "weapon_xm8_lmg" or r == 5 and "weapon_l1a1" or r == 6 and "weapon_galil" or r == 7 and "weapon_civil_famas" or r == 8 and "weapon_ump" or r == 9 and "weapon_mp5" or r == 10 and "weapon_minu14" or r == 11 and "weapon_m1a1" or r == 12 and "weapon_m14" or r == 13 and "weapon_vector" or r == 14 and "weapon_ck98" or r == 15 and "weapon_cppsh41", true)
+			ply:GiveAmmo(wep:GetMaxClip1(), r == 1 and "12/70 gauge" or r == 2 and "5.56x45 mm" or r == 3 and "7.62x39 mm" or r == 4 and "ar2" or r == 5 and "ar2" or r == 6 and "5.56x45 mm" or r == 7 and "5.56x45 mm" or r == 8 and "9х19 mm Parabellum" or r == 9 and "9х19 mm Parabellum" or r == 10 and "12/70 gauge" or r == 11 and "9х19 mm Parabellum" or r == 12 and "9х19 mm Parabellum" or r == 13 and "ar2" or r == 14 and "7.62x39 mm" or r == 15 and "9х19 mm Parabellum", true)
 		end
 	end
 

@@ -256,7 +256,7 @@ local weps = {
 	["weapon_xm8_lmg"] = true,
 	["weapon_hk_arbalet"] = true,
 	["weapon_vector"] = true,
-	["weapon_doublebarrel"] = true,
+	-- ["weapon_doublebarrel"] = true,
 	-- ["weapon_doublebarrel_dulo"] = true,
 	["weapon_slb_awp"] = true,
 	["weapon_slb_scout"] = true,
@@ -660,7 +660,7 @@ function CalcView(ply, vec, ang, fov, znear, zfar)
 
 		if weaponClass == "weapon_rpgg" then
 			--Vector(7,5,1)
-			vecWep = hand.Pos + hand.Ang:Up() * 5.5 - hand.Ang:Forward() * 6 - hand.Ang:Right() * 1.9
+			vecWep = hand.Pos + hand.Ang:Up() * 5.45 - hand.Ang:Forward() * 6 - hand.Ang:Right() * 1.9
 			angWep = hand.Ang + Angle(0, 0, 0)
 		end
 

@@ -1,5 +1,3 @@
-if engine.ActiveGamemode() ~= "homigrad" then return end
-
 Guns = {"weapon_glock18", "weapon_cmosin", "weapon_csmg40", "weapon_ck98", "weapon_cppsh41", "weapon_p220", "weapon_mp5", "weapon_ar15", "weapon_ak74", "weapon_akm", "weapon_fiveseven", "weapon_hk_usp", "weapon_deagle", "weapon_beretta", "weapon_ak74u", "weapon_l1a1", "weapon_fal", "weapon_galil", "weapon_galilsar", "weapon_m14", "weapon_m1a1", "weapon_mk18", "weapon_m249", "weapon_m4a1", "weapon_minu14", "weapon_mp40", "weapon_rpk", "weapon_ump", "weapon_hk_usps", "weapon_m3super", "weapon_glock", "weapon_mp7", "weapon_remington870", "weapon_xm1014", "bandage", "morphine", "medkit", "painkiller", "weapon_physgun", "weapon_kabar", "weapon_bat", "weapon_gurkha", "weapon_jmoddynamite", "weapon_jmodflash", "weapon_jmodnade", "weapon_taser", "weapon_t", "weapon_knife", "weapon_pipe", "weapon_sar2", "weapon_civil_famas", "weapon_vector", "weapon_xm8_lmg", "weapon_hk_arbalet", "weapon_spas12"}
 
 GunsModel = {

@@ -35,7 +35,6 @@ SWEP.dwmARight = 180
 SWEP.dwmAUp = 200
 SWEP.dwmAForward = 0
 
-
 function SWEP:Initialize()
 	self:SetHoldType("revolver")
 end

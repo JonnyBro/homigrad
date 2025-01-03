@@ -179,7 +179,7 @@ hook.Add("Boxes Think", "SpawnBoxes", function()
 	print(ent)
 
 	if randomWep then
-		ent:SetModel(boxes[math.random(#boxes)])
+		ent:SetModel(boxes[math.random(#boxes)]) -- TODO: sometimes gives error, fix
 	end
 
 	if IsValid(ent) then
