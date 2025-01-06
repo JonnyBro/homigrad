@@ -4,6 +4,8 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 util.AddNetworkString("remove_jmod_effects")
+util.AddNetworkString("hg_sendchat")
+util.AddNetworkString("hg_sendchat_format")
 
 local specColor = Vector(0.25,0.25,0.25)
 
@@ -93,20 +95,20 @@ function GM:PlayerSpawn(ply)
 
 
 	ply:Give("weapon_hands")
-	
+
 	if ply:IsUserGroup("sponsor") or ply:IsUserGroup("supporterplus") then
 		ply:Give("weapon_vape")
 	end
-	
+
 	-- actually terrible code, but we need it for the time being to make sure that players who havent donated aren't reaping the benefits.
 	-- We can remove this line of code in late Jan / early feb
 	if ply:GetUserGroup() == "user" or ply:GetUserGroup() == "regular" or ply:GetUserGroup() == "supporter" or ply:GetUserGroup() == "supporterplus" then
 		RunConsoleCommand("hg_usecustommodel","false")
 		RunConsoleCommand("cl_playermodel","none")
 	end
-	
+
 	TableRound().PlayerSpawn2(ply,ply:Team())
-	
+
 end
 
 function GM:PlayerDeath(ply,inf,att)
@@ -128,7 +130,7 @@ function GM:PlayerInitialSpawn(ply)
 	if func then func(ply) else ply:SetTeam(1002) end
 
 	if #player.GetAll() < 2 then EndRound() end
-	
+
 	ply.NEEDKILLNOW = 2
 	ply.allowGrab = true
 
@@ -136,7 +138,7 @@ function GM:PlayerInitialSpawn(ply)
 	RoundStateSync(ply,RoundData)
 
 	RoundActiveSync(ply)
-	RoundActiveNextSync(ply)	
+	RoundActiveNextSync(ply)
 
 	SendSpawnPoint(ply)
 end

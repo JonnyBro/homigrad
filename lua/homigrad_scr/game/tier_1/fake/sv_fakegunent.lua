@@ -2,16 +2,16 @@ if engine.ActiveGamemode() != "homigrad" then return end
 
 function SpawnWeapon(ply)
 	local weapon = ply.ActiveWeapon
-	
+
 	DespawnWeapon(ply)
 
 	if IsValid(weapon) and ishgweapon(weapon) then
 		local rag = ply:GetNWEntity("Ragdoll")
-		
+
 		if IsValid(rag) then
 			local lh = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand")))
 			local rh = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand")))
-			
+
 			if not IsValid(rh) then return end
 
 			local wep = ents.Create("wep")
@@ -34,7 +34,7 @@ function SpawnWeapon(ply)
 			wep:SetAngles(ang)
 
 			wep:Spawn()
-			
+
 			ply:SetNWEntity("ragdollWeapon", wep)
 
 			local phys = wep:GetPhysicsObject()
@@ -44,10 +44,10 @@ function SpawnWeapon(ply)
 			end
 
 			if IsValid(ply.WepCons) then ply.WepCons:Remove() ply.WepCons = nil end
-			
+
 			local cons = constraint.Weld(wep,rag,0,rag:TranslateBoneToPhysBone(rag:LookupBone( "ValveBiped.Bip01_R_Hand" )),0,true)
 			--rh:EnableMotion(false)
-			
+
 			if IsValid(cons) then
 				ply.WepCons=cons
 			end
@@ -83,8 +83,10 @@ end
 hook.Add("Player Think","shooting",function(ply)
 	if not ply:Alive() or ply.unconscious then return end
 	if not IsValid(ply.FakeRagdoll) or not IsValid(ply.wep) then return end
+
 	local wep = ply.ActiveWeapon
-	
+	if not IsValid(wep) then return end
+
 	if wep.Primary.Automatic and ply:KeyDown(IN_ATTACK) or ply:KeyPressed(IN_ATTACK) then
 		wep:PrimaryAttack()
 	end

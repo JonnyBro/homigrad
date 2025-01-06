@@ -40,8 +40,8 @@ tdm.teamEncoder = {
 function tdm.StartRound()
 	game.CleanUpMap(false)
 
-	team.SetColor(1,red)
-	team.SetColor(2,blue)
+	team.SetColor(1, tdm.red[2])
+	team.SetColor(2, tdm.blue[2])
 
 	if CLIENT then return end
 
@@ -49,8 +49,6 @@ function tdm.StartRound()
 end
 
 if SERVER then return end
-
-local colorRed = Color(255,0,0)
 
 function tdm.GetTeamName(ply)
 	local game = TableRound()

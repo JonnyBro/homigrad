@@ -56,7 +56,6 @@ surface.CreateFont("HomigradFontSmall",{
 CreateClientConVar("hg_scopespeed","0.5",true,false,"Changes the speed of the sniper scope when zoomed in.",0,5)
 CreateClientConVar("hg_usecustommodel","false",true,true,"Allows usage of custom models.")
 
-
 -- For player models!!
 local validUserGroup = {
 	servermanager = true,
@@ -72,10 +71,37 @@ local validUserGroup = {
 	user = false,
 }
 
-net.Receive("round_active",function(len)
+net.Receive("round_active", function(len)
 	roundActive = net.ReadBool()
 	roundTimeStart = net.ReadFloat()
 	roundTime = net.ReadFloat()
+end)
+
+net.Receive("hg_sendchat", function(len)
+	local ply = LocalPlayer()
+	local msg = net.ReadTable()
+	local tbl = {}
+
+	for _, v in ipairs(msg) do
+		tbl[#tbl + 1] = (string.StartsWith(v, "#") and language.GetPhrase(v)) or v
+	end
+
+	if IsValid(ply) then
+		ply:ChatPrint(table.concat(tbl))
+	end
+end)
+
+net.Receive("hg_sendchat_format", function(len)
+	local ply = LocalPlayer()
+	local msg = net.ReadTable()
+	if not msg or not msg[1] then return end
+
+	local text = msg[1]
+	local args = {unpack(msg, 2)} -- Extract other args
+
+	if IsValid(ply) then
+		ply:ChatPrint(language.GetPhrase(text):format(unpack(args)))
+	end
 end)
 
 local view = {}
@@ -122,7 +148,7 @@ local gradient_d = Material("vgui/gradient-d")
 
 hook.Add("HUDPaint","spectate",function()
 	local lply = LocalPlayer()
-	
+
 	local spec = lply:GetNWEntity("HeSpectateOn")
 
 	if lply:Alive() then
@@ -260,28 +286,28 @@ hook.Add("PostDrawOpaqueRenderables", "laser", function()
 		ply.Laser = ply.Laser or false
 		local wep = ply:GetActiveWeapon()
 		wep = IsValid(wep) and wep or ply:GetNWEntity("ActiveWeapon")
-		if IsValid(wep) and IsValid(ply) and ply.Laser and not ply:GetNWInt("unconscious") and laserweps[wep:GetClass()] then			
+		if IsValid(wep) and IsValid(ply) and ply.Laser and not ply:GetNWInt("unconscious") and laserweps[wep:GetClass()] then
 			if not IsValid(wep) then continue end
-			
+
 			local pos, ang = wep:GetTrace()
-			
+
 			local t = {}
 
 			t.start = pos + ang:Right() * 0 + ang:Forward() * -5 + ang:Up() * -0.5
-			
+
 			t.endpos = t.start + ang:Forward() * 9000
-			
+
 			t.filter = {ply,wep,LocalPlayer(),ply:GetNWEntity("Ragdoll"),ply:GetNWEntity("ragdollWeapon")}
 			t.mask = MASK_SOLID
 			local tr = util.TraceLine(t)
-			
+
 			local angle = (tr.StartPos - tr.HitPos):Angle()
-			
+
 			cam.Start3D(EyePos(),EyeAngles())
 
 			render.SetMaterial(mat)
 			render.DrawBeam(tr.StartPos, tr.HitPos, 1, 0, 15.5, Color(255, 0, 0))
-			
+
 			local Size = math.random(3,4)
 			render.SetMaterial(mat2)
 			local tra = util.TraceLine({
@@ -366,7 +392,7 @@ local function ToggleMenu(toggle)
 			surface.PlaySound("UI/buttonclickrelease.wav")
         end)
 		armorMenu:SetIcon("icon16/shield.png")
-		
+
 		local ammoMenu = plyMenu:AddOption("Ammo Menu",function()
 			LocalPlayer():ConCommand("hg_ammomenu")
 			surface.PlaySound("UI/buttonclickrelease.wav")
@@ -402,7 +428,7 @@ local function ToggleMenu(toggle)
 			end)
 			plyModelMenu:SetIcon("icon16/cancel.png")
 		end
-		
+
 		local EZarmor = LocalPlayer().EZarmor
 		if JMod.GetItemInSlot(EZarmor, "eyes") then
 			plyMenu:AddOption("Toggle Mask/Helmet Visor",function()
@@ -424,7 +450,7 @@ hook.Add("Think","Thinkhuyhuy",function()
 	active = input.IsKeyDown(KEY_C)
 	if oldValue ~= active then
 		oldValue = active
-		
+
 		if active then
 			ToggleMenu(true)
 		else
@@ -457,7 +483,7 @@ hook.Add("OnEntityCreated", "homigrad-colorragdolls", function(ent)
 				end
 
 				ent.playerColor = ent:GetNWVector("plycolor", plr_clr) or plr_clr
-				
+
 				ent.GetPlayerColor = function()
 					return ent.playerColor
 				end
@@ -552,7 +578,7 @@ hook.Add("DrawDeathNotice","no",function() return false end)
 
 function GM:MouthMoveAnimation( ply )
 	local ent = IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWEntity("Ragdoll") or ply
-	
+
 	local flexes = {
 		ent:GetFlexIDByName( "jaw_drop" ),
 		ent:GetFlexIDByName( "left_part" ),
@@ -560,7 +586,7 @@ function GM:MouthMoveAnimation( ply )
 		ent:GetFlexIDByName( "left_mouth_drop" ),
 		ent:GetFlexIDByName( "right_mouth_drop" )
 	}
-	
+
 	local weight = ply:IsSpeaking() and math.Clamp( ply:VoiceVolume() * 6, 0, 6 ) or 0
 
 	for k, v in ipairs( flexes ) do

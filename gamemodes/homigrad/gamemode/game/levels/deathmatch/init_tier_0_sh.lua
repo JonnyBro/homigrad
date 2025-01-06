@@ -15,9 +15,9 @@ function dm.GetTeamName(ply)
 end
 
 function dm.StartRound(data)
-    team.SetColor(1,red)
-    team.SetColor(2,blue)
-    team.SetColor(1,green)
+    team.SetColor(1, red)
+    team.SetColor(2, red)
+    team.SetColor(3, red)
 
     game.CleanUpMap(false)
 
@@ -59,8 +59,6 @@ function dm.HUDPaint_RoundLeft(white)
             surface.PlaySound("snd_jack_hmcd_deathmatch.mp3")
             lply:ScreenFade(SCREENFADE.IN,Color(0,0,0,220),0.5,4)
         end
-        
-
 
         --[[surface.SetFont("HomigradRoundFont")
         surface.SetTextColor(color.r,color.g,color.b,math.Clamp(startRound - 0.5,0,1) * 255)

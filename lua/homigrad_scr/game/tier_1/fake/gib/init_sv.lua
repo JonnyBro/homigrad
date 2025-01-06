@@ -9,7 +9,7 @@ local function removeBone(rag,bone,phys_bone)
 	if rag.gibRemove[phys_bone] then return end
 
 	local phys_obj = rag:GetPhysicsObjectNum(phys_bone)
-	
+
 	if not IsValid(phys_obj) then return end
 
 	phys_obj:EnableCollisions(false)
@@ -131,7 +131,7 @@ function SpawnGore(ent, pos, headpos, force)
 		entg:SetPos(pos)
 		entg:SetVelocity(VectorRand(-50,50))
 		entg:Spawn()
-		
+
 		local phys = entg:GetPhysicsObject()
 		if IsValid(phys) then
 			phys:ApplyForceCenter(force)
@@ -172,7 +172,7 @@ function Gib_Input(rag, bone, dmgInfo)
 		gibRemove = rag.gibRemove
 
 		gib_ragdols[rag] = true
- 
+
 		--if not dmgInfo:IsDamageType(DMG_CRUSH) then
 			rag.Blood = rag.Blood or 5000
 			rag.BloodNext = 0
@@ -183,7 +183,7 @@ function Gib_Input(rag, bone, dmgInfo)
 	local phys_bone = rag:TranslateBoneToPhysBone(bone)
 
 	local dmgPos = dmgInfo:GetDamagePosition()
-	
+
 	if not gibRemove[phys_bone] then
 		sound.Emit(rag,"homigrad/player/headshot" .. math.random(1,2) .. ".wav")
 		sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
@@ -212,15 +212,15 @@ function Gib_Input(rag, bone, dmgInfo)
 	if dmgInfo:IsDamageType(DMG_BLAST) then
 		for bonename in pairs(validBone) do
 			local access = false
-			
+
 			local bone = rag:LookupBone(bonename)
 			if not bone then continue end--lol???????????????
 			local phys_bone = rag:TranslateBoneToPhysBone(bone)
-			
+
 			if gibRemove[phys_bone] then continue end
 
 			if rag:GetBonePosition(bone):Distance(dmgPos) <= 125 then access = true end
-			
+
 			if access then
 				sound.Emit(rag,"physics/flesh/flesh_squishy_impact_hard" .. math.random(2,4) .. ".wav")
 				sound.Emit(rag,"physics/body/body_medium_break3.wav")
@@ -250,7 +250,7 @@ local validBone2 = {
 	["ValveBiped.Bip01_R_Thigh"] = true,
 	["ValveBiped.Bip01_R_Calf"] = true,
 	["ValveBiped.Bip01_R_Foot"] = true,
-	
+
 	--["ValveBiped.Bip01_Head1"] = true, --bad idea
 
 	["ValveBiped.Bip01_R_UpperArm"] = true,
@@ -265,14 +265,14 @@ hook.Add("Player Death","Gib",function(ply, inflictor, attacker)
 	dmgInfo = ply.LastDMGInfo
 	if not dmgInfo then return end
 	if ply.LastTimeAttacked and (ply.LastTimeAttacked + 1) < CurTime() then return end
-	
+
 	if dmgInfo:GetDamage() < 450 * (bone_integrity[ply.LastHitBoneName] or 1) then return end
-	
+
 	timer.Simple(0,function()
 		local rag = ply:GetNWEntity("Ragdoll")
 		if not IsValid(rag) then return end
 		local bone = rag:LookupBone(ply.LastHitBoneName)
-		
+
 		--bone = bone ~= 0 and bone or 1
 
 		if not IsValid(rag) or not bone then return end
@@ -310,7 +310,7 @@ hook.Add("HomigradGib","Gib",function(ent, dmgInfo, phys_bone)
 				dmg:SetDamage(newdmginfo.dmg)
 				dmg:SetDamagePosition(newdmginfo.pos)
 				dmg:SetDamageForce(newdmginfo.force)
-				
+
 				if IsValid(rag) then
 					hook.Run("HomigradGib", rag, dmg, phys_bone)
 				end
@@ -322,7 +322,7 @@ hook.Add("HomigradGib","Gib",function(ent, dmgInfo, phys_bone)
 	end
 
 	local phys_bone = phys_bone or GetPhysicsBoneDamageInfo(ent,dmgInfo)
-	
+
 	local dmg = dmgInfo:GetDamage()
 
 	if dmgInfo:GetAttacker():IsRagdoll() then return end--maybe we can win this
@@ -331,7 +331,7 @@ hook.Add("HomigradGib","Gib",function(ent, dmgInfo, phys_bone)
 	ply = ply and ply:Alive() and ply
 	ent.dmgstack = ent.dmgstack or {}
 	ent.dmgstack[phys_bone] = (ent.dmgstack[phys_bone] or 0) + dmg * (dmgInfo:IsDamageType(DMG_CRUSH) and 0.15 or 0.75)
-	
+
 	-- Commenting out for now
 	--print(ent.dmgstack[phys_bone],dmgInfo:IsDamageType(DMG_CRUSH))
 
@@ -340,14 +340,14 @@ hook.Add("HomigradGib","Gib",function(ent, dmgInfo, phys_bone)
 			ent.dmgstack[phys_bone] = 0
 		end
 	end)
-	
+
 	local bonename = ent:GetBoneName(ent:TranslatePhysBoneToBone(phys_bone))
 
 	if ply and not validBone2[bonename] then return end
 
 	if ent.dmgstack[phys_bone] < 450 * (bone_integrity[bonename] or 1) then return end
 	ent.dmgstack[phys_bone] = 0
-	
+
 	Gib_Input(ent,ent:TranslatePhysBoneToBone(phys_bone),dmgInfo)
 end)
 
@@ -394,7 +394,7 @@ hook.Add("Think","Gib",function()
 			end--]]
 
 			local BloodGibs = ent.BloodGibs
-			
+
 			for phys_bone,phys_obj in pairs(ent.gibRemove) do
 				if type(phys_obj) != "PhysObj" or not IsValid(phys_obj) then continue end
 				local parent_bone = ent:GetBoneParent(ent:TranslatePhysBoneToBone(phys_bone))
@@ -404,7 +404,7 @@ hook.Add("Think","Gib",function()
 				if (BloodGibs[phys_bone] or 0) < time then
 					ply.Blood = max(ply.Blood - 5,0)
 					ply.pain = ply.pain + 2.5
-					
+
 					BloodGibs[phys_bone] = time + Rand(0.07,0.1) / max(k,0.5)
 
 					BloodParticle(phys_obj:GetPos() - parent_obj:GetAngles():Forward() * 1,phys_obj:GetVelocity() + parent_obj:GetAngles():Forward() * Rand(200,250) * k + VectorRand(-20,20))

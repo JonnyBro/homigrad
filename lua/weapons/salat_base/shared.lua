@@ -124,7 +124,7 @@ hook.Add("HUDPaint","admin_hitpos",function()
 		local tr = util.QuickTrace(pos,ang:Forward() * 1000,LocalPlayer())
 		local hit = tr.HitPos:ToScreen()
 		local start = pos:ToScreen()
-		
+
 		surface.SetDrawColor( 255, 255, 255, 100 )
 		surface.DrawRect(hit.x - 2,hit.y - 2,4,4)
 
@@ -201,7 +201,7 @@ end
 
 function SWEP:DrawWorldModel()
     self:DrawModel()
-	
+
 	if not hg_skins:GetBool() then return end
 
     if (IsValid(self:GetOwner()) and self:GetOwner():IsPlayer() and skins[self:GetOwner():GetUserGroup()]) then
@@ -307,7 +307,7 @@ local skini = {
 
 function AddHomigradWeapon(self)
 	table.insert(homigrad_weapons,self)
-	
+
 	--[[if SERVER then
 		net.Start("SendHomigradWeapons", true)
 		net.WriteEntity(homigrad_weapons)
@@ -366,12 +366,12 @@ function SWEP:PrimaryAttack()
 
 	local ply = self:GetOwner() -- а ну да
 	self.NextShot = CurTime() + self.ShootWait
-	
+
 	if SERVER then
 		local ent = IsValid(ply.FakeRagdoll) and ply.FakeRagdoll or ply
 		ent:EmitSound(self.Primary.Sound,80,math.random(100,120),1,CHAN_WEAPON)
 	end
-	
+
     self:FireBullet()
 
 	if SERVER and not ply:IsNPC() then
@@ -387,17 +387,17 @@ function SWEP:PrimaryAttack()
 	if CLIENT and ply == LocalPlayer() then
 		self.ZazhimYaycami = math.min(self.ZazhimYaycami + 1,self.Primary.ClipSize)
 	end
-	
+
 	if CLIENT and (self:GetOwner() != LocalPlayer()) then
 		self:GetOwner():SetAnimation(PLAYER_ATTACK1)
 	end
-	
+
 	self.lastShoot = CurTime()
 	self:SetNWFloat("LastShoot",CurTime())
 
 	if CLIENT and ply == LocalPlayer() then
 		self.eyeSpray = self.eyeSpray or Angle(0,0,0)
-		
+
 		local func = self.ApplyEyeSpray
 		if func then
 			func(self)
@@ -408,7 +408,7 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:Reload()
-	
+
 	if !self:GetOwner():KeyDown(IN_WALK) then
 		self.AmmoChek = 3
 		if timer.Exists("reload"..self:EntIndex())  or self:Clip1()>=self:GetMaxClip1() or self:GetOwner():GetAmmoCount( self:GetPrimaryAmmoType() )<=0 then return nil end
@@ -454,29 +454,29 @@ end
 function SWEP:GetSAttachment(obj)
 	local pos, ang = self:GetTransform()
 	local owner = self:GetOwner()
-	
+
 	local wep = IsValid(owner) and owner:GetNWEntity("ragdollWeapon",self) or self
 
 	local model = IsValid(wep) and wep or self
-	
+
 	local att = model:GetAttachment(obj)
-	
+
 	if not att then return end
 
 	if IsValid(wep) then return att end
-	
+
 	local bon = att.Bone or 0
 	local mat = model:GetBoneMatrix(bon)
 	local bonepos, boneang = mat:GetTranslation(), mat:GetAngles()
 	local lpos, lang = WorldToLocal(att.Pos or bonepos, att.Ang or boneang, bonepos, boneang)
-	
+
 	if CLIENT then self:SetupBones() end
 
 	local mat = model:GetBoneMatrix(bon)
 	local bonepos, boneang = mat:GetTranslation(), mat:GetAngles()
 
 	local pos, ang = LocalToWorld(lpos, lang, bonepos, boneang)
-	
+
 	return {Pos = pos, Ang = ang, Bone = bon}
 end
 
@@ -494,12 +494,12 @@ end
 function SWEP:GetTrace(nomodify)
 	local owner = self:GetOwner()
 	local obj = self:LookupAttachment("muzzle") or 0
-	
+
 	local att = self:GetSAttachment(self.att or obj)
-	
+
 	if not att then
 		local Pos, Ang
-		
+
 		local wep = IsValid(owner) and owner:GetNWEntity("ragdollWeapon")
 		if wep and IsValid(wep) then
 			Pos, Ang = wep:GetPos(), wep:GetAngles()
@@ -509,7 +509,7 @@ function SWEP:GetTrace(nomodify)
 
 		att = {Pos = Pos, Ang = Ang}
 	end
-	
+
 	local pos, ang = att.Pos, att.Ang
 
 	if not nomodify then
@@ -562,15 +562,15 @@ local CaliberEffects = {
 function SWEP:FireBullet()
 	if self:Clip1() <= 0 then return end
 	if timer.Exists("reload"..self:EntIndex()) then return nil end
-	
+
 	local ply = self:GetOwner()
 
 	ply:LagCompensation(true)
 
 	local shootOrigin, shootAngles = self:GetTrace()
-	
+
 	local cone = self.Primary.Cone
-	
+
 	local _
 	if not ply:IsNPC() and not IsValid(ply.FakeRagdoll) then
 		--_, shootOrigin, _ = util.DistanceToLine(shootOrigin - shootAngles:Forward(),shootOrigin,ply:EyePos())
@@ -611,7 +611,7 @@ function SWEP:FireBullet()
 
 			dmgInfo:ScaleDamage(k)
 		end
-		
+
 		local effectdata = EffectData()
 		effectdata:SetEntity(tr.Entity)
 		effectdata:SetOrigin(tr.HitPos)
@@ -629,7 +629,7 @@ function SWEP:FireBullet()
 	end
 
 	if SERVER then self:TakePrimaryAmmo(1) end
-	
+
 
 	if ply:GetNWBool("Suiciding") then
 		if SERVER then
@@ -647,7 +647,7 @@ function SWEP:FireBullet()
 
 			ply.LastDMGInfo = dmgInfo
 			ply.LastHitBoneName = "ValveBiped.Bip01_Head1"
-			
+
 			--if ply:Alive() then ply:Kill() end
 		end
 	elseif not self:GetOwner():IsNPC() then
@@ -759,7 +759,7 @@ local pistol_hold = Angle(10,-10,0)
 local rifle_hold = Angle(-5,-8,0)
 
 function SWEP:IsPistolHoldType()
-	return self.HoldType == "revolver" 
+	return self.HoldType == "revolver"
 end
 
 SWEP.ishgweapon = true
@@ -783,9 +783,9 @@ function SWEP:Step()
 
 	if isLocal then
 		self.eyeSpray = self.eyeSpray or Angle(0,0,0)
-		
+
 		ply:SetEyeAngles(ply:EyeAngles() + self.eyeSpray)
-		
+
 		self.eyeSpray = LerpAngleFT(0.5,self.eyeSpray,Angle(0,0,0))
 
 		if not ply:KeyDown(IN_ATTACK) then
@@ -850,7 +850,7 @@ function SWEP:ApplyAnim(ply)
 				local dist = pos:DistToSqr(tr.HitPos)
 
 				self.isClose = self.dist <= 35 and not self:IsReloaded()
-				
+
 				if SERVER then self:SetNWBool("isClose",self.isClose) end
 			end
 		else
@@ -890,7 +890,7 @@ function SWEP:ApplyAnim(ply)
 	local hand_index = ply:LookupBone("ValveBiped.Bip01_R_Hand")
 	local forearm_index = ply:LookupBone("ValveBiped.Bip01_R_Forearm")
 	local clavicle_index = ply:LookupBone("ValveBiped.Bip01_R_Clavicle")
-	
+
 	local attPos, attAng = self:GetTrace()
 	local matrix = ply:GetBoneMatrix(hand_index)
 	if not matrix then return end
@@ -903,7 +903,7 @@ function SWEP:ApplyAnim(ply)
 	ang:RotateAroundAxis(ang:Forward(),-90)
 	--ang:RotateAroundAxis(ang:Right(),8)
 	matrix:SetAngles(ang)
-	
+
 	local lpos, lang = ply:SetBoneMatrix2(hand_index, matrix, false)
 
 	if not ply:GetNWBool("Suiciding") then
@@ -916,10 +916,10 @@ function SWEP:ApplyAnim(ply)
 
 		hand = lang * self.lerp_aim
 	end
-	
+
 	local _,localAng = WorldToLocal(vector_origin,attAng,vector_origin,ang)
 	localAng:RotateAroundAxis(localAng:Forward(),0)
-	
+
 	if not ply:GetNWBool("Suiciding") and not self:IsSprinting() and not self.isClose then
 		self.localAng = LerpFT(0.1, self.localAng or angle_zero, localAng)
 		--print(self.localAng)
@@ -977,7 +977,7 @@ function SWEP:Deploy()
 	if SERVER then
 		self:GetOwner():EmitSound("snd_jack_hmcd_pistoldraw.wav", 65,(self.TwoHands and 100) or (!self.TwoHands and 110), 1, CHAN_AUTO)
 	end
-	
+
 	self.NextShot = CurTime() + 0.5
 	self:SetNWFloat("DeployTime",CurTime())
 
@@ -1070,7 +1070,7 @@ SWEP.localang = Angle(0,0,0)
 function SWEP:GetTransform(model, force)
     local owner = self:GetOwner()
 	local model = IsValid(model) and model
-	
+
 	if not IsValid(owner) then return self:GetPos(),self:GetAngles() end
 
 	if not IsValid(model) then
@@ -1080,7 +1080,7 @@ function SWEP:GetTransform(model, force)
 
 	local wep = owner:GetNWEntity("ragdollWeapon")
 	if IsValid(wep) and not force then return wep:GetPos(),wep:GetAngles() end
-	
+
 	local owner = IsValid(owner.FakeRagdoll) and owner.FakeRagdoll or owner
 	local model = IsValid(wep) and wep or model
 
@@ -1097,6 +1097,8 @@ function SWEP:GetTransform(model, force)
 	if owner:IsRagdoll() then--fuck source engine
 		rh = Matrix()
 		local phys = owner:GetPhysicsObjectNum(owner:TranslateBoneToPhysBone(bon))
+		if not IsValid(phys) then return end
+
 		local pos, ang = phys:GetPos(), phys:GetAngles()
 		rh:SetTranslation(pos)
 		rh:SetAngles(ang)
@@ -1115,7 +1117,7 @@ function SWEP:GetTransform(model, force)
 		model:SetRenderOrigin(pos)
     	model:SetRenderAngles(ang)
 	end
-	
+
 	if CLIENT then model:SetupBones() end
 
 	local bon2 = model:LookupBone("ValveBiped.Bip01_R_Hand")
@@ -1138,7 +1140,7 @@ function SWEP:GetTransform(model, force)
 
 	local timehuy = 0.1
 	local animpos = math.ease.InBack(math.max(self:LastShootTime() - CurTime() + timehuy,0) / timehuy) * 1
-	
+
     ang:RotateAroundAxis(ang:Up(),(self.dwmAUp or 0))
     ang:RotateAroundAxis(ang:Right(),(self.dwmARight or 0))-- + animpos * (self:IsPistolHoldType() and 1 or 0))
     ang:RotateAroundAxis(ang:Forward(),(self.dwmAForward or 0))
@@ -1156,18 +1158,18 @@ if CLIENT then
 	function SWEP:Camera(ply, origin, angles, fov)
 		local pos, ang = self:GetTrace(true)
 		local _, anglef = self:GetTrace()
-		
+
 		lerpaim = LerpFT(0.1, lerpaim, self:IsSighted() and 1 or 0)
-		
+
 		local neworigin, _ = LocalToWorld(self.SightPos, self.SightAng, pos, ang)
 
 		origin = Lerp(lerpaim,origin,neworigin)
-		
+
 		local animpos = math.max(self:LastShootTime() - CurTime() + 0.1,0) * 20
 		origin = origin + anglef:Forward() * animpos --+ angles:Up() * animpos / 20
-		
+
 		origin = origin + anglef:Right() * math.random(-0.1,0.1) * (animpos/200) + anglef:Up() * math.random(-0.1,0.1) * (animpos/200)
-		
+
 		addfov = LerpFT(0.1, addfov, self:IsSighted() and -(self.addfov or 20) or 0)
 
 		return origin, angles, fov + addfov
