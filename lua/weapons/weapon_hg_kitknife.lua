@@ -1,9 +1,8 @@
-if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = "weapon_hg_melee_base"
 
-SWEP.PrintName = "Kitchen Knife"
-SWEP.Category = "Melee"
-SWEP.Instructions = "Sharpened to perfection."
+SWEP.PrintName = "Kitchen knife"
+SWEP.Category = "[HG] Melee"
+SWEP.Instructions = ""
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true
@@ -47,6 +46,5 @@ SWEP.DrawSound = "snd_jack_hmcd_knifedraw.wav"
 SWEP.HitSound = "snd_jack_hmcd_knifehit.wav"
 SWEP.FlashHitSound = "snd_jack_hmcd_slash.wav"
 SWEP.ShouldDecal = true
-SWEP.HoldTypeWep = "melee"
-SWEP.DamageType = DMG_SLASH 
-end
+SWEP.HoldTypeWep = "knife"
+SWEP.DamageType = DMG_SLASH

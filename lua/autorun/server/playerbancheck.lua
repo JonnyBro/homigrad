@@ -1,3 +1,5 @@
+if not util.IsBinaryModuleInstalled("mysqloo") then return end
+
 local STEAM_API_KEY = "#####" -- Don't use your main account steam key.
 
 -- clueless

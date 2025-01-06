@@ -1,17 +1,16 @@
-if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = "weapon_hg_melee_base"
 
 SWEP.PrintName = "Crowbar"
-SWEP.Category = "Melee"
-SWEP.Instructions = "Manufactured by Freeman Inc."
+SWEP.Category = "[HG] Melee"
+SWEP.Instructions = ""
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true
 SWEP.AdminOnly = false
 
 SWEP.ViewModelFOV = 60
-SWEP.ViewModel = "models/weapons/w_crowbar.mdl"
-SWEP.WorldModel = "models/weapons/w_crowbar.mdl"
+SWEP.ViewModel = "models/weapons/me_crowbar/w_me_crowbar.mdl"
+SWEP.WorldModel = "models/weapons/me_crowbar/w_me_crowbar.mdl"
 SWEP.ViewModelFlip = false
 
 SWEP.AutoSwitchTo = false
@@ -35,7 +34,7 @@ SWEP.Primary.Ammo = "none"
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = true
 SWEP.Primary.Recoil = 0.5
-SWEP.Primary.Delay = 1.5
+SWEP.Primary.Delay = 1.3
 SWEP.Primary.Force = 70
 
 SWEP.Secondary.ClipSize = 0
@@ -49,4 +48,3 @@ SWEP.FlashHitSound = "weapons/melee/flesh_impact_blunt_04.wav"
 SWEP.ShouldDecal = true
 SWEP.HoldTypeWep = "melee"
 SWEP.DamageType = DMG_SLASH
-end

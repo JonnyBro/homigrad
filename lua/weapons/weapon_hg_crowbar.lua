@@ -1,17 +1,16 @@
-if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = "weapon_hg_melee_base"
 
 SWEP.PrintName = "Shovel"
-SWEP.Category = "Melee"
-SWEP.Instructions = "Useful for caving both Earth and Bone."
+SWEP.Category = "[HG] Melee"
+SWEP.Instructions = ""
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true
 SWEP.AdminOnly = false
 
 SWEP.ViewModelFOV = 60
-SWEP.ViewModel = "models/weapons/w_spade.mdl"
-SWEP.WorldModel = "models/weapons/w_spade.mdl"
+SWEP.ViewModel = "models/weapons/me_spade/w_me_spade.mdl"
+SWEP.WorldModel = "models/weapons/me_spade/w_me_spade.mdl"
 SWEP.ViewModelFlip = false
 
 SWEP.AutoSwitchTo = false
@@ -35,7 +34,7 @@ SWEP.Primary.Ammo = "none"
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = true
 SWEP.Primary.Recoil = 0.5
-SWEP.Primary.Delay = 2.1
+SWEP.Primary.Delay = 1.1
 SWEP.Primary.Force = 180
 
 SWEP.Secondary.ClipSize = 0
@@ -49,4 +48,3 @@ SWEP.FlashHitSound = "snd_jack_hmcd_axehit.wav"
 SWEP.ShouldDecal = true
 SWEP.HoldTypeWep = "melee2"
 SWEP.DamageType = DMG_SLASH
-end

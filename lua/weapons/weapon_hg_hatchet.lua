@@ -1,9 +1,8 @@
-if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = "weapon_hg_melee_base"
 
 SWEP.PrintName = "Hatchet"
-SWEP.Category = "Melee"
-SWEP.Instructions = "The axes baby brother."
+SWEP.Category = "[HG] Melee"
+SWEP.Instructions = ""
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true
@@ -49,4 +48,3 @@ SWEP.FlashHitSound = "snd_jack_hmcd_axehit.wav"
 SWEP.ShouldDecal = true
 SWEP.HoldTypeWep = "melee"
 SWEP.DamageType = DMG_SLASH
-end

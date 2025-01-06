@@ -1,9 +1,8 @@
-if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = "weapon_hg_melee_base"
 
-SWEP.PrintName = "Metal Bat"
-SWEP.Category = "Melee"
-SWEP.Instructions = "Not as iconic as it's wooden brother."
+SWEP.PrintName = "Metal bat"
+SWEP.Category = "[HG] Melee"
+SWEP.Instructions = ""
 
 SWEP.Spawnable= true
 SWEP.AdminSpawnable= true
@@ -49,4 +48,3 @@ SWEP.FlashHitSound = "weapons/melee/flesh_impact_blunt_04.wav"
 SWEP.ShouldDecal = false
 SWEP.HoldTypeWep = "melee2"
 SWEP.DamageType = DMG_CLUB
-end
