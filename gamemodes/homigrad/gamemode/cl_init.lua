@@ -80,6 +80,8 @@ end)
 net.Receive("hg_sendchat", function(len)
 	local ply = LocalPlayer()
 	local msg = net.ReadTable()
+	if not msg then return end
+
 	local tbl = {}
 
 	for _, v in ipairs(msg) do
@@ -94,10 +96,16 @@ end)
 net.Receive("hg_sendchat_format", function(len)
 	local ply = LocalPlayer()
 	local msg = net.ReadTable()
-	if not msg or not msg[1] then return end
+	if not msg then return end
 
-	local text = msg[1]
-	local args = {unpack(msg, 2)} -- Extract other args
+	local tbl = {}
+
+	for _, v in ipairs(msg) do
+		tbl[#tbl + 1] = (string.StartsWith(v, "#") and language.GetPhrase(v)) or v
+	end
+
+	local text = tbl[1]
+	local args = {unpack(tbl, 2)} -- Extract other args
 
 	if IsValid(ply) then
 		ply:ChatPrint(language.GetPhrase(text):format(unpack(args)))
@@ -140,7 +148,6 @@ end)
 SpectateHideNick = SpectateHideNick or false
 
 local keyOld,keyOld2
-local lply
 flashlight = flashlight or nil
 flashlightOn = flashlightOn or false
 
@@ -161,10 +168,8 @@ hook.Add("HUDPaint","spectate",function()
 	local result = lply:PlayerClassEvent("CanUseSpectateHUD")
 	if result == false then return end
 
-
-
 	if
-		(((not lply:Alive() or lply:Team() == 1002 or spec and lply:GetObserverMode() != OBS_MODE_NONE) or lply:GetMoveType() == MOVETYPE_NOCLIP)
+		(((not lply:Alive() or lply:Team() == 1002 or spec and lply:GetObserverMode() ~= OBS_MODE_NONE) or lply:GetMoveType() == MOVETYPE_NOCLIP)
 		and not lply:InVehicle()) or result or hook.Run("CanUseSpectateHUD")
 	then
 		local ent = spec
@@ -222,7 +227,7 @@ hook.Add("HUDPaint","spectate",function()
 			if func then func() end
 
 			for _, v in ipairs(player.GetAll()) do --ESP
-				if !v:Alive() or v == ent then continue end
+				if not v:Alive() or v == ent then continue end
 
 				local ent = IsValid(v:GetNWEntity("Ragdoll")) and v:GetNWEntity("Ragdoll") or v
 				local screenPosition = ent:GetPos():ToScreen()
@@ -301,8 +306,6 @@ hook.Add("PostDrawOpaqueRenderables", "laser", function()
 			t.mask = MASK_SOLID
 			local tr = util.TraceLine(t)
 
-			local angle = (tr.StartPos - tr.HitPos):Angle()
-
 			cam.Start3D(EyePos(),EyeAngles())
 
 			render.SetMaterial(mat)
@@ -327,17 +330,17 @@ hook.Add("PostDrawOpaqueRenderables", "laser", function()
 	end
 end)
 
-local function PlayerModelMenu()
-	local newv = list.Get( "DesktopWindows" )[ "PlayerEditor" ]
+-- local function PlayerModelMenu()
+-- 	local newv = list.Get( "DesktopWindows" )[ "PlayerEditor" ]
 
-	local Window = vgui.Create( "DFrame" )
-	Window:SetSize( newv.width, newv.height )
-	Window:SetTitle( newv.title )
-	Window:Center()
-	Window:MakePopup()
+-- 	local Window = vgui.Create( "DFrame" )
+-- 	Window:SetSize( newv.width, newv.height )
+-- 	Window:SetTitle( newv.title )
+-- 	Window:Center()
+-- 	Window:MakePopup()
 
-	newv.init( nil, Window )
-end
+-- 	newv.init( nil, Window )
+-- end
 
 local function ToggleMenu(toggle)
     if toggle then
@@ -512,39 +515,6 @@ local clipcolorempty = Color(247, 40, 40, 255)
 local colorgray = Color(200, 200, 200)
 local shadow = color_black
 
---[[hook.Add("HUDPaint","homigrad-fancyammo",function()
-	--[[local ply = LocalPlayer()
-	local clip, maxclip, ammo = GetClipForCurrentWeapon(ply)
-	local clipstring = tostring(clip)
-	local sw, sh = ScrW(), ScrH()
-	if clip != -1 and maxclip > 0 then
-		if oldclip != clip then
-			randomx = math.random(0, 10)
-			randomy = math.random(0, 10)
-			timer.Simple(0.15, function()
-				oldclip = clip
-			end)
-		else
-			randomx = 0
-			randomy = 0
-		end
-
-		if clip == 0 then
-			clipcolor = clipcolorempty
-		elseif maxclip / clip >= 6 or clip == 1 and maxclip != 1 then
-			clipcolor = clipcolorlow
-		else
-			clipcolor = color_white
-		end
-
-		draw.SimpleText("/ " .. ammo, "HomigradFontSmall", sw * 0.9 + 2 + #clipstring * sw * 0.02, sh * 0.97 + 2, shadow)
-		draw.SimpleText("/ " .. ammo, "HomigradFontSmall", sw * 0.9 + #clipstring * sw * 0.02, sh * 0.97, colorgray)
-
-		draw.SimpleText(clip, "HomigradFontLarge", sw * 0.89 + 5 + randomx, sh * 0.92 + 5 + randomy, shadow)
-		draw.SimpleText(clip, "HomigradFontLarge", sw * 0.89 + randomx, sh * 0.92 + randomy, clipcolor)
-	end
-end)
-]]
 net.Receive("remove_jmod_effects",function(len)
 	LocalPlayer().EZvisionBlur = 0
 	LocalPlayer().EZflashbanged = 0

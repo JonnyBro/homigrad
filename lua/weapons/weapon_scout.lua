@@ -1,4 +1,3 @@
-if engine.ActiveGamemode() == "homigrad" then
 SWEP.Base = 'salat_base' -- base
 
 SWEP.PrintName 				= "Scout"
@@ -57,9 +56,9 @@ if CLIENT then
     local rtsize = 512
     local rtmat = GetRenderTarget("huy-glass", rtsize, rtsize, false)
 
-    function SWEP:InitAdd()    
+    function SWEP:InitAdd()
         --self.scope_mat = Material("models/weapons/v_models/snip_awp/v_awp_scope")
-    
+
         --self.lpos = Vector(-14,0,0)
         --self.lang = Angle(0,180,0)
     end
@@ -68,7 +67,7 @@ if CLIENT then
     SWEP.lang = Angle(0,180,0)
 
     SWEP.scope_mat = Material("models/weapons/v_models/snip_awp/v_awp_scope")
-    
+
     SWEP.opticpos = Vector(0, 0, 8)
     SWEP.opticang = Angle(0, -90, 0)
 
@@ -85,7 +84,7 @@ if CLIENT then
 
         if not IsValid(self.optic_scope) then
             self.optic_scope = ClientsideModel(self.opticmodel2)
-            
+
             --self.optic_scope:SetSubMaterial(0, "null")
             --self.optic_scope:SetSubMaterial(1, "!scope_mat1")
         end
@@ -94,7 +93,7 @@ if CLIENT then
         local mdl2 = self.optic_scope
         mdl:SetNoDraw(true)
         mdl2:SetNoDraw(true)
-        
+
         local pos, ang = LocalToWorld(self.opticpos, self.opticang, model:GetPos(), model:GetAngles())
 
         mdl:SetPos(pos)
@@ -106,7 +105,7 @@ if CLIENT then
         mdl2:SetPos(pos)
         mdl2:SetAngles(ang)
         if model:GetMaterial() ~= "null" then mdl2:DrawModel() end
-        
+
         render.SetLightingMode(0)
     end
 
@@ -123,7 +122,7 @@ if CLIENT then
         local ply = self:GetOwner()
         local pos, ang = self:GetTrace()
         ang:RotateAroundAxis(ang:Forward(), -90)
-        
+
         local pos, ang = LocalToWorld(self.spos, self.sang, pos, ang)
 
         self.scope_mat:SetTexture("$basetexture", rtmat)
@@ -147,7 +146,7 @@ if CLIENT then
             fov = self.zoomfov,
             znear = 1,
         }
-        
+
         local scrw, scrh = ScrW(), ScrH()
         render.PushRenderTarget(rtmat, 0, 0, rtsize, rtsize)
             render.RenderView(rt)
@@ -180,7 +179,7 @@ if CLIENT then
 end
 
 function SWEP:AdjustMouseSensitivity()
-    return self:IsSighted() and (GetConVar("hg_scopespeed"):GetFloat() / 10) or 1 
+    return self:IsSighted() and (GetConVar("hg_scopespeed"):GetFloat() / 10) or 1
 end
 
 SWEP.vbwPos = Vector(-3,-5,-5)
@@ -194,4 +193,3 @@ SWEP.addAng = Angle(-5.4,0,-90)
 SWEP.addPos = Vector(-14,-0.7,-0.5)
 
 SWEP.SightPos = Vector(-60, -0.68, -6)--Vector(-60, -0.68, -5.4)
-end

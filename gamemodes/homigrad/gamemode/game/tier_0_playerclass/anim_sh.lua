@@ -1,4 +1,3 @@
-
 hook.Add("CalcMainActivity","PlayerClass",function(ply,velocity)
 	tab = ply:GetPlayerClass()
 
@@ -12,7 +11,7 @@ end)
 if SERVER then return end
 
 concommand.Add("hg_getanim",function()
-	if IsValid(hg_getanim) then hg_getanim:Remove() end 
+	if IsValid(hg_getanim) then hg_getanim:Remove() end
 	hg_getanim = vgui.Create("DFrame")
 	local frame = hg_getanim
 	frame:SetSize(700,700)

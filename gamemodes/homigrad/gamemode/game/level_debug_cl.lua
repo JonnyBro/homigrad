@@ -1,12 +1,12 @@
-concommand.Add("hg_dataround",function()
+concommand.Add("hg_dataround", function()
 	PrintTable(dataRound)
 end)
 
-concommand.Add("hg_enddataround",function()
+concommand.Add("hg_enddataround", function()
 	PrintTable(dataRound)
 end)
 
-concommand.Add("hg_roundinfo",function()
+concommand.Add("hg_roundinfo", function()
 	print("roundActive	" .. tostring(roundActive))
 	print("roundActiveName	" .. tostring(roundActiveName))
 

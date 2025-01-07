@@ -196,52 +196,52 @@ if (CLIENT) then
 			IconLayout:SetStretchWidth( true )
 			IconLayout:SetStretchHeight( false ) -- No infinite re-layouts
 			IconLayout:Dock( LEFT )
-		
+
 			-- This overrides DIconLayout's OnMousePressed (which is inherited from DPanel), but we don't care about that in this case
 			IconLayout.OnMousePressed = function( s, ... ) s:GetParent():OnMousePressed( ... ) end
-		
+
 			for k, v in pairs( list.Get( "DesktopWindows" ) ) do
-			
+
 				local icon = IconLayout:Add( "DButton" )
 				icon:SetText( "" )
 				icon:SetSize( 80, 82 )
 				icon.Paint = function() end
-			
+
 				local image = icon:Add( "DImage" )
 				image:SetImage( v.icon )
 				image:SetSize( 64, 64 )
 				image:Dock( TOP )
 				image:DockMargin( 8, 0, 8, 0 )
-			
+
 				local label = icon:Add( "DLabel" )
 				label:Dock( BOTTOM )
 				label:SetText( v.title )
 				label:SetContentAlignment( 5 )
 				label:SetTextColor( color_white )
 				label:SetExpensiveShadow( 1, Color( 0, 0, 0, 200 ) )
-			
+
 				icon.DoClick = function()
-				
+
 					--
 					-- v might have changed using autorefresh so grab it again
 					--
 					local newv = list.Get( "DesktopWindows" )[ k ]
-				
+
 					if ( v.onewindow and IsValid( icon.Window ) ) then
 						icon.Window:Center()
 						return
 					end
-				
+
 					-- Make the window
 					icon.Window = g_ContextMenu:Add( "DFrame" )
 					icon.Window:SetSize( newv.width, newv.height )
 					icon.Window:SetTitle( newv.title )
 					icon.Window:Center()
-				
+
 					newv.init( icon, icon.Window )
-				
+
 				end
-			
+
 			end
 		end
 	end
@@ -251,18 +251,18 @@ if (CLIENT) then
 	cvars.AddChangeCallback( "CMenuOptions", function()
 		CreateContextMenu = function()
 			if ( !hook.Run( "ContextMenuEnabled" ) ) then return end
-	
+
 			if ( IsValid( g_ContextMenu ) ) then
 				g_ContextMenu:Remove()
 				g_ContextMenu = nil
 			end
-	
+
 			g_ContextMenu = vgui.Create( "ContextMenu" )
-	
+
 			if ( !IsValid( g_ContextMenu ) ) then return end
-	
+
 			g_ContextMenu:SetVisible( false )
-	
+
 			--
 			-- We're blocking clicks to the world - but we don't want to
 			-- so feed clicks to the proper functions..
@@ -273,11 +273,11 @@ if (CLIENT) then
 			g_ContextMenu.OnMouseReleased = function( p, code )
 				hook.Run( "GUIMouseReleased", code, gui.ScreenToVector( gui.MousePos() ) )
 			end
-	
+
 			hook.Run( "ContextMenuCreated", g_ContextMenu )
-	
+
 			if LocalPlayer():IsSuperAdmin() && GetConVar("CMenuOptions"):GetBool() then
-	
+
 				local IconLayout = g_ContextMenu:Add( "DIconLayout" )
 				IconLayout:SetBorder( 8 )
 				IconLayout:SetSpaceX( 8 )
@@ -287,52 +287,52 @@ if (CLIENT) then
 				IconLayout:SetStretchWidth( true )
 				IconLayout:SetStretchHeight( false ) -- No infinite re-layouts
 				IconLayout:Dock( LEFT )
-			
+
 				-- This overrides DIconLayout's OnMousePressed (which is inherited from DPanel), but we don't care about that in this case
 				IconLayout.OnMousePressed = function( s, ... ) s:GetParent():OnMousePressed( ... ) end
-			
+
 				for k, v in pairs( list.Get( "DesktopWindows" ) ) do
-				
+
 					local icon = IconLayout:Add( "DButton" )
 					icon:SetText( "" )
 					icon:SetSize( 80, 82 )
 					icon.Paint = function() end
-				
+
 					local image = icon:Add( "DImage" )
 					image:SetImage( v.icon )
 					image:SetSize( 64, 64 )
 					image:Dock( TOP )
 					image:DockMargin( 8, 0, 8, 0 )
-				
+
 					local label = icon:Add( "DLabel" )
 					label:Dock( BOTTOM )
 					label:SetText( v.title )
 					label:SetContentAlignment( 5 )
 					label:SetTextColor( color_white )
 					label:SetExpensiveShadow( 1, Color( 0, 0, 0, 200 ) )
-				
+
 					icon.DoClick = function()
-					
+
 						--
 						-- v might have changed using autorefresh so grab it again
 						--
 						local newv = list.Get( "DesktopWindows" )[ k ]
-					
+
 						if ( v.onewindow and IsValid( icon.Window ) ) then
 							icon.Window:Center()
 							return
 						end
-					
+
 						-- Make the window
 						icon.Window = g_ContextMenu:Add( "DFrame" )
 						icon.Window:SetSize( newv.width, newv.height )
 						icon.Window:SetTitle( newv.title )
 						icon.Window:Center()
-					
+
 						newv.init( icon, icon.Window )
-					
+
 					end
-				
+
 				end
 			end
 		end

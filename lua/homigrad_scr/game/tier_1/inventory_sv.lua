@@ -1,4 +1,3 @@
-if engine.ActiveGamemode() != "homigrad" then return end
 util.AddNetworkString("inventory")
 util.AddNetworkString("ply_take_item")
 util.AddNetworkString("ply_take_ammo")
@@ -23,7 +22,7 @@ end
 
 hg.send = send
 
-hook.Add("PlayerSpawn","!!!huyassdd",function(lootEnt)
+hook.Add("PlayerSpawn","hg_syncinventories",function(lootEnt)
 	if lootEnt.UsersInventory ~= nil then
 		for plys,bool in pairs(lootEnt.UsersInventory) do
 			lootEnt.UsersInventory[plys] = nil
@@ -32,7 +31,6 @@ hook.Add("PlayerSpawn","!!!huyassdd",function(lootEnt)
 	end
 end)
 
-local searchSound = false 
 hook.Add("Player Think","Looting",function(ply)
 	local key = ply:KeyDown(IN_USE)
 
@@ -47,17 +45,17 @@ hook.Add("Player Think","Looting",function(ply)
 
 			if not IsValid(hitEnt) then return end
 
-			if IsValid(RagdollOwner(hitEnt)) then 
-				hitEnt = RagdollOwner(hitEnt) 
-				ply:EmitSound("npc/combine_soldier/gear" .. math.random(1, 7) .. ".wav", 50, math.random(95, 105)) 
+			if IsValid(RagdollOwner(hitEnt)) then
+				hitEnt = RagdollOwner(hitEnt)
+				ply:EmitSound("npc/combine_soldier/gear" .. math.random(1, 7) .. ".wav", 50, math.random(95, 105))
 			end
-			
+
 			if IsValid(hitEnt) and hitEnt.IsJModArmor then hitEnt = hitEnt.Owner end
 			if not IsValid(hitEnt) then return end
 			if hitEnt:IsPlayer() and hitEnt:Alive() and not IsValid(hitEnt.FakeRagdoll) then return end
 			SavePlyInfo(hitEnt)
 			if not hitEnt.Info then return end
-			
+
 			hitEnt.UsersInventory = hitEnt.UsersInventory or {}
 			hitEnt.UsersInventory[ply] = true
 
@@ -80,7 +78,7 @@ hook.Add("DoPlayerDeath","huyhuy",function(ply)
 	ply.weps = {}
 
 	local actwep = ply:GetActiveWeapon()
-	
+
 	actwep = IsValid(actwep) and actwep:GetClass() or IsValid(ply.ActiveWeapon) and ply.ActiveWeapon:GetClass()
 	for class, wep in pairs(info.Weapons) do
 		local tbl = wep:GetTable()
@@ -151,7 +149,7 @@ net.Receive("ply_take_item",function(len,ply)
 	local weapon = lootInfo.Weapons[wep]
 
 	if not IsValid(weapon) then return end
-	
+
 	if prekol[wep] and not ply:IsAdmin() then ply:Kick(trollmsgs[math.random(#trollmsgs)]) return end
 
 	if ply:HasWeapon(wep) then
@@ -164,7 +162,7 @@ net.Receive("ply_take_item",function(len,ply)
 		end
 	else
 		if lootEnt:IsPlayer() and (lootEnt.ActiveWeapon == weapon and not lootEnt.unconscious) then return end
-		
+
 		if lootEnt:IsPlayer() then lootEnt:DropWeapon(weapon) end
 		ply:PickupWeapon(weapon)
 
@@ -174,7 +172,7 @@ net.Receive("ply_take_item",function(len,ply)
 		weapon:SetMaterial("")
 
 		lootInfo.Weapons[wep] = nil
-		
+
 		if lootEnt.ActiveWeapon == weapon then
 			DespawnWeapon(lootEnt)
 		end
