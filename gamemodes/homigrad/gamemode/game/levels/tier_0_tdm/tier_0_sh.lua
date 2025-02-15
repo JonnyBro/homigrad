@@ -23,7 +23,7 @@ tdm.red = {
 }
 
 tdm.blue = {
-	"#hg.tdm.team1", Color(75, 75, 255), weapons = {"weapon_binokle", "weapon_radio", "weapon_hands", "weapon_kabar", "med_band_big", "med_band_small", "medkit", "painkiller", "weapon_handcuffs", "weapon_taser"},
+	"#hg.tdm.team2", Color(75, 75, 255), weapons = {"weapon_binokle", "weapon_radio", "weapon_hands", "weapon_kabar", "med_band_big", "med_band_small", "medkit", "painkiller", "weapon_handcuffs", "weapon_taser"},
 	main_weapon = {"weapon_hk416", "weapon_m4a1", "weapon_m4super", "weapon_mp7", "weapon_xm1014", "weapon_sa80", "weapon_asval", "weapon_m249", "weapon_p90", "weapon_scout", "weapon_barret"},
 	secondary_weapon = {"weapon_beretta", "weapon_p99", "weapon_hk_usp"},
 	models = models

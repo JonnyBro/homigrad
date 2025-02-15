@@ -291,7 +291,7 @@ local function ToggleScoreboard(toggle)
 					alive = language.GetPhrase("#hg.scoreboard.spectator")
 					alivecol = colorSpec
 				else
-					alive = language.GetPhrase("#hg.modes.unknownteam")
+					alive = language.GetPhrase("#hg.modes.team.unknown")
 					alivecol = colorSpec
 					colorAdd = colorSpec
 				end
@@ -310,7 +310,7 @@ local function ToggleScoreboard(toggle)
 					draw.RoundedBox(0, 0, 0, w, h, whiteAdd)
 				end
 
-				if alive ~= language.GetPhrase("hg.modes.unknownteam") and ply.last then
+				if alive ~= language.GetPhrase("hg.modes.team.unknown") and ply.last then
 					draw.SimpleText(ply.last, "HomigradFont", 25, h / 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 

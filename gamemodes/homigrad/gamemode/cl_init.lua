@@ -411,6 +411,13 @@ local function ToggleMenu(toggle)
 
 		ammoMenu:SetIcon("icon16/box.png")
 
+		local appearanceMenu = plyMenu:AddOption("#hg.cmenu.appearance", function()
+			LocalPlayer():ConCommand("hg_appearance_menu")
+			surface.PlaySound("UI/buttonclickrelease.wav")
+		end)
+
+		appearanceMenu:SetIcon("icon16/user_suit.png")
+
 		if validUserGroup[LocalPlayer():GetUserGroup()] then
 			local plyModelMenu = plyMenu:AddOption("#hg.cmenu.model", function()
 				RunConsoleCommand("playermodel_selector")
