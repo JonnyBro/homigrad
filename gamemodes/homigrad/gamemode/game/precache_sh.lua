@@ -94,6 +94,8 @@ if not ConVarExists("hg_precache_models") then CreateConVar("hg_precache_models"
         util.PrecacheModel("models/weapons/w_jmod_at4.mdl")
         util.PrecacheModel("models/pwb2/weapons/w_vectorsmg.mdl")
         util.PrecacheModel("models/pwb2/weapons/w_xm8lmg.mdl")
+        util.PrecacheModel("models/weapons/w_jmod_m107.mdl")
+        util.PrecacheModel("models/weapons/w_jmod_r700.mdl")
         util.PrecacheModel("models/weapons/w_knije_t.mdl") -- melees
         util.PrecacheModel("models/weapons/insurgency/w_gurkha.mdl")
         util.PrecacheModel("models/weapons/insurgency/w_marinebayonet.mdl")
