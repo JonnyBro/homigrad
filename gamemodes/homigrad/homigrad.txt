@@ -14,7 +14,6 @@
 			"help"		"Spawns all players with a physgun & ability to use the Spawn Menu."
 			"type"		"CheckBox"
 			"default"	"0"
-			"singleplayer"
 		}
 		2
 		{
@@ -23,7 +22,6 @@
 			"help"		"Homicide is the only round type queued. Other gamemodes like TDM, Capture The Point, etc, are not queued."
 			"type"		"CheckBox"
 			"default"	"0"
-			"singleplayer"
 		}
 		3
 		{
@@ -32,7 +30,6 @@
 			"help"		"Items in a player's inventory will appear after a given time (between 0 and 10)"
 			"type"		"Numeric"
 			"default"	"2"
-			"singleplayer"
 		}
 		4
 		{
@@ -41,7 +38,14 @@
 			"help"		"If enabled, Police will be alerted to who the traitors are when they arrive."
 			"type"		"CheckBox"
 			"default"	"0"
-			"singleplayer"
+		}
+		5
+		{
+			"name"		"empty"
+			"text"		"CHOOSE AT LEAST 2 PLAYERS"
+			"type"		"CheckBox"
+			"default"	"1"
+			"singleplayer"	"1"
 		}
 	}
 }
