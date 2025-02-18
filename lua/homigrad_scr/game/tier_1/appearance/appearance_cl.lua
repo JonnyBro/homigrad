@@ -54,8 +54,24 @@ function EasyAppearance.Menu()
 	local sex = "Male"
 
 	ModelView:SetModel(tModel and tModel.strPatch or table.Random(table.GetKeys(Models)))
+	ModelView.Angles = Angle(0, 0, 0)
+
+	function ModelView:DragMousePress()
+		self.PressX, self.PressY = gui.MousePos()
+		self.Pressed = true
+	end
+
+	function ModelView:DragMouseRelease() 
+		self.Pressed = false 
+	end
 
 	function ModelView:LayoutEntity(ent)
+		if (self.Pressed) then --360° model spin
+			local mx, my = gui.MousePos()
+			self.Angles = self.Angles - Angle(0,((self.PressX or mx) - mx) / 2, 0)
+			self.PressX, self.PressY = gui.MousePos()
+		end
+		ent:SetAngles(self.Angles)
 		ent:SetSubMaterial()
 
 		sex = EasyAppearance.Sex[ent:GetModelSex()]
