@@ -39,13 +39,5 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		5
-		{
-			"name"		"empty"
-			"text"		"CHOOSE AT LEAST 2 PLAYERS"
-			"type"		"CheckBox"
-			"default"	"1"
-			"singleplayer"	"1"
-		}
 	}
 }
