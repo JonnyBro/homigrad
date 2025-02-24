@@ -94,7 +94,7 @@ net.Receive("inventory", function()
 			net.WriteEntity(lootEnt)
 		net.SendToServer()
 	end
-
+	-- Should do the job
 	local lootingTime = math.Clamp(GetConVar("hg_SearchTime"):GetInt(), 0, 10)
 	local targetID = IsValid(lootEnt) and lootEnt:SteamID64()
 	local corner = 6
