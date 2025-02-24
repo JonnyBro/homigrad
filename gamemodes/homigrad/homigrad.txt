@@ -41,6 +41,7 @@
 			"help"		"Enables/Disables Looting Alive Players."
 			"type"		"CheckBox"
 			"default"	"1"
+			"singleplayer"
 		}
 		5
 		{
