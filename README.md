@@ -15,7 +15,7 @@ It features a somewhat realistic health and movement system and offers several s
 2. Subscribe to this collection: [\*click\*](https://steamcommunity.com/sharedfiles/filedetails/?id=3393369855).
 3. Extract the `homigrad-main` folder and place it in `your_gmod_install/garrysmod/addons` folder or server’s `addons` directory.
 4. Move the `data` folder from `homigrad-main` to `your_gmod_install/garrysmod/`.
-   - This folder contains points data that are used in some modes.
+   - This folder contains spawnpoints data that are used in some modes.
 5. Ensure the gamemode is set to `Homigrad` (use `+gamemode homigrad` for servers).
 
 A tickrate from **99** to **128** is recommended to improve controls when faking.
