@@ -1,13 +1,11 @@
 -- Include the player model manager script (adjust the path as necessary)
 include("../../playermodelmanager_sv.lua")
 
-local function GetFriends(ply)
+local function GetTraitorsNames()
 	local tbl = {}
 
-	for _, p in pairs(homicide.t) do
-		if ply == p then continue end
-
-		table.insert(tbl, p:Name())
+	for _, plr in pairs(homicide.t) do
+		table.insert(tbl, plr:Name())
 	end
 
 	return tbl
@@ -93,15 +91,6 @@ local function makeT(ply)
 	timer.Simple(1, function()
 		ply.allowFlashlights = true
 	end)
-
-	--[[
-	AddNotificate(ply, "You are a traitor.")
-
-	if #GetFriends(ply) >= 1 then
-		timer.Simple(1, function()
-			AddNotificate(ply, "Your Traitor Buddies are " .. table.concat(GetFriends(ply), ", "))
-		end)
-	end --]]
 end
 
 local function makeCT(ply)
@@ -235,7 +224,7 @@ function SpawnPolicePlayers()
 			net.Start("hg_sendchat_format")
 				net.WriteTable({
 					"#hg.homicide.traitors",
-					(#homicide.t > 1 and homicide.t[1]:Name() .. ", " .. table.concat(GetFriends(homicide.t[1]), ", ")) or homicide.t[1]:Name()
+					#homicide.t > 1 and table.concat(GetTraitorsNames(), ", ") or homicide.t[1]:Name()
 				})
 			net.Send(ply)
 		end)
@@ -403,7 +392,7 @@ function homicide.EndRound(winner)
 		net.Start("hg_sendchat_format")
 			net.WriteTable({
 				"#hg.homicide.traitors",
-				(#homicide.t > 1 and homicide.t[1]:Name() .. ", " .. table.concat(GetFriends(homicide.t[1]), ", ")) or homicide.t[1]:Name()
+				#homicide.t > 1 and table.concat(GetTraitorsNames(), ", ") or homicide.t[1]:Name()
 			})
 		net.Broadcast()
 	end
