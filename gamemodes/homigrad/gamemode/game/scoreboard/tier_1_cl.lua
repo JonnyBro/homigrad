@@ -383,7 +383,6 @@ local function ToggleScoreboard(toggle)
 				draw.SimpleText(ply:Ping(), "HomigradFont", w - 200, h / 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				local name, color = ply:PlayerClassEvent("TeamName")
 
-				--print()
 				if not name then
 					name, color = TableRound().GetTeamName(ply)
 					name = name or language.GetPhrase("hg.scoreboard.spectator")

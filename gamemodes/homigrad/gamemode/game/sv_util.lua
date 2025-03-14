@@ -1,14 +1,10 @@
-local team_GetPlayers = team.GetPlayers
-local GetAll = player.GetAll
-local max, abs, min = math.max, math.abs, math.min
-
 LimitAutoBalance = 1
 
 function NeedAutoBalance(addT, addCT)
 	addT = addT or 0
 	addCT = addCT or 0
 
-	local count = (#team_GetPlayers(1) + addT) - (#team_GetPlayers(2) + addCT)
+	local count = (#team.GetPlayers(1) + addT) - (#team.GetPlayers(2) + addCT)
 	if count == 0 then return end
 
 	local favorT
@@ -17,39 +13,33 @@ function NeedAutoBalance(addT, addCT)
 		favorT = true
 	end
 
-	local limit = min(#GetAll() - LimitAutoBalance - 1, LimitAutoBalance)
-	count = max(abs(count) - limit, 0)
+	local limit = math.min(#player.GetAll() - LimitAutoBalance - 1, LimitAutoBalance)
+	count = math.max(math.abs(count) - limit, 0)
 	if count == 0 then return end
 
 	return favorT, count
 end
 
-local table_Random = table.Random
-
 function AutoBalanceTwoTeam()
-	for _ in pairs(GetAll()) do
+	for _ in pairs(player.GetAll()) do
 		local favorT, count = NeedAutoBalance()
 		if not count then break end
 
 		if favorT then
-			local ply = table_Random(team_GetPlayers(1))
+			local ply = table.Random(team.GetPlayers(1))
 			ply:SetTeam(2)
-			-- ply:ChatPrint("Тебя перекинуло в CT команду, из-за неравенства команд.")
 		else
-			local ply = table_Random(team_GetPlayers(2))
+			local ply = table.Random(team.GetPlayers(2))
 			ply:SetTeam(1)
-			-- ply:ChatPrint("Тебя перекинуло в T команду, из-за неравенства команд.")
 		end
 	end
 end
 
-local table_CopyFromTo = table.CopyFromTo
-
 function OpposingAllTeam()
 	local oldT, oldCT = {}, {}
 
-	table_CopyFromTo(team_GetPlayers(1), oldT)
-	table_CopyFromTo(team_GetPlayers(2), oldCT)
+	table.CopyFromTo(team.GetPlayers(1), oldT)
+	table.CopyFromTo(team.GetPlayers(2), oldCT)
 
 	for _, ply in pairs(oldT) do
 		ply:SetTeam(2)
@@ -58,4 +48,33 @@ function OpposingAllTeam()
 	for _, ply in pairs(oldCT) do
 		ply:SetTeam(1)
 	end
+end
+
+function PlayersInGame()
+	local newTbl = {}
+
+	for _, ply in pairs(team.GetPlayers(1)) do
+		newTbl[i] = ply
+	end
+
+	for _, ply in pairs(team.GetPlayers(2)) do
+		table.insert(newTbl, ply)
+	end
+
+	for _, ply in pairs(team.GetPlayers(3)) do
+		table.insert(newTbl, ply)
+	end
+
+	return newTbl
+end
+
+local EntityMeta = FindMetaTable("Entity")
+
+oldSetModel = oldSetModel or EntityMeta.SetModel
+
+function EntityMeta:SetModel(str)
+	self:SetSubMaterial()
+	self:SetNWString("EA_Attachments", nil)
+
+	oldSetModel(self, str)
 end

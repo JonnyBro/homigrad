@@ -48,13 +48,13 @@ end
 if SERVER then return end
 
 function tdm.GetTeamName(ply)
-	local game = TableRound()
-	local team = game.teamEncoder[ply:Team()]
+	local round = TableRound()
+	local tm = round.teamEncoder[ply:Team()]
 
-	if team then
-		team = game[team]
+	if tm then
+		tm = round[tm]
 
-		return team[1], team[2]
+		return tm[1], tm[2]
 	end
 end
 
