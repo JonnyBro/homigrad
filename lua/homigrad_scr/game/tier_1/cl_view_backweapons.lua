@@ -203,14 +203,6 @@ local angRotate = Angle(0, 0, 0)
 local _cameraPos = Vector(20, 20, 10)
 local _cameraAng = Angle(10, 0, 0)
 
---[[ NOTE: Might remove later
-WeaponByModel = {
-	weapon_physgun = {
-		WorldModel = "models/weapons/w_physics.mdl",
-		PrintName = "Physgun"
-	}
-} --]]
-
 local function PrintWeaponInfo(self, x, y, alpha)
 	if self.DrawWeaponInfoBox == false then return end
 	if self.InfoMarkup == nil then
