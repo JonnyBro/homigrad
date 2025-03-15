@@ -58,7 +58,7 @@ function juggernaut.StartRoundSV()
 
     local count = 1
     for i = 1,count do
-        local ply = table.Random(players)
+        local ply = RandomFromTable(players)
         table.RemoveByValue(players,ply)
 
         makeT(ply)

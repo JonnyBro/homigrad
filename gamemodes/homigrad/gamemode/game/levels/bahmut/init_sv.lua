@@ -21,7 +21,7 @@ end
 
 function bahmut.SelectRandomPlayers(list, div, func)
 	for _ = 1, math.floor(#list / div) do
-		local ply, key = table.Random(list)
+		local ply, key = RandomFromTable(list)
 
 		table.remove(list, key)
 
@@ -85,18 +85,18 @@ end
 function bahmut.StartRoundSV()
 	tdm.RemoveItems()
 	roundTimeStart = CurTime()
-	--roundTime = 60 * (2 + math.min(#player.GetAll() / 4,2))
+	-- roundTime = 60 * (2 + math.min(#player.GetAll() / 4,2))
 	roundTime = 900
 	tdm.DirectOtherTeam(3, 1, 2)
 	OpposingAllTeam()
 	AutoBalanceTwoTeam()
-	--local spawnsT,spawnsCT = bahmut.SpawnsTwoCommand()
-	--bahmut.SpawnCommand(team.GetPlayers(1),spawnsT)
-	--bahmut.SpawnCommand(team.GetPlayers(2),spawnsCT)
+	-- local spawnsT,spawnsCT = bahmut.SpawnsTwoCommand()
+	-- bahmut.SpawnCommand(team.GetPlayers(1),spawnsT)
+	-- bahmut.SpawnCommand(team.GetPlayers(2),spawnsCT)
 	bahmut.SpawnVehicle()
 	bahmut.SpawnGred()
 	bahmut.oi = false
-	--tdm.CenterInit()
+	-- tdm.CenterInit()
 	bahmut.SelectRandomPlayers(team.GetPlayers(1), 2, bahmut.GiveMimomet)
 	bahmut.SelectRandomPlayers(team.GetPlayers(1), 2, bahmut.GiveAidPhone)
 	bahmut.SelectRandomPlayers(team.GetPlayers(2), 2, bahmut.GiveMimomet)
@@ -115,17 +115,13 @@ function bahmut.Think()
 			if not v:Alive() and v:Team() ~= 1002 then
 				v:Spawn()
 				local teamspawn = GetTeamSpawns(v)
-				local point, _ = table.Random(teamspawn)
+				local point, _ = RandomFromTable(teamspawn)
 				point = ReadPoint(point)
 				if not point then continue end
 				v:SetPos(point[1])
 				players[v:Team()] = players[v:Team()] or {}
 				players[v:Team()][v] = true
 			end
-			--[[for i,list in pairs(players) do
-				bahmut.SelectRandomPlayers(list[1],6,bahmut.GiveAidPhone)
-				bahmut.SelectRandomPlayers(list[2],6,bahmut.GiveAidPhone)
-			end]]
 		end
 
 		for ent in pairs(bahmut.ragdolls) do

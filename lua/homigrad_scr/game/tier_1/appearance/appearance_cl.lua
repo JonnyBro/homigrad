@@ -54,7 +54,7 @@ function EasyAppearance.Menu()
 
 	local sex = "Male"
 
-	ModelView:SetModel(tModel and tModel.strPatch or table.Random(table.GetKeys(Models)))
+	ModelView:SetModel(tModel and tModel.strPatch or RandomFromTable(table.GetKeys(Models)))
 	ModelView.Angles = Angle(0, 0, 0)
 
 	function ModelView:DragMousePress()

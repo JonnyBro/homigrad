@@ -21,7 +21,7 @@ local spawnsT,spawnsCT = tdm.SpawnsTwoCommand()
     tdm.SpawnCommand(team.GetPlayers(1),spawnsT)
 
     for i,ply in pairs(players) do ply:SetTeam(1) end
-    return {roundTimeStart,roundTime}   
+    return {roundTimeStart,roundTime}
 end
 
 function igib.Think()
@@ -29,26 +29,26 @@ function igib.Think()
 
     if CurTime() >= igib.LastWave then
         SetGlobalInt("igib_respawntime", CurTime())
-    
+
         for _, v in player.Iterator() do
             local players = {}
             if !v:Alive() and v:Team() != 1002 then
                 v:Spawn()
                 local teamspawn = GetTeamSpawns(v)
-    
-                local point,key = table.Random(teamspawn)
+
+                local point,key = RandomFromTable(teamspawn)
                 point = ReadPoint(point)
                 if not point then continue end
-    
+
                 v:SetPos(point[1])
                 players[v:Team()] = players[v:Team()] or {}
                 players[v:Team()][v] = true
             end
         end
-    
+
         for ent in pairs(igib.ragdolls) do
             if IsValid(ent) then ent:Remove() end
-    
+
             igib.ragdolls[ent] = nil
         end
 

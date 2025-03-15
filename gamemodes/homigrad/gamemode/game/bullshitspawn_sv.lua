@@ -25,15 +25,15 @@ local function randomLoot()
 	local gunchance = math.random(1, 200)
 
 	if gunchance < 3 then
-		return table.Random(weaponslegendary)
+		return RandomFromTable(weaponslegendary)
 	elseif gunchance < 12 then
-		return table.Random(weaponsveryrare)
+		return RandomFromTable(weaponsveryrare)
 	elseif gunchance < 30 then
-		return table.Random(weaponsrare)
+		return RandomFromTable(weaponsrare)
 	elseif gunchance < 90 then
-		return table.Random(weaponsuncommon)
+		return RandomFromTable(weaponsuncommon)
 	else
-		return table.Random(weaponscommon)
+		return RandomFromTable(weaponscommon)
 	end
 end
 
@@ -58,10 +58,10 @@ hook.Add("PropBreak", "homigrad", function(att, ent)
 				end
 
 				if not ammoType then
-					randomWep = table.Random(ammos)
+					randomWep = RandomFromTable(ammos)
 				end
 			else
-				randomWep = table.Random(ammos)
+				randomWep = RandomFromTable(ammos)
 			end
 		end
 

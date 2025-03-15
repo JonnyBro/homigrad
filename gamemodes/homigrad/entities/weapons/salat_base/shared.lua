@@ -268,7 +268,7 @@ end
 
 homigrad_weapons = homigrad_weapons or {}
 
-local skini = {"sal/acc/armor01_2", "sal/acc/armor01_3", "sal/acc/armor01_4", "sal/acc/armor01_5", "models/foodnhouseholditems/cj_b_plastic", "models/jacky_camouflage/digi", "models/jacky_camouflage/digi2"}
+local skins = {"sal/acc/armor01_2", "sal/acc/armor01_3", "sal/acc/armor01_4", "sal/acc/armor01_5", "models/foodnhouseholditems/cj_b_plastic", "models/jacky_camouflage/digi", "models/jacky_camouflage/digi2"}
 
 -- util.AddNetworkString("SendHomigradWeapons")
 
@@ -289,7 +289,7 @@ end
 function SWEP:Initialize()
 	AddHomigradWeapon(self)
 
-	if SERVER then self:SetNWString("skin", table.Random(skini)) end
+	if SERVER then self:SetNWString("skin", RandomFromTable(skins)) end
 
 	self.lerpClose = 0
 	self:InitAdd()

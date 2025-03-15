@@ -201,7 +201,7 @@ function LevelRandom()
 	end
 
 	for _ = 1, #randoms do
-		local name, key = table.Random(randoms)
+		local name, key = RandomFromTable(randoms)
 		randoms[key] = nil
 
 		if TableRound(name).NoSelectRandom then continue end

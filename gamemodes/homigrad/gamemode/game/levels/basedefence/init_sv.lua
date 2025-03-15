@@ -68,7 +68,7 @@ function basedefence.StartRoundSV()
 		local plys = team.GetPlayers(1)
 
 		for _ = 1, #botsspawns - count do
-			local bot = table.Random(npcs)
+			local bot = RandomFromTable(npcs)
 			bot = ents.Create(bot)
 
 			local wep = ents.Create("weapon_sar2")
@@ -151,7 +151,7 @@ function basedefence.PlayerSpawn2(ply, teamID)
 	wep:SetClip1(wep:GetMaxClip1())
 	ply:SetAmmo(wep:GetMaxClip1() * 3, wep:GetPrimaryAmmoType())
 
-	local wep = ply:Give(table.Random(wepeno))
+	local wep = ply:Give(RandomFromTable(wepeno))
 	wep:SetClip1(wep:GetMaxClip1())
 	ply:SetAmmo(wep:GetMaxClip1() * 3, wep:GetPrimaryAmmoType())
 

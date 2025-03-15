@@ -22,7 +22,7 @@ function css.SpawnCommand(tbl,aviable,func,funcShould)
 		ply:Spawn()
 		ply.allowFlashlights = true
 
-		local point,key = table.Random(aviable)
+		local point,key = RandomFromTable(aviable)
 		point = ReadPoint(point)
 		if not point then continue end
 
@@ -47,7 +47,7 @@ function css.GetListMul(list,mul,func,max)
 	if max then mul = math.max(mul,max) end
 
 	for i = 1,mul do
-		local ply,key = table.Random(list)
+		local ply,key = RandomFromTable(list)
 		list[key] = nil
 
 		if func and func(ply) ~= true then continue end
@@ -141,7 +141,7 @@ function css.Think()
             if !v:Alive() and v:Team() != 1002 then
                 v:Spawn()
                 local teamspawn = GetTeamSpawns(v)
-                local point,key = table.Random(teamspawn)
+                local point,key = RandomFromTable(teamspawn)
                 point = ReadPoint(point)
                 if not point then continue end
                 v:SetPos(point[1])

@@ -77,7 +77,7 @@ function hideandseek.RoundEndCheck()
 
 				--[[
 				local aviable = ReadDataMap("spawnpointsct")
-				local pos, key = table.Random(aviable)
+				local pos, key = RandomFromTable(aviable)
 				if not pos then continue end
 				if #aviable > 1 then
 					table.remove(aviable, key)

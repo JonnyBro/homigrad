@@ -24,7 +24,7 @@ local tDefaultAppearance = {
 function EasyAppearance.GetRandomAppearance()
 	local tRandomAppearance = {}
 
-	tRandomAppearance.strModel = table.Random(table.GetKeys(EasyAppearance.Models))
+	tRandomAppearance.strModel = RandomFromTable(table.GetKeys(EasyAppearance.Models))
 	tRandomAppearance.strPath = EasyAppearance.Models[tRandomAppearance.strModel].strPatch
 	tRandomAppearance.strColthesStyle = "Random"
 
@@ -62,7 +62,7 @@ function EasyAppearance.SetAppearance(ply)
 		ply:SetModel(tModelParms.strPatch)
 
 		local sex = EasyAppearance.Sex[ply:GetModelSex()]
-		if not EasyAppearance.Appearances[sex][tAppearance.strColthesStyle] or tAppearance.strColthesStyle == "Random" then tAppearance.strColthesStyle = table.Random(table.GetKeys(EasyAppearance.Appearances[sex])) end
+		if not EasyAppearance.Appearances[sex][tAppearance.strColthesStyle] or tAppearance.strColthesStyle == "Random" then tAppearance.strColthesStyle = RandomFromTable(table.GetKeys(EasyAppearance.Appearances[sex])) end
 
 		ply:SetSubMaterial()
 		ply:SetSubMaterial(tModelParms.intSubMat, EasyAppearance.Appearances[sex][tAppearance.strColthesStyle])

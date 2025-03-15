@@ -106,7 +106,7 @@ end
 function CLASS:PlayerDeath()
 	--[[
 	if not self.unconscious then
-		local name = table.Random(soundDeaths)
+		local name = RandomFromTable(soundDeaths)
 		EmitSound(self, name)
 	end --]]
 

@@ -89,7 +89,7 @@ local soundDeaths = {"bot/pain10.wav", "bot/pain2.wav", "bot/pain4.wav", "bot/pa
 
 function CLASS:PlayerDeath()
 	if not self.unconscious then
-		local name = table.Random(soundDeaths)
+		local name = RandomFromTable(soundDeaths)
 		EmitSound(self, name)
 	end
 

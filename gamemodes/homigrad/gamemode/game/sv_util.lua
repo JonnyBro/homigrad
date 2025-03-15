@@ -1,5 +1,9 @@
 LimitAutoBalance = 1
 
+function RandomFromTable(tbl)
+	return tbl[math.random(#tbl)]
+end
+
 function NeedAutoBalance(addT, addCT)
 	addT = addT or 0
 	addCT = addCT or 0
@@ -26,27 +30,39 @@ function AutoBalanceTwoTeam()
 		if not count then break end
 
 		if favorT then
-			local ply = table.Random(team.GetPlayers(1))
+			local tm = team.GetPlayers(1)
+			local ply = RandomFromTable(tm)
 			ply:SetTeam(2)
 		else
-			local ply = table.Random(team.GetPlayers(2))
+			local tm = team.GetPlayers(2)
+			local ply = RandomFromTable(tm)
 			ply:SetTeam(1)
 		end
 	end
 end
 
 function OpposingAllTeam()
-	local oldT, oldCT = {}, {}
+	local allPlayers = {}
 
-	table.CopyFromTo(team.GetPlayers(1), oldT)
-	table.CopyFromTo(team.GetPlayers(2), oldCT)
-
-	for _, ply in pairs(oldT) do
-		ply:SetTeam(2)
+	for _, ply in pairs(team.GetPlayers(1)) do
+		table.insert(allPlayers, ply)
 	end
 
-	for _, ply in pairs(oldCT) do
-		ply:SetTeam(1)
+	for _, ply in pairs(team.GetPlayers(2)) do
+		table.insert(allPlayers, ply)
+	end
+
+	for i = #allPlayers, 2, -1 do
+		local j = math.random(i)
+		allPlayers[i], allPlayers[j] = allPlayers[j], allPlayers[i]
+	end
+
+	for i, ply in ipairs(allPlayers) do
+		if i % 2 == 0 then
+			ply:SetTeam(1)
+		else
+			ply:SetTeam(2)
+		end
 	end
 end
 

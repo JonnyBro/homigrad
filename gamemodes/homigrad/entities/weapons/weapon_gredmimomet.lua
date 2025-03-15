@@ -68,7 +68,7 @@ function SWEP:Initialize()
 	AddHomigradWeapon(self)
 
 	if SERVER then
-		local _, ent = table.Random(mortars)
+		local _, ent = RandomFromTable(mortars)
 		self:SetNWString("Gred", ent)
 	end
 end

@@ -98,7 +98,7 @@ function ctp.Think()
 				v:Spawn()
 
 				local teamspawn = GetTeamSpawns(v)
-				local point, _ = table.Random(teamspawn)
+				local point, _ = RandomFromTable(teamspawn)
 				point = ReadPoint(point)
 				if not point then continue end
 

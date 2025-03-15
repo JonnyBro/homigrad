@@ -97,7 +97,7 @@ function dm.Think()
 				v:Spawn()
 
 				local teamspawn = GetTeamSpawns(v)
-				local point, key = table.Random(teamspawn)
+				local point, key = RandomFromTable(teamspawn)
 				point = ReadPoint(point)
 				if not point then continue end
 
