@@ -11,14 +11,14 @@ end
 
 hl2dm.red = {
 	"#hg.hl2dm.team1", Color(125, 95, 60), weapons = {"weapon_hands", "med_band_big", "med_band_small", "weapon_radio"},
-	main_weapon = {"weapon_sar2", "weapon_spas12", "weapon_akm", "weapon_mp7", "weapon_scout", "weapon_barrett"},
+	main_weapon = {"weapon_sar2", "weapon_spas12", "weapon_akm", "weapon_mp7", "weapon_scout", "weapon_barret"},
 	secondary_weapon = {"weapon_hk_usp", "weapon_p220"},
 	models = models
 }
 
 hl2dm.blue = {
 	"#hg.hl2dm.team2", Color(75, 75, 125), weapons = {"weapon_hands"},
-	main_weapon = {"weapon_sar2", "weapon_spas12", "weapon_mp7", "weapon_scout", "weapon_barrett"},
+	main_weapon = {"weapon_sar2", "weapon_spas12", "weapon_mp7", "weapon_scout", "weapon_barret"},
 	secondary_weapon = {"weapon_hk_usp"},
 	models = {"models/player/combine_soldier.mdl"}
 }

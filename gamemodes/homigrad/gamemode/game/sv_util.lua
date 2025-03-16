@@ -1,7 +1,10 @@
 LimitAutoBalance = 1
 
 function RandomFromTable(tbl)
-	return tbl[math.random(#tbl)]
+	local key = math.random(#tbl)
+	local value = tbl[key]
+
+	return value, key
 end
 
 function NeedAutoBalance(addT, addCT)
