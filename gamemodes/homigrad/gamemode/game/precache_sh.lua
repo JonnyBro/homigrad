@@ -1,4 +1,4 @@
-local precache = CreateConVar("hg_PreCache_Models", "1", {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Enables Models Precaching", 0, 1)
+local precache = CreateConVar("hg_PreCache_Models", "1", {FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Toggles Models Precaching", 0, 1)
 
 if precache:GetBool() then
 	util.PrecacheModel("models/alusplint.mdl") -- Meds
