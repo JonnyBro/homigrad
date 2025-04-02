@@ -6,7 +6,7 @@
 
 ## What is Homigrad?
 
-Homigrad is a gamemode that expands on an existing game mode called 'Homicide,' which is inspired by Trouble in Terrorist Town (TTT) and Murder.\
+Homigrad is a gamemode that expands on an existing gamemode called 'Homicide,' which is inspired by Trouble in Terrorist Town (TTT) and Murder.\
 It features a somewhat realistic health and movement system and offers several sub-modes, including Team Deathmatch (TDM), Deathmatch, and Hide and Seek.
 
 ## Installation
@@ -15,7 +15,7 @@ It features a somewhat realistic health and movement system and offers several s
 2. Subscribe to this collection: [\*click\*](https://steamcommunity.com/sharedfiles/filedetails/?id=3393369855).
 3. Extract the `homigrad-main` folder and place it in `your_gmod_install/garrysmod/addons` folder or server’s `addons` directory.
 4. Move the `data` folder from `homigrad-main` to `your_gmod_install/garrysmod/`.
-   - This folder contains spawnpoints data that are used in some modes.
+   - This folder contains some premaid spawnpoints data that are used in some modes.
 5. Ensure the gamemode is set to `Homigrad` (use `+gamemode homigrad` for servers).
 
 A tickrate from **99** to **128** is recommended to improve controls when faking.
@@ -45,7 +45,7 @@ You’re free to modify the files, adjust values, and tweak the code to suit you
 
 ### Can I create my own gamemode using your fork?
 
-Yes! Just like the original repo, this project is under the MIT License, so you’re welcome to use it as a base. Contributions are also encouraged — feel free to submit a pull request here or on [Harrison's repository](https://github.com/harrisoniam/homigrad).
+Yes! Just like the original repo, this project is under the MIT License, so you’re welcome to use it as a base. Contributions are also encouraged — feel free to submit a pull request.
 
 ## Credits
 
