@@ -119,26 +119,3 @@ hook.Add("PropBreak", "PropVengeance", function(client, prop)
 	if modelsbig[model] then BoomBig(prop) end
 	if modelssmall[model] then BoomSmall(prop) end
 end)
-
-hook.Add("PlayerSay", "trolled", function(ply, text)
-	if ply:Alive() and string.find(text, "сервер") and string.find(text, "говно") then
-		local SelfPos = ply:GetPos()
-
-		ParticleEffect("pcf_jack_groundsplode_small", SelfPos, vector_up:Angle())
-
-		util.ScreenShake(SelfPos, 99999, 99999, 1, 3000)
-
-		sound.Play("BaseExplosionEffect.Sound", SelfPos, 120, math.random(130, 160))
-
-		for _ = 1, 4 do
-			sound.Play("explosions/doi_ty_01_close.wav", SelfPos, 140, math.random(140, 160))
-		end
-
-		timer.Simple(.1, function()
-			for _ = 1, 5 do
-				local Tr = util.QuickTrace(SelfPos, VectorRand() * 20)
-				if Tr.Hit then util.Decal("Scorch", Tr.HitPos + Tr.HitNormal, Tr.HitPos - Tr.HitNormal) end
-			end
-		end)
-	end
-end)
