@@ -16,10 +16,12 @@ if SERVER then
 		self:SetState(JMod.EZ_STATE_ARMED)
 		self:SpoonEffect()
 
-		
+
 		local time = self.FuzeTimeOverride or 4
 		timer.Simple(time - 1,function()
-			player.EventPoint(self:GetPos(),"fragnade pre detonate",1024,self)
+			if IsValid(self) then
+				player.EventPoint(self:GetPos(),"fragnade pre detonate",1024,self)
+			end
 		end)
 
 		timer.Simple(time, function()

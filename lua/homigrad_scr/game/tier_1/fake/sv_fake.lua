@@ -569,17 +569,8 @@ local function RemoveRag(self)
 end
 
 local CustomWeight = {
-	["models/player/police_fem.mdl"] = 65,
-	["models/player/police.mdl"] = 65,
-	["models/player/Rusty/NatGuard/male_01.mdl"] = 90,
-	["models/player/Rusty/NatGuard/male_02.mdl"] = 90,
-	["models/player/Rusty/NatGuard/male_03.mdl"] = 90,
-	["models/player/Rusty/NatGuard/male_04.mdl"] = 90,
-	["models/player/Rusty/NatGuard/male_05.mdl"] = 90,
-	["models/player/Rusty/NatGuard/male_06.mdl"] = 90,
-	["models/player/Rusty/NatGuard/male_07.mdl"] = 90,
-	["models/player/Rusty/NatGuard/male_08.mdl"] = 90,
-	["models/player/Rusty/NatGuard/male_09.mdl"] = 90,
+	["models/player/police_fem.mdl"] = 80,
+	["models/player/police.mdl"] = 80,
 	["models/LeymiRBA/Gyokami/Gyokami.mdl"] = 50,
 	["models/player/smoky/Smoky.mdl"] = 65,
 	["models/player/smoky/Smokycl.mdl"] = 65,
@@ -588,20 +579,24 @@ local CustomWeight = {
 	["models/ats/mgs2snake/mgs2snake.mdl"] = 20
 }
 
-for i = 1, 6 do
-	CustomWeight["models/monolithservers/mpd/female_0" .. i .. ".mdl"] = 20
+for i = 1, 9 do
+	CustomWeight["models/player/Rusty/NatGuard/male_0" .. i .. ".mdl"] = 90
 end
 
 for i = 1, 6 do
-	CustomWeight["models/monolithservers/mpd/female_0" .. i .. "_2.mdl"] = 20
+	CustomWeight["models/monolithservers/mpd/female_0" .. i .. ".mdl"] = 80
 end
 
 for i = 1, 6 do
-	CustomWeight["models/monolithservers/mpd/male_0" .. i .. ".mdl"] = 20
+	CustomWeight["models/monolithservers/mpd/female_0" .. i .. "_2.mdl"] = 80
 end
 
 for i = 1, 6 do
-	CustomWeight["models/monolithservers/mpd/male_0" .. i .. "_2.mdl"] = 20
+	CustomWeight["models/monolithservers/mpd/male_0" .. i .. ".mdl"] = 90
+end
+
+for i = 1, 6 do
+	CustomWeight["models/monolithservers/mpd/male_0" .. i .. "_2.mdl"] = 90
 end
 
 IdealMassPlayer = {

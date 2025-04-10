@@ -1,6 +1,6 @@
 if engine.ActiveGamemode() ~= "homigrad" then return end
 
--- !fake
+-- fake
 function ulx.hg_fake(ply, targets)
 	for _, v in pairs(targets) do
 		Faking(v)
@@ -16,7 +16,7 @@ fake:addParam({
 fake:defaultAccess(ULib.ACCESS_ADMIN)
 fake:help("Toggles 'fake' for a given player(s).")
 
--- !guilt
+-- guilt
 function ulx.hg_guilt(ply, targets, arg)
 	arg = tobool(arg)
 
