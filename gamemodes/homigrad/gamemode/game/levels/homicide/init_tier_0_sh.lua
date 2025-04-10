@@ -7,8 +7,13 @@ homicide.red = {
 	"#hg.homicide.team1", Color(255, 255, 255), models = tdm.models
 }
 
+homicide.blue = {
+	"#hg.homicide.team2", Color(255, 0, 0), models = tdm.models
+}
+
 homicide.teamEncoder = {
-	[1] = "red"
+	[1] = "red",
+	[2] = "blue"
 }
 
 homicide.RoundRandomDefalut = 6

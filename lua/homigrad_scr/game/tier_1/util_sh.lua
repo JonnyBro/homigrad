@@ -1,5 +1,12 @@
 gameevent.Listen("player_spawn")
 
+function RandomFromTable(tbl)
+	local key = math.random(#tbl)
+	local value = tbl[key]
+
+	return value, key
+end
+
 hook.Add("player_spawn", "player_activatehg", function(data)
 	local ply = Player(data.userid)
 

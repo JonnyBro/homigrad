@@ -46,7 +46,7 @@
 		5
 		{
 			"name"		"hg_TellPoliceWhoTraitorsAre"
-			"text"		"Announce Traitors on Police Spawn (Not realized for now)"
+			"text"		"Announce Traitors on Police Spawn (doesn't work rn)"
 			"help"		"If enabled, Police will be alerted to who the traitors are when they arrive."
 			"type"		"CheckBox"
 			"default"	"0"

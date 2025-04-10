@@ -223,8 +223,8 @@ function ctp.EndRound(winner)
 
 	net.Start("hg_sendchat_format")
 		net.WriteTable({
-			"#hg.modes.teamwin",
-			winner == 0 and "#hg.modes.draw" or tbl[tbl.teamEncoder[winner]] and tbl[tbl.teamEncoder[winner]][1] or "#hg.modes.draw",
+			"#hg.modes.teamwon",
+			winner == 0 and "#hg.modes.draw" or tbl[tbl.teamEncoder[winner]] and tbl[tbl.teamEncoder[winner]][1] or "Something bad happened...",
 		})
 	net.Broadcast()
 
