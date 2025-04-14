@@ -139,22 +139,22 @@ function SWEP:DrawWorldModel()
 	local Pos, Ang = owner:GetBonePosition(owner:LookupBone("ValveBiped.Bip01_R_Hand"))
 	if not Pos then return end
 
-	model:SetModel(self.WorldModel)
+	self:SetModel(self.WorldModel)
 
 	Pos:Add(Ang:Forward() * self.dwmForward)
 	Pos:Add(Ang:Right() * self.dwmRight)
 	Pos:Add(Ang:Up() * self.dwmUp)
 
-	model:SetPos(Pos)
+	self:SetPos(Pos)
 
 	Ang:RotateAroundAxis(Ang:Up(), self.dwmAUp)
 	Ang:RotateAroundAxis(Ang:Right(), self.dwmARight)
 	Ang:RotateAroundAxis(Ang:Forward(), self.dwmAForward)
 
-	model:SetAngles(Ang)
-	model:SetModelScale(self.dwmModeScale)
+	self:SetAngles(Ang)
+	self:SetModelScale(self.dwmModeScale)
 
 	local isFocus = self:GetNWBool("Focus")
-	if not isFocus or not firstPerson then model:DrawModel()
-	else model:SetNoDraw(true) end
+	if not isFocus or not firstPerson then self:DrawModel()
+	else self:SetNoDraw(true) end
 end

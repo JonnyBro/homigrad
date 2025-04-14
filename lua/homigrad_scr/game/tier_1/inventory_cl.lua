@@ -56,7 +56,7 @@ net.Receive("inventory", function()
 	end
 
 	local lootEnt = net.ReadEntity()
-	if lootEnt:GetClass() == "prop_ragdoll" then lootEnt = lootEnt:GetNWEntity("OldRagdollController") end -- If player is dead (lootEnt is prop_ragdoll) return who's ragdoll it was
+	if IsValid(lootEnt) and lootEnt:GetClass() == "prop_ragdoll" then lootEnt = lootEnt:GetNWEntity("OldRagdollController") end -- If player is dead (lootEnt is prop_ragdoll) return who's ragdoll it was
 
 	if not GetConVar("hg_LootAlive"):GetBool() and lootEnt:Alive() then return end
 

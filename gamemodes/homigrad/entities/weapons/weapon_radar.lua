@@ -70,6 +70,8 @@ function SWEP:PrimaryAttack()
 
 		self:GetOwner():EmitSound("common/wpn_denyselect.wav")
 	end
+
+	return
 end
 
 -- Helper function to update player positions

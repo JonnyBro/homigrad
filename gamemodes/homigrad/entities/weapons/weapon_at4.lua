@@ -57,6 +57,3 @@ function SWEP:PrimaryAttack()
 
 	self:TakePrimaryAmmo(1)
 end
-
--- models/weapons/insurgency/w_rpg7.mdl
--- models/weapons/insurgency/w_rpg7_projectile.mdl
