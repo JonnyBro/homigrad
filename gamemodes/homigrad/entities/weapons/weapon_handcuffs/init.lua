@@ -21,7 +21,7 @@ function SWEP:Cuff(ent)
 	cuff:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
 	cuff:Spawn()
 
-	for i = 1, 9 do
+	for _ = 1, 9 do
 		constraint.Rope(ent, ent, 5, 7, Vector(0, 0, 0), Vector(0, 0, 0), -2, 0, 0, 0, "cable/rope.vmt", false, Color(255, 255, 255))
 	end
 

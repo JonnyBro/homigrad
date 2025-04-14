@@ -44,7 +44,7 @@ function SWEP:PrimaryAttack()
 
 		local traceResult = util.TraceLine(tr)
 		local ent = traceResult.Entity
-		local ply = RagdollOwner(ent) and ent
+		local ply = IsValid(RagdollOwner(ent)) and ent -- :shrug:
 
 		if IsValid(ply) then
 			self.CuffPly = ply
@@ -62,7 +62,7 @@ end
 local cuffTime = 2
 
 function SWEP:Think()
-	if SERVER and self.CuffPly then
+	if SERVER and self.CuffPly and IsValid(self.CuffPly) then
 		local pos1 = self.CuffPly:GetPos()
 		local pos2 = self:GetOwner():GetPos()
 
