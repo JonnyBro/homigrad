@@ -217,8 +217,6 @@ function ctp.RoundEndCheck()
 end
 
 function ctp.EndRound(winner)
-	print("End round, '" .. tostring(winner) .. "' won")
-
 	local tbl = TableRound()
 
 	net.Start("hg_sendchat_format")

@@ -63,8 +63,6 @@ net.Receive("inventory", function()
 	local success, items = pcall(net.ReadTable)
 	if not success or not lootEnt then return end
 
-	local nickname = lootEnt:IsPlayer() and lootEnt:Name() or lootEnt:GetNWString("Nickname") or ""
-
 	if IsValid(lootEnt:GetNWEntity("ActiveWeapon")) and items[lootEnt:GetNWEntity("ActiveWeapon"):GetClass()] then items[lootEnt:GetNWEntity("ActiveWeapon"):GetClass()] = nil end
 
 	local items_ammo = net.ReadTable()
@@ -102,6 +100,8 @@ net.Receive("inventory", function()
 
 	panel.Paint = function(self, w, h)
 		if not IsValid(lootEnt) or not LocalPlayer():Alive() then return panel:Remove() end
+
+		local nickname = lootEnt:IsPlayer() and lootEnt:Name() or lootEnt:GetNWString("Nickname") or ""
 
 		draw.RoundedBox(0, 0, 0, w, h, black)
 		surface.SetDrawColor(255, 255, 255, 128)
