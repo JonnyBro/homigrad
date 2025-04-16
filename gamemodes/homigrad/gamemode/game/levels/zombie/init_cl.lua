@@ -49,7 +49,7 @@ function zombie.HUDPaint_RoundLeft(white2,time)
 	else
 		green.a = 255
 	end
-	/*
+	--[[
 	local time = math.Round(roundTimeStart + (roundTimeLoot or 0) - CurTime())
 	local ftime = string.FormattedTime(time,"%02i:%02i")
 
@@ -57,8 +57,8 @@ function zombie.HUDPaint_RoundLeft(white2,time)
 		draw.SimpleText("До спавна лута :","HomigradFont",ScrW() / 2 - 200,ScrH() - 50,white,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER)
 		draw.SimpleText(ftime,"HomigradFont",ScrW() / 2 + 200,ScrH() - 50,white,TEXT_ALIGN_RIGHT,TEXT_ALIGN_CENTER)
 	end
-	*/
-	
+	--]]
+
 	if (lply:Team() == 1 or not lply:Alive()) and (time < 0) then
 		local list = SpawnPointsList.spawnpoints_ss_exit
 		--local list = ReadDataMap("spawnpoints_ss_exit")

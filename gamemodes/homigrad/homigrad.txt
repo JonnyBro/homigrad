@@ -1,56 +1,56 @@
 "homigrad"
 {
-	"base"		"sandbox"
-	"title"		"Homigrad"
-	"maps"		""
+	"base"			"sandbox"
+	"title"			"Homigrad"
+	"maps"			"hg_"
 	"menusystem"	"1"
 
 	"settings"
 	{
 		1
 		{
-			"name"		"hg_ConstructOnly"
-			"text"		"Construct Gamemode"
-			"help"		"Spawns all players with a physgun & ability to use the Spawn Menu."
-			"type"		"CheckBox"
-			"default"	"0"
-			"singleplayer"
+			"name"			"hg_ConstructOnly"
+			"text"			"Construct Gamemode"
+			"help"			"Spawns all players with a physgun & ability to use the Spawn Menu."
+			"type"			"CheckBox"
+			"default"		"0"
+			"singleplayer"	"1"
 		}
 		2
 		{
-			"name"		"hg_HomicideOnly"
-			"text"		"Homicide Only"
-			"help"		"Homicide is the only round type queued. Other gamemodes like TDM, Capture The Point, etc, are not queued."
-			"type"		"CheckBox"
-			"default"	"0"
-			"singleplayer"
+			"name"			"hg_HomicideOnly"
+			"text"			"Homicide Only"
+			"help"			"Homicide is the only round type queued. Other gamemodes like TDM, Capture The Point, etc, are not queued."
+			"type"			"CheckBox"
+			"default"		"0"
+			"singleplayer"	"1"
 		}
 		3
 		{
-			"name"		"hg_SearchTime"
-			"text"		"Inventory Search Time (seconds)"
-			"help"		"Items in a player's inventory will appear after a given time (between 0 and 10)."
-			"type"		"Numeric"
-			"default"	"2"
-			"singleplayer"
+			"name"			"hg_SearchTime"
+			"text"			"Inventory Search Time (seconds)"
+			"help"			"Items in a player's inventory will appear after a given time (between 0 and 10)."
+			"type"			"Numeric"
+			"default"		"2"
+			"singleplayer"	"1"
 		}
 		4
 		{
-			"name"		"hg_LootAlive"
-			"text"		"Loot Alive Players"
-			"help"		"Toggles the ability to loot alive faking players."
-			"type"		"CheckBox"
-			"default"	"1"
-			"singleplayer"
+			"name"			"hg_LootAlive"
+			"text"			"Loot Alive Players"
+			"help"			"Toggles the ability to loot alive faking players."
+			"type"			"CheckBox"
+			"default"		"1"
+			"singleplayer"	"1"
 		}
 		5
 		{
-			"name"		"hg_TellPoliceWhoTraitorsAre"
-			"text"		"Announce Traitors on Police Spawn (doesn't work rn)"
-			"help"		"If enabled, Police will be alerted to who the traitors are when they arrive."
-			"type"		"CheckBox"
-			"default"	"0"
-			"singleplayer"
+			"name"			"hg_TellPoliceWhoTraitorsAre"
+			"text"			"Announce Traitors on Police Spawn (doesn't work rn)"
+			"help"			"If enabled, Police will be alerted to who the traitors are when they arrive."
+			"type"			"CheckBox"
+			"default"		"0"
+			"singleplayer"	"1"
 		}
 	}
 }
