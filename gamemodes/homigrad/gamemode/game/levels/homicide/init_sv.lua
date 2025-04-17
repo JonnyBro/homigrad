@@ -48,9 +48,9 @@ local function makeT(ply)
 		wep:SetClip1(wep:GetMaxClip1())
 		ply:GiveAmmo(wep:GetMaxClip1() * 1, wep:GetPrimaryAmmoType(), true)
 
+		if math.random(1, 2) == 2 then ply:Give("weapon_hg_t_vxpoison") else ply:Give("weapon_hg_t_syringepoison") end
+		if math.random(1, 2) == 2 then ply:Give("weapon_hidebomb") else ply:Give("weapon_suicidevest") end
 		ply:Give("weapon_hg_rgd5")
-		ply:Give("weapon_hg_t_vxpoison")
-		ply:Give("weapon_hidebomb")
 		ply:Give("weapon_kabar")
 		ply:Give("weapon_radar")
 	elseif homicide.roundType == 3 then
@@ -59,9 +59,9 @@ local function makeT(ply)
 		wep:SetClip1(wep:GetMaxClip1())
 		ply:GiveAmmo(wep:GetMaxClip1() * 8, "XBowBolt", true)
 
+		if math.random(1, 2) == 2 then ply:Give("weapon_hg_t_vxpoison") else ply:Give("weapon_hg_t_syringepoison") end
+		if math.random(1, 2) == 2 then ply:Give("weapon_hidebomb") else ply:Give("weapon_suicidevest") end
 		ply:Give("weapon_hg_rgd5")
-		ply:Give("weapon_hg_t_vxpoison")
-		ply:Give("weapon_hidebomb")
 		ply:Give("weapon_kabar")
 		ply:Give("weapon_radar")
 	elseif homicide.roundType == 5 then
@@ -70,9 +70,9 @@ local function makeT(ply)
 		wep:SetClip1(wep:GetMaxClip1())
 		ply:GiveAmmo(wep:GetMaxClip1() * 2, wep:GetPrimaryAmmoType(), true)
 
+		if math.random(1, 2) == 2 then ply:Give("weapon_hg_t_vxpoison") else ply:Give("weapon_hg_t_syringepoison") end
+		if math.random(1, 2) == 2 then ply:Give("weapon_hidebomb") else ply:Give("weapon_suicidevest") end
 		ply:Give("weapon_hg_rgd5")
-		ply:Give("weapon_hg_t_vxpoison")
-		ply:Give("weapon_hidebomb")
 		ply:Give("weapon_kabar")
 		ply:Give("weapon_radar")
 	else
@@ -81,9 +81,9 @@ local function makeT(ply)
 		wep:SetClip1(wep:GetMaxClip1())
 		ply:GiveAmmo(wep:GetMaxClip1() * 2, wep:GetPrimaryAmmoType(), true)
 
+		if math.random(1, 2) == 2 then ply:Give("weapon_hg_t_vxpoison") else ply:Give("weapon_hg_t_syringepoison") end
+		if math.random(1, 2) == 2 then ply:Give("weapon_hidebomb") else ply:Give("weapon_suicidevest") end
 		ply:Give("weapon_hg_rgd5")
-		ply:Give("weapon_hg_t_vxpoison")
-		ply:Give("weapon_hidebomb")
 		ply:Give("weapon_kabar")
 		ply:Give("weapon_radar")
 	end

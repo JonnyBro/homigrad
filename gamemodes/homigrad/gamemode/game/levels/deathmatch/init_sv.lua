@@ -129,9 +129,9 @@ function dm.PlayerSpawn2(ply, teamID)
 		local r = math.random(1, 8)
 		local wep1 = ply:Give((r == 1 and "weapon_mp7") or (r == 2 and "weapon_aks74u") or (r == 3 and "weapon_akm") or (r == 4 and "weapon_scout" and "weapon_uzi") or (r == 5 and "weapon_m4a1") or (r == 6 and "weapon_hk416") or (r == 7 and "weapon_m4a1") or (r == 8 and "weapon_galil"))
 
-		ply:Give("weapon_kabar")
-		ply:Give("medkit")
 		ply:Give("med_band_big")
+		ply:Give("medkit")
+		ply:Give("weapon_kabar")
 
 		ply:GiveAmmo(wep1:GetMaxClip1() * 3, wep1:GetPrimaryAmmoType())
 	elseif roundDmType == 2 then
@@ -140,39 +140,39 @@ function dm.PlayerSpawn2(ply, teamID)
 		local wep1 = ply:Give((r == 1 and "weapon_spas12") or (r == 2 and "weapon_xm1014") or (r == 3 and "weapon_remington870") or (r == 4 and "weapon_m590"))
 		local wep2 = ply:Give((p == 1 and "weapon_uzi") or p == 2 and "weapon_p99" or p == 3 and "weapon_glock" or p == 4 and "weapon_fiveseven")
 
-		ply:Give("weapon_kabar")
-		ply:Give("medkit")
 		ply:Give("med_band_big")
+		ply:Give("medkit")
 		ply:Give("weapon_hg_rgd5")
+		ply:Give("weapon_kabar")
 
 		ply:GiveAmmo(wep1:GetMaxClip1() * 3, wep1:GetPrimaryAmmoType())
 		ply:GiveAmmo(wep2:GetMaxClip1() * 3, wep2:GetPrimaryAmmoType())
 	elseif roundDmType == 3 then
 		local wep1 = ply:Give("weapon_mateba")
 
-		ply:Give("weapon_kabar")
-		ply:Give("medkit")
 		ply:Give("med_band_big")
+		ply:Give("medkit")
+		ply:Give("weapon_kabar")
 
 		ply:GiveAmmo(wep1:GetMaxClip1() * 3, wep1:GetPrimaryAmmoType())
 	elseif roundDmType == 4 then
 		local r = math.random(1, 3)
 		local wep1 = ply:Give((r == 1 and "weapon_hk_usp") or (r == 2 and "weapon_p99") or (r == 3 and "weapon_beretta"))
 
-		ply:Give("weapon_kabar")
+		if math.random(1, 2) == 2 then ply:Give("weapon_hidebomb") else ply:Give("weapon_suicidevest") end
 		ply:Give("med_band_big")
 		ply:Give("weapon_hg_rgd5")
-		ply:Give("weapon_hidebomb")
+		ply:Give("weapon_kabar")
 
 		ply:GiveAmmo(wep1:GetMaxClip1() * 3, wep1:GetPrimaryAmmoType())
 	else
 		local r = math.random(1, 3)
 		local wep1 = ply:Give((r == 1 and "weapon_hk_usp") or (r == 2 and "weapon_p99") or (r == 3 and "weapon_beretta"))
 
-		ply:Give("weapon_kabar")
+		if math.random(1, 2) == 2 then ply:Give("weapon_hidebomb") else ply:Give("weapon_suicidevest") end
 		ply:Give("med_band_big")
 		ply:Give("weapon_hg_rgd5")
-		ply:Give("weapon_hidebomb")
+		ply:Give("weapon_kabar")
 
 		ply:GiveAmmo(wep1:GetMaxClip1() * 3, wep1:GetPrimaryAmmoType())
 	end
