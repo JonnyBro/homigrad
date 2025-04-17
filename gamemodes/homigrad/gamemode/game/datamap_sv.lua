@@ -143,23 +143,17 @@ COMMANDS.point = {
 
 COMMANDS.pointreset = {
 	function(ply, args)
-		if args[1] ~= "" then
-			for name, info in pairs(SpawnPointsList) do
-				if info[1] ~= args[1] then continue end
+		if not args[1] then return end
 
-				WriteDataMap(name)
+		for name, info in pairs(SpawnPointsList) do
+			if info[1] ~= args[1] then continue end
 
-				break
-			end
+			WriteDataMap(name)
 
-			PrintMessage(3, "Points with name " .. args[1] .. " cleared.")
-		else
-			for name, _ in pairs(SpawnPointsList) do
-				WriteDataMap(name)
-			end
-
-			PrintMessage(3, "All points cleared.")
+			break
 		end
+
+		PrintMessage(3, "Points with name " .. args[1] .. " cleared.")
 
 		SetupSpawnPointsList()
 		SendSpawnPoint()
@@ -174,6 +168,8 @@ COMMANDS.pointsync = {
 
 COMMANDS.pointpage = {
 	function(ply, args)
+		if not args[1] then return end
+
 		SpawnPointsPage = tonumber(args[1])
 
 		SetupSpawnPointsList()
@@ -184,7 +180,9 @@ COMMANDS.pointpage = {
 
 COMMANDS.pointpages = {
 	function(ply, args)
-		PrintMessage(3, GetMaxDataPages("spawnpointst"))
+		if not args[1] then return end
+
+		PrintMessage(3, GetMaxDataPages(args[1]))
 	end
 }
 

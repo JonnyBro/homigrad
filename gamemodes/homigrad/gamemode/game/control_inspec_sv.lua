@@ -8,7 +8,6 @@ hook.Add("Player Think", "ControlPlayersAdmins", function(ply, time)
 			Faking(enta)
 
 			local text = tostring(ply:Name()) .. " grabbed the player " .. enta:Name()
-			--DiscordSendMessage("💙" .. text)
 			print(text)
 		end
 
@@ -25,8 +24,7 @@ hook.Add("Player Think", "ControlPlayersAdmins", function(ply, time)
 
 		if IsValid(ply.CarryEnt) then
 			if ply:KeyPressed(IN_ATTACK) then
-				local text = tostring(ply:Name()) .. "Raised the yeetiti" .. tostring(RagdollOwner(ply.CarryEnt) and RagdollOwner(ply.CarryEnt):Name() or ply.CarryEnt:GetClass())
-				--DiscordSendMessage("💙" .. text)
+				local text = tostring(ply:Name()) .. " grabbed " .. tostring(RagdollOwner(ply.CarryEnt) and RagdollOwner(ply.CarryEnt):Name() or ply.CarryEnt:GetClass())
 				print(text)
 			end
 

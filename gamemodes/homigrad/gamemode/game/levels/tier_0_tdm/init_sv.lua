@@ -160,7 +160,7 @@ function tdm.RoundEndCheck()
 	local TAlive = tdm.GetCountAlive(team.GetPlayers(1))
 	local CTAlive = tdm.GetCountAlive(team.GetPlayers(2))
 
-	if TAlive == 0 and CTAlive == 0 then return EndRound() end
+	if TAlive == 0 and CTAlive == 0 then return EndRound(0) end
 	if TAlive == 0 then return EndRound(2) end
 	if CTAlive == 0 then return EndRound(1) end
 end

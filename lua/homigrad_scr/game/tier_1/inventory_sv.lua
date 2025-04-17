@@ -1,10 +1,10 @@
-util.AddNetworkString("inventory")
+util.AddNetworkString("hg_inventory")
 util.AddNetworkString("ply_take_item")
 util.AddNetworkString("ply_take_ammo")
 
 local function send(ply, lootEnt, remove)
 	if ply then
-		net.Start("inventory")
+		net.Start("hg_inventory")
 			net.WriteEntity(not remove and lootEnt or nil)
 			net.WriteTable(lootEnt.Info.Weapons)
 			net.WriteTable(lootEnt.Info.Ammo)
@@ -184,11 +184,12 @@ net.Receive("ply_take_item", function(len, ply)
 end)
 
 net.Receive("ply_take_ammo", function(len, ply)
-	--if ply:Team() ~= 1002 then return end
-
 	local lootEnt = net.ReadEntity()
+
+	if not ply:Alive() or ply.unconscious then return end
 	if not IsValid(lootEnt) then return end
 	if lootEnt:IsPlayer() and not IsValid(lootEnt.FakeRagdoll) then return end
+	if ply:GetAttachment(ply:LookupAttachment("eyes")).Pos:Distance(lootEnt:GetPos()) > 100 then return end
 
 	local ammo = net.ReadFloat()
 	local lootInfo = lootEnt.Info

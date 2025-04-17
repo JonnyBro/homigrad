@@ -49,14 +49,20 @@ end
 local panel
 hg_searched = {}
 
-net.Receive("inventory", function()
+net.Receive("hg_inventory", function()
 	if IsValid(panel) then
 		panel.override = true
 		panel:Remove()
 	end
 
 	local lootEnt = net.ReadEntity()
-	if IsValid(lootEnt) and lootEnt:GetClass() == "prop_ragdoll" then lootEnt = lootEnt:GetNWEntity("OldRagdollController") end -- If player is dead (lootEnt is prop_ragdoll) return who's ragdoll it was
+	local ragdoll
+
+	-- If player is dead (lootEnt is prop_ragdoll) return who's ragdoll it was
+	if IsValid(lootEnt) and lootEnt:GetClass() == "prop_ragdoll" then
+		ragdoll = lootEnt
+		lootEnt = lootEnt:GetNWEntity("OldRagdollController")
+	end
 
 	if not GetConVar("hg_LootAlive"):GetBool() and lootEnt:Alive() then return end
 
@@ -88,7 +94,7 @@ net.Receive("inventory", function()
 	function panel:OnRemove()
 		if self.override then return end
 
-		net.Start("inventory")
+		net.Start("hg_inventory")
 			net.WriteEntity(lootEnt)
 		net.SendToServer()
 	end
@@ -157,7 +163,7 @@ net.Receive("inventory", function()
 
 			button.DoClick = function()
 				net.Start("ply_take_item")
-					net.WriteEntity(lootEnt)
+					net.WriteEntity(ragdoll or lootEnt)
 					net.WriteString(wep)
 				net.SendToServer()
 			end
@@ -202,7 +208,7 @@ net.Receive("inventory", function()
 
 			button.DoClick = function()
 				net.Start("ply_take_ammo")
-					net.WriteEntity(lootEnt)
+					net.WriteEntity(ragdoll or lootEnt)
 					net.WriteFloat(tonumber(ammo))
 				net.SendToServer()
 			end
