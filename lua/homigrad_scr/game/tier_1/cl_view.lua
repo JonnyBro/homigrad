@@ -47,45 +47,67 @@ local view = {
 	drawmonitors = true
 }
 
+-- local hg_disable_stoprenderunfocus = CreateClientConVar("hg_disable_stoprenderunfocus", "0", true)
+-- local funnyText = {"afk?", "no", "hg_disable_stoprenderunfocus 1", "stop it", "kys", "а ну вернись", "не понял..."}
+-- local currentText = funnyText[1]
+-- local lastTextChange = 0
+-- local nextTextIndex = 2
+-- local wasFocused = true
+
+-- local cam_End2D = cam.End2D
+-- local cam_Start2D = cam.Start2D
+-- local draw_SimpleText = draw.SimpleText
+-- local system_HasFocus = system.HasFocus
+
+local color_white = color_white
+local CurTime = CurTime
+local RealFrameTime = RealFrameTime
 local render_Clear = render.Clear
 local render_RenderView = render.RenderView
-local HasFocus = system.HasFocus
-local oldFocus
-local text
-
-CreateClientConVar("hg_disable_stoprenderunfocus", "0", true)
-
-local funnyText = {"afk?", "no", "hg_disable_stoprenderunfocus 1", "stop it", "kys"}
-local CalcView -- huh
-local vel = 0
-local diffang = Vector(0, 0, 0)
-local diffpos = Vector(0, 0, 0)
-diffang2 = Angle(0, 0, 0)
+local ScrH = ScrH
+local ScrW = ScrW
+local TEXT_ALIGN_CENTER = TEXT_ALIGN_CENTER
 
 hook.Add("RenderScene", "homigrad_mainrenderscene", function(pos, angle, fov)
-	local focus = HasFocus()
+	if RealFrameTime() > 0.02 then return end
 
-	if focus ~= oldFocus then
-		oldFocus = focus
+	--[[
+	local now = CurTime()
+	local isFocused = system_HasFocus()
 
-		if not focus then text = funnyText[math.random(#funnyText)] end
+	if isFocused ~= wasFocused then
+		wasFocused = isFocused
+
+		if not isFocused then
+			lastTextChange = now
+			currentText = funnyText[1]
+			nextTextIndex = 2
+		end
 	end
 
-	hook.Run("Frame", pos, angle)
+	if not isFocused and not hg_disable_stoprenderunfocus:GetBool() then
+		if now - lastTextChange > 1 then
+			currentText = funnyText[nextTextIndex] or funnyText[1]
 
-	STOPRENDER = false -- not hg_disable_stoprenderunfocus:GetBool() and not developer:GetBool() and not focus
+			nextTextIndex = nextTextIndex + 1
 
-	if STOPRENDER then
-		cam.Start2D()
-			draw.SimpleText(text, "DebugFixedSmall", ScrW() / 2, ScrH() / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		cam.End2D()
+			if nextTextIndex > #funnyText then nextTextIndex = 1 end
+
+			lastTextChange = now
+		end
+
+		cam_Start2D()
+			draw_SimpleText(currentText, "DebugFixedSmall", ScrW() / 2, ScrH() / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		cam_End2D()
 
 		return true
-	end
+	end --]]
 
 	RENDERSCENE = true
 
-	local _view = CalcView(LocalPlayer(), pos, angle, fov)
+	local ply = LocalPlayer()
+	local _view = CalcView(ply, pos, angle, fov)
+
 	if not _view then
 		RENDERSCENE = nil
 
@@ -98,13 +120,9 @@ hook.Add("RenderScene", "homigrad_mainrenderscene", function(pos, angle, fov)
 	view.znear = _view.znear
 	view.drawviewmodel = _view.drawviewmodel
 
-	if CAMERA_ZFAR then
-		view.zfar = CAMERA_ZFAR + 250 -- cl_fog in homigrad gamemode
-	else
-		view.zfar = nil
-	end
+	view.zfar = CAMERA_ZFAR and CAMERA_ZFAR + 250 or nil
 
-	render_Clear(0, 0, 0, 255, true, true, true)
+	render_Clear(0, 0, 0, 255, true, true)
 	render_RenderView(view)
 
 	RENDERSCENE = nil
@@ -128,14 +146,6 @@ function RagdollOwner(rag)
 	return IsValid(ply) and ply
 end
 
---[[
-hook.Add("Think", "pophead", function()
-	for _, ent in pairs(ents.FindByClass("prop_ragdoll")) do
-		if not IsValid(RagdollOwner(ent)) or not RagdollOwner(ent):Alive() then ent:ManipulateBoneScale(6, Vector(1, 1, 1)) end
-	end
-end) --]]
-
-local angZero = Angle(0, 0, 0)
 local playing = false
 local deathtracks = {
 	-- format: multiline
@@ -204,19 +214,22 @@ local oldrag
 hook.Add("Player Death", "hgPlayerDeath2", function(ent)
 	if ent ~= LocalPlayer() then return end
 
+	local ply = LocalPlayer()
+
 	if GetConVar("hg_deathscreen"):GetBool() then
 		deathrag = ent:GetNWEntity("Ragdoll", oldrag)
 		deathtext = string.upper(deathtexts[math.random(#deathtexts)])
 
-		-- TODO: Fix issue where, upon dying and immediately respawning, screen still fades to black
-		LocalPlayer():ScreenFade(SCREENFADE.IN, Color(0, 0, 0, 255), 0.5, 1)
+		deathFadeTimer = "hgDeathFade_" .. CurTime()
+
+		ply:ScreenFade(SCREENFADE.IN, Color(0, 0, 0, 255), 0.5, 1)
 
 		if not playing and GetConVar("hg_deathsound"):GetBool() then
 			playing = true
 
 			sound.PlayURL(deathtracks[math.random(#deathtracks)], "mono", function(station)
 				if IsValid(station) then
-					station:SetPos(LocalPlayer():GetPos())
+					station:SetPos(ply:GetPos())
 					station:Play()
 					station:SetVolume(3)
 
@@ -225,35 +238,46 @@ hook.Add("Player Death", "hgPlayerDeath2", function(ent)
 			end)
 		end
 
-		timer.Create("DeathCam", 5, 1, function()
-			LocalPlayer():ScreenFade(SCREENFADE.IN, Color(0, 0, 0, 255), 1, 1)
+		timer.Create(deathFadeTimer, 5, 1, function()
+			if IsValid(ply) and not ply:Alive() then ply:ScreenFade(SCREENFADE.IN, Color(0, 0, 0, 255), 1, 1) end
 
 			playing = false
 		end)
 	end
 
 	timer.Simple(4, function()
-		if GetConVar("hg_deathscreen"):GetBool() then LocalPlayer():ScreenFade(SCREENFADE.OUT, Color(0, 0, 0, 255), 0.2, 1) end
+		if not IsValid(ply) or ply:Alive() then return end
+		if GetConVar("hg_deathscreen"):GetBool() then ply:ScreenFade(SCREENFADE.OUT, Color(0, 0, 0, 255), 0.2, 1) end
 		if IsValid(deathrag) then deathrag:ManipulateBoneScale(deathrag:LookupBone("ValveBiped.Bip01_Head1"), Vector(1, 1, 1)) end
 	end)
 end)
 
+hook.Add("PlayerSpawn", "hgCleanupDeathEffects", function(ply)
+	if ply ~= LocalPlayer() then return end
+	if deathFadeTimer and timer.Exists(deathFadeTimer) then timer.Remove(deathFadeTimer) end
+
+	ply:ScreenFade(SCREENFADE.OUT, Color(0, 0, 0, 0), 0.1, 0)
+
+	if IsValid(g_station) then
+		g_station:Stop()
+		g_station = nil
+	end
+
+	playing = false
+end)
+
+-- CALCVIEW
+
 local ScopeLerp = 0
-local scope
-local firstPerson
+local scope, firstPerson
 local LerpEyeRagdoll = Angle(0, 0, 0)
--- local LerpEye = IsValid(LocalPlayer()) and LocalPlayer():EyeAngles() or Angle(0, 0, 0)
 
 local vecZero, vecFull = Vector(0, 0, 0), Vector(1, 1, 1)
-local startRecoil = 0
+local startRecoil, recoil, sprint = 0, 0, 0
 local angRecoil = Angle(0, 0, 0)
-local recoil = 0
-local sprint = 0
-local oldview = {}
-local view = {}
+local oldview, view = {}, {}
 
-ADDFOV = 0
-ADDROLL = 0
+ADDFOV, ADDROLL = 0, 0
 follow = follow or NULL
 
 local helmEnt
@@ -261,66 +285,66 @@ local helmEnt
 net.Receive("nodraw_helmet", function() helmEnt = net.ReadEntity() end)
 
 local oldangles = Angle(0, 0, 0)
+local diffpos, diffang, diffang2 = Vector(0, 0, 0), Vector(0, 0, 0), Angle(0, 0, 0)
+local vel, playerFPS = 0, 0
+
+-- Cache frequently used functions and values
+local Angle = Angle
+local CurTime = CurTime
+local IsValid = IsValid
+local Lerp = Lerp
+local LerpAngle = LerpAngle
+local LerpAngleFT = LerpAngleFT
+local LerpFT = LerpFT
+local math_abs = math.abs
+local math_max = math.max
+local math_min = math.min
+local math_Round = math.Round
+local math_sin = math.sin
+local table_Copy = table.Copy
+local util_TraceHull = util.TraceHull
+local util_TraceLine = util.TraceLine
+local Vector = Vector
+local vector_origin = vector_origin
+local WorldToLocal = WorldToLocal
 
 function CalcView(ply, vec, ang, fov, znear, zfar)
 	if STOPRENDER then return end
 
-	local fov = CameraSetFOV + ADDFOV
 	local lply = LocalPlayer()
+	fov = CameraSetFOV + ADDFOV
 
 	if not ply:Alive() and timer.Exists("DeathCam") and IsValid(deathrag) then
-		-- deathrag:ManipulateBoneScale(6, vecZero)
-
 		local att = deathrag:GetAttachment(deathrag:LookupAttachment("eyes"))
 		LerpEyeRagdoll = LerpAngleFT(0.08, LerpEyeRagdoll, att.Ang)
 		LerpEyeRagdoll[3] = LerpEyeRagdoll[3] + ADDROLL
 
-		local view = {
-			origin = att.Pos,
-			angles = LerpEyeRagdoll,
-			fov = fov,
-			drawviewer = true
-		}
+		view.origin = att.Pos
+		view.angles = LerpEyeRagdoll
+		view.fov = fov
+		view.drawviewer = true
 
 		return view
 	end
 
-	DRAWMODEL = nil
-	ADDFOV = 0
-	ADDROLL = 0
-
+	DRAWMODEL, ADDFOV, ADDROLL = nil, 0, 0
 	hook.Run("CalcAddFOV", ply)
 
-	local result = hook.Run("PreCalcView", ply, vec, ang, fov, znear, zfar)
+	local precalcview = hook.Run("PreCalcView", ply, vec, ang, fov, znear, zfar)
 
-	if result ~= nil then
-		result.fov = fov + ADDFOV
-		result.angles[3] = result.angles[3] + ADDROLL
-		return result
+	if precalcview then
+		precalcview.fov = fov + ADDFOV
+		precalcview.angles[3] = precalcview.angles[3] + ADDROLL
+
+		return precalcview
 	end
 
-	--[[
-	if lply:InVehicle() then
-		local diffvel = lply:GetVehicle():GetPos() - vel
-		local view = {
-			origin = lply:EyePos() + diffvel * 10,
-			angles = lply:EyeAngles(),
-			fov = fov
-		}
-
-		vel = lply:GetVehicle():GetPos()
-
-		return view
-	end --]]
-
 	firstPerson = GetViewEntity() == lply
-
 	local bone = lply:LookupBone("ValveBiped.Bip01_Head1")
 	if bone then lply:ManipulateBoneScale(bone, firstPerson and vecZero or vecFull) end
 
 	if not firstPerson then
 		DRAWMODEL = true
-
 		return
 	end
 
@@ -329,19 +353,21 @@ function CalcView(ply, vec, ang, fov, znear, zfar)
 	local body = ply:LookupBone("ValveBiped.Bip01_Spine2")
 	local tr = hg.eyeTrace(lply)
 
+	local angEye, vecEye
+
 	if GetConVar("hg_bodycam"):GetInt() == 0 then
 		angEye = lply:EyeAngles()
 		vecEye = tr.StartPos or lply:EyePos()
 	else
 		local matrix = ply:GetBoneMatrix(body)
-		local bodypos = matrix:GetTranslation()
-		local bodyang = matrix:GetAngles()
-		-- bodyang:RotateAroundAxis(bodyang:Right(), 90)
-		-- bodyang[2] = eye.Ang[2]
-		-- bodyang[3] = 0
-
-		angEye = eye.Ang -- bodyang
-		vecEye = eye and bodypos + bodyang:Up() * 0 + bodyang:Forward() * 14 + bodyang:Right() * -6 or lply:EyePos()
+		if matrix then
+			local bodyang = matrix:GetAngles()
+			angEye = eye and eye.Ang or lply:EyeAngles()
+			vecEye = eye and (matrix:GetTranslation() + bodyang:Up() * 0 + bodyang:Forward() * 14 + bodyang:Right() * -6) or lply:EyePos()
+		else
+			angEye = lply:EyeAngles()
+			vecEye = lply:EyePos()
+		end
 	end
 
 	local ragdoll = ply:GetNWEntity("Ragdoll")
@@ -355,38 +381,33 @@ function CalcView(ply, vec, ang, fov, znear, zfar)
 
 		if GetConVar("hg_bodycam"):GetInt() == 1 then
 			local matrix = ragdoll:GetBoneMatrix(body)
-			local bodypos = matrix:GetTranslation()
-			local bodyang = matrix:GetAngles()
 
-			eyeAngs = att.Ang
-
-			att.Pos = eye and bodypos + bodyang:Up() * 0 + bodyang:Forward() * 10 + bodyang:Right() * -8 or lply:EyePos()
+			if matrix then
+				local bodyang = matrix:GetAngles()
+				eyeAngs = att.Ang
+				att.Pos = eye and (matrix:GetTranslation() + bodyang:Up() * 0 + bodyang:Forward() * 10 + bodyang:Right() * -8) or lply:EyePos()
+			end
 		end
 
 		local anghook = GetConVar("hg_fakecam_mode"):GetFloat()
-
 		LerpEyeRagdoll = LerpAngleFT(0.08, LerpEyeRagdoll, LerpAngle(anghook, eyeAngs, att.Ang))
 		LerpEyeRagdoll[3] = LerpEyeRagdoll[3] + ADDROLL
 
-		local view = {
-			origin = att.Pos,
-			angles = LerpEyeRagdoll,
-			fov = fov,
-			drawviewer = true
-		}
+		view.origin = att.Pos
+		view.angles = LerpEyeRagdoll
+		view.fov = fov
+		view.drawviewer = true
 
 		if IsValid(helmEnt) then helmEnt:SetNoDraw(true) end
-
 		return view
 	end
 
 	local wep = lply:GetActiveWeapon()
-
 	view.fov = fov
 
-	if lply:InVehicle() or not firstPerson then return end
+	if lply:InVehicle() then return end
 
-	if not lply:Alive() or IsValid(wep) and whitelistweps[wep:GetClass()] or lply:GetMoveType() == MOVETYPE_NOCLIP then
+	if not lply:Alive() or (IsValid(wep) and whitelistweps[wep:GetClass()]) or lply:GetMoveType() == MOVETYPE_NOCLIP then
 		view.origin = ply:EyePos()
 		view.angles = ply:EyeAngles()
 		view.drawviewer = false
@@ -397,70 +418,71 @@ function CalcView(ply, vec, ang, fov, znear, zfar)
 	local output_ang = angEye + angRecoil
 	local output_pos = vecEye
 
-	if wep and wep.Camera then output_pos, output_ang, fov = wep:Camera(ply, output_pos, output_ang, fov) end
-
-	view.fov = fov
+	if wep and wep.Camera then
+		output_pos, output_ang, fov = wep:Camera(ply, output_pos, output_ang, fov)
+		view.fov = fov
+	end
 
 	if wep and hand then
 		local posRecoil = Vector(recoil * 8, 0, recoil * 1.5)
 		posRecoil:Rotate(hand.Ang)
 
-		view.znear = Lerp(ScopeLerp, 1, math.max(1 - recoil, 0.2))
+		view.znear = Lerp(ScopeLerp, 1, math_max(1 - recoil, 0.2))
 		output_pos = output_pos + posRecoil
 
-		if not RENDERSCENE then recoil = LerpFT(scope and (wep.CLR_Scope or 0.25) or wep.CLR or 0.1, recoil, 0) end
+		if not RENDERSCENE then
+			recoil = LerpFT(scope and (wep.CLR_Scope or 0.25) or (wep.CLR or 0.1), recoil, 0)
+		end
 	else
 		recoil = 0
 	end
 
 	vec = Vector(vec[1], vec[2], eye and eye.Pos[3] or vec[3])
-	vel = math.max(math.Round(Lerp(0.1, vel, lply:GetVelocity():Length())) - 1, 0)
-
-	sprint = LerpFT(0.1, sprint, -math.abs(math.sin(CurTime() * 6)) * vel / 400)
+	vel = math_max(math_Round(Lerp(0.1, vel, lply:GetVelocity():Length())) - 1, 0)
+	sprint = LerpFT(0.1, sprint, -math_abs(math_sin(CurTime() * 6)) * vel / 400)
 
 	output_ang[1] = output_ang[1] + sprint
 	output_ang[3] = 0
 
-	local anim_pos = math.max(startRecoil - CurTime(), 0) * 5
+	local anim_pos = math_max(startRecoil - CurTime(), 0) * 5
 	local tick = 1 / engine.AbsoluteFrameTime()
-
-	playerFPS = math.Round(Lerp(0.1, playerFPS or tick, tick))
-
-	local val = math.min(math.Round(playerFPS / 120, 1), 1)
+	playerFPS = math_Round(Lerp(0.1, playerFPS or tick, tick))
+	local val = math_min(math_Round(playerFPS / 120, 1), 1)
 
 	diffpos = LerpFT(0.1, diffpos, (output_pos - (oldview.origin or output_pos)) / 6)
-	diffang = LerpFT(0.1, diffang, (output_ang:Forward() - (oldview.angles or output_ang):Forward()) * 50 + (lply:EyeAngles() + (lply:GetActiveWeapon().eyeSpray or angZero) * 1000):Forward() * anim_pos * 1)
+	diffang = LerpFT(0.1, diffang, (output_ang:Forward() - (oldview.angles or output_ang):Forward()) * 50 + (lply:EyeAngles() + (wep.eyeSpray or Angle(0, 0, 0)) * 1000):Forward() * anim_pos * 1)
 
 	local _, lang = WorldToLocal(vector_origin, lply:EyeAngles(), vector_origin, oldangles or lply:EyeAngles())
-
 	oldangles = lply:EyeAngles()
 	diffang2 = LerpFT(0.05, diffang2, lang * val)
 
-	if RENDERSCENE then
-		if hg_cool_camera:GetBool() then output_ang[3] = output_ang[3] + math.min(diffang:Dot(output_ang:Right()) * 3 * val, 10) end
-		if hg_cool_camera:GetBool() then output_ang[3] = output_ang[3] + math.min(diffpos:Dot(output_ang:Right()) * 25 * val, 10) end
+	if RENDERSCENE and hg_cool_camera:GetBool() then
+		output_ang[3] = output_ang[3] + math_min(diffang:Dot(output_ang:Right()) * 3 * val, 10)
+		output_ang[3] = output_ang[3] + math_min(diffpos:Dot(output_ang:Right()) * 25 * val, 10)
 	end
 
-	if diffang then output_pos:Add((diffang * 1.5 + diffpos) * val) end
+	if diffang then
+		output_pos:Add((diffang * 1.5 + diffpos) * val)
+	end
 
 	local size = Vector(6, 6, 0)
-	local tr = {}
-	tr.start = vec
-	tr.endpos = output_pos
-	tr.mins = -size
-	tr.maxs = size
-	tr.filter = ply
-	local trZNear = util.TraceHull(tr)
+	local tr = {
+		start = vec,
+		endpos = output_pos,
+		mins = -size,
+		maxs = size,
+		filter = ply
+	}
+	local trZNear = util_TraceHull(tr)
 
 	size = size / 2
-	tr.mins = -size
-	tr.maxs = size
-	tr = util.TraceHull(tr)
+	tr.mins, tr.maxs = -size, size
+	tr = util_TraceHull(tr)
 
 	local pos = lply:GetPos()
-	pos[3] = tr.HitPos[3] + 1 -- wtf is this bullshit
+	pos[3] = tr.HitPos[3] + 1
 
-	local trace = util.TraceLine({
+	local trace = util_TraceLine({
 		start = lply:EyePos(),
 		endpos = pos,
 		filter = ply,
@@ -468,30 +490,24 @@ function CalcView(ply, vec, ang, fov, znear, zfar)
 	})
 
 	tr.HitPos[3] = trace.HitPos[3] - 1
-
 	output_pos = tr.HitPos
-	output_pos = output_pos
 
-	if trZNear.Hit then
-		view.znear = 0.1
-	else
-		view.znear = 1
-	end
-
+	view.znear = trZNear.Hit and 0.1 or 1
 	output_ang[3] = output_ang[3] + ADDROLL
 
 	view.origin = output_pos
 	view.angles = output_ang
 	view.drawviewer = true
 
-	oldview = table.Copy(view)
-
+	oldview = table_Copy(view)
 	DRAWMODEL = true
 
 	return view
 end
 
-hook.Add("CalcView", "hgCalcVie", CalcView)
+hook.Add("CalcView", "hgCalcView", CalcView)
+
+-- END CALCVIEW
 
 hide = {
 	["CHudHealth"] = true,
@@ -502,20 +518,6 @@ hide = {
 }
 
 hook.Add("HUDShouldDraw", "HideHUD", function(name) if hide[name] then return false end end)
-
---[[ Scopes (don't use)
-hook.Add("PostDrawOpaqueRenderables", "example", function()
-	local hand = LocalPlayer():GetAttachment(ply:LookupAttachment("anim_attachment_rh"))
-	local eye = LocalPlayer():GetAttachment(ply:LookupAttachment("eyes"))
-	possight = hand.Pos + hand.Ang:Up() * 4.4 - hand.Ang:Forward() * -1 + hand.Ang:Right() * -0.15
-	angle = hand.Ang + Angle(-90, 0, 0)
-
-	cam.Start3D2D(possight, angle, 1)
-		surface.SetDrawColor(255, 0, 0, 200)
-		draw.NoTexture()
-		draw.Circle(0, 0, 0.05, 25)
-	cam.End3D2D()
-end) --]]
 
 hook.Add("InputMouseApply", "asdasd2", function(cmd, x, y, angle)
 	if not IsValid(LocalPlayer()) or not LocalPlayer():Alive() then return end
