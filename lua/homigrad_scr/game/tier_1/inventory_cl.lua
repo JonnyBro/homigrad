@@ -55,6 +55,7 @@ net.Receive("hg_inventory", function()
 		panel:Remove()
 	end
 
+	local plr = LocalPlayer()
 	local lootEnt = net.ReadEntity()
 	local ragdoll
 
@@ -72,20 +73,38 @@ net.Receive("hg_inventory", function()
 	if IsValid(lootEnt:GetNWEntity("ActiveWeapon")) and items[lootEnt:GetNWEntity("ActiveWeapon"):GetClass()] then items[lootEnt:GetNWEntity("ActiveWeapon"):GetClass()] = nil end
 
 	local items_ammo = net.ReadTable()
+	local targetID = IsValid(lootEnt) and lootEnt:SteamID64()
 
 	items.weapon_hands = nil
 
 	panel = vgui.Create("DFrame")
+	panel:SetTitle("")
 	panel:SetAlpha(255)
-	panel:SetSize(500, 400)
+	panel:SetSize(400, 400)
 	panel:Center()
 	panel:SetDraggable(false)
+	panel:ShowCloseButton()
 	panel:MakePopup()
-	panel:SetTitle("")
+
+	local closeButton = vgui.Create("DButton", panel)
+	closeButton:SetPos(375, 5)
+	closeButton:SetSize(20, 20)
+	closeButton:SetText("")
+
+	closeButton.Paint = function(self, w, h)
+		draw.RoundedBox(0, 0, 0, w, h, black)
+		surface.SetDrawColor(255, 255, 255, 128)
+		surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
+		draw.SimpleText("X", "DefaultFixedDropShadow", 6, 5, color_white)
+	end
+
+	closeButton.DoClick = function()
+		panel:Remove()
+	end
 
 	function panel:OnKeyCodePressed(key)
 		if key == KEY_W or key == KEY_S or key == KEY_A or key == KEY_D then
-			if timer.Exists(LocalPlayer():Name() .. "_hg_searching") then timer.Remove(LocalPlayer():Name() .. "_hg_searching") end
+			if timer.Exists("hg_searching_" .. plr:SteamID64() .. "_" .. targetID) then timer.Remove("hg_searching_" .. plr:SteamID64() .. "_" .. targetID) end
 
 			self:Remove()
 		end
@@ -100,12 +119,11 @@ net.Receive("hg_inventory", function()
 	end
 
 	local lootingTime = math.Clamp(GetConVar("hg_SearchTime"):GetInt(), 0, 10)
-	local targetID = IsValid(lootEnt) and lootEnt:SteamID64()
 	local corner = 6
 	local x, y = 40, 40
 
 	panel.Paint = function(self, w, h)
-		if not IsValid(lootEnt) or not LocalPlayer():Alive() then return panel:Remove() end
+		if not IsValid(lootEnt) or not plr:Alive() then return panel:Remove() end
 
 		local nickname = lootEnt:IsPlayer() and lootEnt:Name() or lootEnt:GetNWString("Nickname") or ""
 
@@ -115,13 +133,16 @@ net.Receive("hg_inventory", function()
 		draw.SimpleText(language.GetPhrase("hg.inventory.title"):format(nickname), "DefaultFixedDropShadow", corner, corner, color_white)
 
 		-- Don't show the text if player "remembers" target's inventory
-		if not hg_searched[targetID] then draw.SimpleText(language.GetPhrase("hg.inventory.searching"), "HomigradDefaultFixedDropShadow", corner * 36, corner * 30, color_white) end
+		if not hg_searched[targetID] then
+			draw.SimpleText(language.GetPhrase("hg.inventory.searching"), "HomigradDefaultFixedDropShadow", corner * 30, corner * 30, color_white)
+		end
 	end
 
 	-- Set timer to 0 if player "remembers" target's inventory
 	if hg_searched[targetID] then lootingTime = 0 end
 
-	timer.Create(LocalPlayer():Name() .. "_hg_searching", lootingTime, 1, function()
+	if not targetID then return end
+	timer.Create("hg_searching_" .. plr:SteamID64() .. "_" .. targetID, lootingTime, 1, function()
 		if not IsValid(panel) then return end
 
 		-- "Remember" this target's inventory
