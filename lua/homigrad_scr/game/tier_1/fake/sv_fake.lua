@@ -569,8 +569,8 @@ local function RemoveRag(self)
 end
 
 local CustomWeight = {
-	["models/player/police_fem.mdl"] = 80,
-	["models/player/police.mdl"] = 80,
+	["models/player/police_fem.mdl"] = 70,
+	["models/player/police.mdl"] = 70,
 	["models/LeymiRBA/Gyokami/Gyokami.mdl"] = 50,
 	["models/player/smoky/Smoky.mdl"] = 65,
 	["models/player/smoky/Smokycl.mdl"] = 65,
@@ -580,23 +580,23 @@ local CustomWeight = {
 }
 
 for i = 1, 9 do
-	CustomWeight["models/player/Rusty/NatGuard/male_0" .. i .. ".mdl"] = 90
+	CustomWeight["models/player/Rusty/NatGuard/male_0" .. i .. ".mdl"] = 80
 end
 
 for i = 1, 6 do
-	CustomWeight["models/monolithservers/mpd/female_0" .. i .. ".mdl"] = 80
+	CustomWeight["models/monolithservers/mpd/female_0" .. i .. ".mdl"] = 70
 end
 
 for i = 1, 6 do
-	CustomWeight["models/monolithservers/mpd/female_0" .. i .. "_2.mdl"] = 80
+	CustomWeight["models/monolithservers/mpd/female_0" .. i .. "_2.mdl"] = 70
 end
 
 for i = 1, 6 do
-	CustomWeight["models/monolithservers/mpd/male_0" .. i .. ".mdl"] = 90
+	CustomWeight["models/monolithservers/mpd/male_0" .. i .. ".mdl"] = 80
 end
 
 for i = 1, 6 do
-	CustomWeight["models/monolithservers/mpd/male_0" .. i .. "_2.mdl"] = 90
+	CustomWeight["models/monolithservers/mpd/male_0" .. i .. "_2.mdl"] = 80
 end
 
 IdealMassPlayer = {
@@ -951,6 +951,7 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 				end
 			end
 
+			-- FIXME: Police has flyin' tech
 			-- Control left hand
 			if ply:KeyDown(IN_ATTACK) and not (IsValid(ply.ActiveWeapon) and isHGWeapon(ply.ActiveWeapon)) then
 				local pos = ply:EyePos()
@@ -962,15 +963,15 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 				ang:RotateAroundAxis(eyeangs:Right(), 75)
 
 				local shadowparams = {
-					secondstoarrive = 0.4,
-					pos = head:GetPos() + eyeangs:Forward() * 50 + eyeangs:Right() * -5,
 					angle = ang,
+					deltatime = deltatime,
 					maxangular = 670,
 					maxangulardamp = 600,
+					maxspeed = 40,
 					maxspeeddamp = 50,
-					maxspeed = 1200,
+					pos = head:GetPos() + eyeangs:Forward() * 50 + eyeangs:Right() * -5,
+					secondstoarrive = 0.4,
 					teleportdistance = 0,
-					deltatime = deltatime,
 				}
 
 				phys:Wake()
@@ -991,15 +992,15 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 						pos[3] = head:GetPos()[3]
 
 						local shadowparams = {
-							secondstoarrive = 0.4,
-							pos = head:GetPos() + eyeangs:Forward() * 50 + eyeangs:Right() * 0,
 							angle = ang,
+							deltatime = deltatime,
 							maxangular = 670,
 							maxangulardamp = 100,
-							maxspeeddamp = 50,
 							maxspeed = 600,
+							maxspeeddamp = 50,
+							pos = head:GetPos() + eyeangs:Forward() * 50 + eyeangs:Right() * 0,
+							secondstoarrive = 0.4,
 							teleportdistance = 0,
-							deltatime = deltatime,
 						}
 
 						physa:Wake()
@@ -1014,15 +1015,15 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 						ang:RotateAroundAxis(eyeangs:Forward(), 90)
 
 						local shadowparams = {
-							secondstoarrive = 0.4,
-							pos = head:GetPos() + eyeangs:Forward() * 60 + eyeangs:Right() * 10 + eyeangs:Up() * 0,
 							angle = ang,
+							deltatime = deltatime,
 							maxangular = 670,
 							maxangulardamp = 600,
-							maxspeeddamp = 50,
 							maxspeed = 500,
+							maxspeeddamp = 50,
+							pos = head:GetPos() + eyeangs:Forward() * 60 + eyeangs:Right() * 10 + eyeangs:Up() * 0,
+							secondstoarrive = 0.4,
 							teleportdistance = 0,
-							deltatime = deltatime,
 						}
 
 						phys:Wake()
@@ -1033,15 +1034,15 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 						ang:RotateAroundAxis(eyeangs:Forward(), 90)
 
 						local shadowparams = {
-							secondstoarrive = 0.4,
-							pos = physa:GetPos() + ang:Forward() * 10,
 							angle = ang,
+							deltatime = deltatime,
 							maxangular = 670,
 							maxangulardamp = 100,
-							maxspeeddamp = 50,
 							maxspeed = 600,
+							maxspeeddamp = 50,
+							pos = physa:GetPos() + ang:Forward() * 10,
+							secondstoarrive = 0.4,
 							teleportdistance = 0,
-							deltatime = deltatime,
 						}
 
 						physa:Wake()
@@ -1057,15 +1058,15 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 					pos[3] = head:GetPos()[3]
 
 					local shadowparams = {
-						secondstoarrive = 0.4,
-						pos = head:GetPos() + eyeangs:Forward() * 50 + eyeangs:Right() * 15,
 						angle = ang,
+						deltatime = deltatime,
 						maxangular = 670,
 						maxangulardamp = 100,
-						maxspeeddamp = 50,
 						maxspeed = 1200,
+						maxspeeddamp = 50,
+						pos = head:GetPos() + eyeangs:Forward() * 50 + eyeangs:Right() * 15,
+						secondstoarrive = 0.4,
 						teleportdistance = 0,
-						deltatime = deltatime,
 					}
 
 					physa:Wake()
@@ -1075,19 +1076,19 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 
 			-- Control head
 			if ply:KeyDown(IN_USE) then
-				local angs = ply:EyeAngles()
-				angs:RotateAroundAxis(angs:Forward(), 90)
+				local ang = ply:EyeAngles()
+				ang:RotateAroundAxis(ang:Forward(), 90)
 
 				local shadowparams = {
-					secondstoarrive = 0.25, -- Halfed from .50
-					pos = head:GetPos() + vector_up * 40 / math.Clamp(rag:GetVelocity():Length() / 300, 1, 12),
-					angle = angs,
-					maxangulardamp = 10,
-					maxspeeddamp = 2, -- Previously 10
-					maxangular = 370,
-					maxspeed = 40, -- Doubled from 40
-					teleportdistance = 0,
+					angle = ang,
 					deltatime = deltatime,
+					maxangular = 370,
+					maxangulardamp = 10,
+					maxspeed = 40, -- Doubled from 40
+					maxspeeddamp = 2, -- Previously 10
+					pos = head:GetPos() + vector_up * 40 / math.Clamp(rag:GetVelocity():Length() / 300, 1, 12),
+					secondstoarrive = 0.25, -- Halfed from .50
+					teleportdistance = 0,
 				}
 
 				head:Wake()

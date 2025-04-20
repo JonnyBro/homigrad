@@ -660,7 +660,7 @@ local pistol_hold = Angle(10, -10, 0)
 local rifle_hold = Angle(-5, -8, 0)
 
 function SWEP:IsPistolHoldType()
-	return self.HoldType == "revolver"
+	return self.HoldType == "revolver" or self.HoldType == "pistol"
 end
 
 SWEP.ishgweapon = true
