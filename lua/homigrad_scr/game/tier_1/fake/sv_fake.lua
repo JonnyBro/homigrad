@@ -410,7 +410,9 @@ hook.Add("PlayerSpawn", "zzzzzzzzzzzz", function(ply) if PLYSPAWN_OVERRIDE then 
 hook.Add("PlayerSpawn", "!", function(ply) if PLYSPAWN_OVERRIDE then return true end end)
 hook.Add("PlayerSpawn", "z", function(ply) if PLYSPAWN_OVERRIDE then return true end end)
 
-hook.Add("PlayerSpawn", "hgResetFakeBody", function(ply)
+hook.Add("PlayerSpawn", "hg_ResetFakeBody", function(ply)
+	local ragdoll = ply:GetNWEntity("Ragdoll")
+
 	ply:AddEFlags(EFL_NO_DAMAGE_FORCES)
 	ply:SetDuckSpeed(0.3)
 	ply:SetUnDuckSpeed(0.3)
@@ -424,6 +426,8 @@ hook.Add("PlayerSpawn", "hgResetFakeBody", function(ply)
 			send(plys, lootEnt, true)
 		end
 	end
+
+	if IsValid(ragdoll) then ragdoll:Remove() end
 
 	ply:SetNWEntity("Ragdoll", NULL)
 end)
