@@ -18,7 +18,8 @@ It features a somewhat realistic health and movement system and offers several s
    - This folder contains some premaid spawnpoints data that are used in some modes.
 5. Ensure the gamemode is set to `Homigrad` (use `+gamemode homigrad` for servers).
 
-A tickrate from **99** to **128** is recommended to improve controls when faking.
+I recommend a tickrate from **99** to **128** for better phyics, but people reported that **66** works too.\
+On dedicated server please use `+tickrate number`. On client (when you host a server from the game itself) tickrate is dependant on `fps_max` concommand.
 
 ## TODO
 
