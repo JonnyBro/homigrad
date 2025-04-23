@@ -148,9 +148,23 @@ net.Receive("ply_take_item", function(len, ply)
 	local lootInfo = lootEnt.Info
 	local wep = net.ReadString()
 	local weapon = lootInfo.Weapons[wep]
-	if not IsValid(weapon) then return end
 
-	if blackList[wep] and not ply:IsAdmin() then return end
+	-- NOTE: This needs a rework
+	if string.StartsWith(lootEnt:GetClass(), "hg_box_") then
+		if ply:HasWeapon(wep) then return end
+
+		local looted = ply:Give(wep)
+		looted:SetClip1(looted:GetMaxClip1())
+
+		lootInfo.Weapons[wep] = nil
+
+		send(ply, lootEnt)
+
+		return
+	end
+
+	if not IsValid(weapon) then return end
+	if blackList[wep] then return end
 
 	if ply:HasWeapon(wep) then
 		if lootEnt:IsPlayer() and lootEnt.ActiveWeapon == weapon and not lootEnt.unconscious then return end

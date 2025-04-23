@@ -147,15 +147,16 @@ function RagdollOwner(rag)
 end
 
 local playing = false
+-- format: multiline
 local deathtracks = {
-	-- format: multiline
 	"https://cdn.discordapp.com/attachments/1144224221334097974/1144224389970272388/death1.mp3",
 	"https://cdn.discordapp.com/attachments/1144224221334097974/1144226357967065180/death2.mp3",
 	"https://cdn.discordapp.com/attachments/1144224221334097974/1144230250465734797/death3.mp3",
 	"https://cdn.discordapp.com/attachments/1144224221334097974/1144238942862979142/death4.mp3",
 }
+
+-- format: multiline
 local deathtexts = {
-	-- format: multiline
 	"gone, gone",
 	"all clyde, no bonnie",
 	"burned out",
