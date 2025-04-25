@@ -3,8 +3,8 @@
 AddCSLuaFile("shared.lua")
 include("shared.lua")
 
-local guns = {"weapon_mp5", "weapon_xm1014", "weapon_remington870", "weapon_mp5", "weapon_civil_famas", "weapon_mp40", "weapon_galil", "weapon_m4a1", "weapon_galilsar"}
-local pistols = {"weapon_p220", "weapon_deagle_csgo", "weapon_glock", "weapon_hk_usp", "weapon_fiveseven", "weapon_deagle"}
+local guns = {"weapon_mp5", "weapon_xm1014", "weapon_remington870", "weapon_mp7", "weapon_civil_famas", "weapon_galil", "weapon_m4a1"}
+local pistols = {"weapon_p220", "weapon_glock", "weapon_hk_usp", "weapon_fiveseven", "weapon_mateba"}
 local grenades = {"weapon_hg_f1", "weapon_hg_rgd5", "weapon_hg_smokenade", "weapon_hg_molotov", "weapon_hg_flashbang"}
 
 function ENT:Initialize()

@@ -5,7 +5,7 @@ include("shared.lua")
 
 local cuffs = {"weapon_handcuffs", "weapon_pepperspray"}
 local food = {"food_spongebob_home", "food_lays", "food_fishcan"}
-local melee = {"weapon_bat", "weapon_hg_kitknife", "weapon_hg_crowbar", "weapon_hg_metalbat", "weapon_t", "weapon_hg_fireaxe", "weapon_hg_hatchet"}
+local melee = {"weapon_bat", "weapon_hg_kitknife", "weapon_hg_crowbar", "weapon_hg_metalbat", "weapon_hg_fireaxe", "weapon_hg_hatchet"}
 
 function ENT:Initialize()
 	self:SetModel("models/props_junk/cardboard_box002a.mdl")

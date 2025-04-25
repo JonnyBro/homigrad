@@ -3,7 +3,7 @@
 AddCSLuaFile("shared.lua")
 include("shared.lua")
 
-local food = {"food_spongebob_home", "food_lays", "food_monster"}
+local food = {"food_spongebob_home", "food_lays", "food_fishcan"}
 local knife = {"weapon_hg_kitknife"}
 local other = {"weapon_handcuffs", "med_band_small", "weapon_pepperspray"}
 
