@@ -154,6 +154,8 @@ net.Receive("ply_take_item", function(len, ply)
 		if ply:HasWeapon(wep) then return end
 
 		local looted = ply:Give(wep)
+		if not IsValid(looted) then return ErrorNoHalt("invalid weapon from lootbox: " .. wep) end
+
 		looted:SetClip1(looted:GetMaxClip1())
 
 		lootInfo.Weapons[wep] = nil
