@@ -9,7 +9,11 @@
 Homigrad is a gamemode that expands on an existing gamemode called 'Homicide,' which is inspired by Trouble in Terrorist Town (TTT) and Murder.\
 It features a somewhat realistic health and movement system and offers several sub-modes, including Team Deathmatch (TDM), Deathmatch, and Hide and Seek.
 
-## Installation
+## Installation | Workshop
+
+[Click Here](https://steamcommunity.com/sharedfiles/filedetails/?id=3401451044)
+
+## Installation | Manual
 
 1. [Download the repository](https://github.com/JonnyBro/homigrad/archive/refs/heads/main.zip).
 2. Subscribe to this collection: [\*click\*](https://steamcommunity.com/sharedfiles/filedetails/?id=3393369855).
