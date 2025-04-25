@@ -73,7 +73,7 @@ net.Receive("hg_inventory", function()
 	if IsValid(lootEnt:GetNWEntity("ActiveWeapon")) and items[lootEnt:GetNWEntity("ActiveWeapon"):GetClass()] then items[lootEnt:GetNWEntity("ActiveWeapon"):GetClass()] = nil end
 
 	local items_ammo = net.ReadTable()
-	local targetID = IsValid(lootEnt) and lootEnt:IsPlayer() and lootEnt:SteamID64() or ""
+	local targetID = IsValid(lootEnt) and lootEnt:IsPlayer() and lootEnt:SteamID64() or lootEnt:EntIndex()
 
 	items.weapon_hands = nil
 

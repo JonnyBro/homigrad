@@ -4,7 +4,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 local secondAll = {"weapon_mateba", "food_spongebob_home", "painkiller", "med_band_big", "med_band_small", "medkit", "weapon_handcuffs", "weapon_pepperspray", "weapon_taser", "weapon_kukri", "weapon_knife", "weapon_kabar", "weapon_hg_kitknife"}
-local mainHeavy = {"weapon_hg_sovkov_showel", "weapon_hg_sleagehammer", "weapon_hg_pickaxe", "weapon_hg_fubar"}
+local mainHeavy = {"weapon_hg_shovel", "weapon_hg_sledgehammer", "weapon_hg_fubar", "weapon_pipe"}
 local grenades = {"weapon_hg_f1", "weapon_hg_rgd5"}
 
 function ENT:Initialize()
