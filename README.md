@@ -11,6 +11,9 @@ It features a somewhat realistic health and movement system and offers several s
 
 ## Installation | Workshop
 
+> [!WARNING]
+> Don't forget to delete the `homigrad-main` in the addons folder if you have one.
+
 [Click Here](https://steamcommunity.com/sharedfiles/filedetails/?id=3401451044)
 
 ## Installation | Manual
