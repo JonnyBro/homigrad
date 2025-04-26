@@ -86,7 +86,7 @@ function Faking(ply, force)
 		if IsValid(rag) then
 			ply.FakeRagdoll = rag -- ply:GetNWEntity("Ragdoll")
 
-			if not ply:IsBot() then
+			if not ply:IsBot() and ply.tAppearance and ply.tAppearance.strModel then
 				local model = ply.tAppearance.strModel
 				local sex = EasyAppearance.Sex[ply:GetModelSex()]
 				local tModelParms = EasyAppearance.Models[model]
@@ -229,7 +229,7 @@ function Faking(ply, force)
 			ply:DrawWorldModel(true)
 			ply:SetModel(rag:GetModel())
 
-			if not ply:IsBot() then
+			if not ply:IsBot() and ply.tAppearance and ply.tAppearance.strModel then
 				local model = ply.tAppearance.strModel
 				local sex = EasyAppearance.Sex[ply:GetModelSex()]
 				local tModelParms = EasyAppearance.Models[model]
