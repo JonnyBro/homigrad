@@ -86,6 +86,14 @@ function Faking(ply, force)
 		if IsValid(rag) then
 			ply.FakeRagdoll = rag -- ply:GetNWEntity("Ragdoll")
 
+			if not ply:IsBot() then
+				local model = ply.tAppearance.strModel
+				local sex = EasyAppearance.Sex[ply:GetModelSex()]
+				local tModelParms = EasyAppearance.Models[model]
+
+				rag:SetSubMaterial(tModelParms.intSubMat, EasyAppearance.Appearances[sex][ply.tAppearance.strColthesStyle])
+			end
+
 			local wep = ply:GetActiveWeapon()
 
 			if IsValid(wep) and isHGWeapon(wep) then
@@ -102,6 +110,7 @@ function Faking(ply, force)
 
 			local bull = rag.bull
 			local eyeatt = rag:GetAttachment(rag:LookupAttachment("eyes"))
+
 			bull:SetPos(eyeatt.Pos)
 			-- bull:SetPos(eyeatt.Pos + eyeatt.Ang:Up() * 3.5)
 			bull:SetAngles(rag:GetAngles())
@@ -110,6 +119,7 @@ function Faking(ply, force)
 			-- bull:SetParent(rag, rag:LookupAttachment("eyes"))
 			bull:SetKeyValue("health", "9999")
 			bull:SetKeyValue("spawnflags", "256")
+
 			bull:Spawn()
 			bull:Activate()
 			bull:SetNotSolid(true)
@@ -218,6 +228,14 @@ function Faking(ply, force)
 			ply:DrawViewModel(true)
 			ply:DrawWorldModel(true)
 			ply:SetModel(rag:GetModel())
+
+			if not ply:IsBot() then
+				local model = ply.tAppearance.strModel
+				local sex = EasyAppearance.Sex[ply:GetModelSex()]
+				local tModelParms = EasyAppearance.Models[model]
+
+				ply:SetSubMaterial(tModelParms.intSubMat, EasyAppearance.Appearances[sex][ply.tAppearance.strColthesStyle])
+			end
 
 			rag.unfaked = true
 

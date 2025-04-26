@@ -403,11 +403,10 @@ function homicide.PlayerSpawn2(ply, teamID)
 	local color = teamID == 1 and Color(math.random(55, 165), math.random(55, 165), math.random(55, 165)) or teamTbl[2]
 
 	-- Set the player's model to the custom model if available, otherwise use a random team model
-	local customModel = (not ply:IsBot() and GetPlayerModelBySteamID(ply:SteamID())) or false
+	local customModel = not ply:IsBot() and GetPlayerModelBySteamID(ply:SteamID()) or false
 
 	if customModel then
 		ply:SetModel(customModel)
-		ply:SetPlayerColor(color:ToVector())
 	else
 		EasyAppearance.SetAppearance(ply)
 		-- ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
@@ -417,9 +416,7 @@ function homicide.PlayerSpawn2(ply, teamID)
 
 	ply:Give("weapon_hands")
 
-	timer.Simple(0, function()
-		ply.allowFlashlights = false
-	end)
+	timer.Simple(0, function() ply.allowFlashlights = false end)
 end
 
 function homicide.PlayerCanJoinTeam(ply, teamID)
