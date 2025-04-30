@@ -89,7 +89,7 @@ SolidMapVote["Config"]["Show Map Play Count"] = true
 -- Setting the option below to true will allow you to manually set the
 -- map pool using the table below. Only the maps inside the table will
 -- be able to be chosen for the vote.
-SolidMapVote["Config"]["Manual Map Pool"] = true
+SolidMapVote["Config"]["Manual Map Pool"] = false
 SolidMapVote["Config"]["Map Pool"] = {
 	"cs_insertion2_dusk",
 	"cs_office-unlimited",
@@ -178,7 +178,7 @@ SolidMapVote["Config"]["Nomination Permissions"] = function(ply) return true end
 
 -- Set this to true if you want the option to extend the map on the vote
 -- Set to false to disable
-SolidMapVote["Config"]["Enable Extend"] = false
+SolidMapVote["Config"]["Enable Extend"] = true
 SolidMapVote["Config"]["Extend Image"] = "http://i.imgur.com/zzBeMid.png"
 
 -- Set this to true if you want the option to choose a random map
@@ -270,13 +270,14 @@ SolidMapVote["Config"]["Specific Maps"] = {
 		width = 1920,
 		height = 1080
 	},
-	-- {
-	-- 	filename = "ttt_clue_xmas",
-	-- 	displayname = "Clue (Christmas)",
-	-- 	image = "materials/levels/minecraftb5.jpg",
-	-- 	width = 1920,
-	-- 	height = 1080
-	-- },
+	--[[
+	{
+		filename = "ttt_clue_xmas",
+		displayname = "Clue (Christmas)",
+		image = "materials/levels/minecraftb5.jpg",
+		width = 1920,
+		height = 1080
+	}, --]]
 	{
 		filename = "ttt_minecraftcity_v4",
 		displayname = "Minecraft City",
