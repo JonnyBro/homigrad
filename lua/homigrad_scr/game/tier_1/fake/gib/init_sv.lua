@@ -299,7 +299,7 @@ hook.Add("HomigradGib", "Gib", function(ent, dmgInfo, phys_bone)
 			local mul = RagdollDamageBoneMul[hitgroup] or 1
 
 			local newdmginfo = {}
-			newdmginfo.att = IsValid(dmgInfo:GetAttacker()) and dmgInfo:GetAttacker() or game.GetWorld()
+			newdmginfo.att = dmgInfo:GetAttacker()
 			newdmginfo.dmg = dmgInfo:GetDamage() / mul
 			newdmginfo.pos = dmgInfo:GetDamagePosition()
 			newdmginfo.force = dmgInfo:GetDamageForce()
@@ -308,7 +308,7 @@ hook.Add("HomigradGib", "Gib", function(ent, dmgInfo, phys_bone)
 				local rag = ent.FakeRagdoll
 
 				local dmg = DamageInfo()
-				dmg:SetAttacker(newdmginfo.att)
+				dmg:SetAttacker(newdmginfo.att or game.GetWorld())
 				dmg:SetDamage(newdmginfo.dmg)
 				dmg:SetDamagePosition(newdmginfo.pos)
 				dmg:SetDamageForce(newdmginfo.force)
