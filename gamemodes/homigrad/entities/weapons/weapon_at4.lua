@@ -42,17 +42,25 @@ SWEP.vbwAng = Angle(60, 0, 90)
 SWEP.addAng = Angle(-5.5, -0.3, -90)
 SWEP.SightPos = Vector(-40, -3.6, -4.85)
 
+SWEP.ThrowVel = 100000
+
 function SWEP:PrimaryAttack()
 	if self:Clip1() <= 0 then return end
 
 	local pos, ang = self:GetTrace()
 
 	if SERVER then
-		local rocket = ents.Create("gb_rocket_rp3") -- FIXME: this ent doesn't exists
-		rocket:SetPos(pos)
-		rocket:SetAngles(ang)
-		rocket:Spawn()
-		rocket:Launch()
+		local grenade = ents.Create("ent_hgjack_40mm_contact") -- NOTE: replaced the gb_rocket_rp3 because i'm to lazy to convert it to current jmod (i should update jmod actually)
+		grenade:SetPos(pos)
+		grenade:SetAngles(ang)
+		grenade:Spawn()
+		grenade:Arm()
+
+		local grenadePhys = grenade:GetPhysicsObject()
+
+		if IsValid(grenadePhys) then
+			grenadePhys:ApplyForceCenter(ang:Forward() * self.ThrowVel + self:GetOwner():GetVelocity() * 1)
+		end
 	end
 
 	self:TakePrimaryAmmo(1)
