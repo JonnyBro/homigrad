@@ -89,7 +89,7 @@ SolidMapVote["Config"]["Show Map Play Count"] = true
 -- Setting the option below to true will allow you to manually set the
 -- map pool using the table below. Only the maps inside the table will
 -- be able to be chosen for the vote.
-SolidMapVote["Config"]["Manual Map Pool"] = false
+SolidMapVote["Config"]["Manual Map Pool"] = true
 SolidMapVote["Config"]["Map Pool"] = {
 	"cs_insertion2_dusk",
 	"cs_office-unlimited",
