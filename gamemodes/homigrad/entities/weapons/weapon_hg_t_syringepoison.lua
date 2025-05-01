@@ -65,7 +65,7 @@ end
 
 if SERVER then
 	function SWEP:Poison(ent)
-		local entreal = ent.FakeRagdoll or ent
+		local entreal = IsValid(ent.FakeRagdoll) and ent.FakeRagdoll or ent
 
 		local bone1 = entreal:LookupBone("ValveBiped.Bip01_Spine4")
 		if not bone1 then return end
