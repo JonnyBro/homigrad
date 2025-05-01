@@ -1,5 +1,3 @@
-include("../../playermodelmanager_sv.lua")
-
 local function makeT(ply)
 	ply.roleT = true
 

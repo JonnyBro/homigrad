@@ -1,5 +1,3 @@
-include("../../playermodelmanager_sv.lua")
-
 function zombie.StartRoundSV(data)
     tdm.RemoveItems()
 

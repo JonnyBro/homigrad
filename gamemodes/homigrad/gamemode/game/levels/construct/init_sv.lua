@@ -1,6 +1,3 @@
--- Include the player model manager script (adjust the path as necessary)
-include("../../playermodelmanager_sv.lua")
-
 construct.ragdolls = {}
 
 local function GetTeamSpawns(ply)
