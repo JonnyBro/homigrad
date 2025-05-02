@@ -84,14 +84,16 @@ function Faking(ply, force)
 		if IsValid(veh) then rag:GetPhysicsObject():SetVelocity(veh:GetPhysicsObject():GetVelocity() * 5) end
 
 		if IsValid(rag) then
-			ply.FakeRagdoll = rag -- ply:GetNWEntity("Ragdoll")
+			ply.FakeRagdoll = rag
 
-			if not ply:IsBot() and ply.tAppearance and ply.tAppearance.strModel then
-				local model = ply.tAppearance.strModel
-				local sex = EasyAppearance.Sex[ply:GetModelSex()]
-				local tModelParms = EasyAppearance.Models[model]
-
-				rag:SetSubMaterial(tModelParms.intSubMat, EasyAppearance.Appearances[sex][ply.tAppearance.strColthesStyle])
+			if not ply:IsBot() then -- Apply the skin to the ragdoll
+				local model = ply:GetModel()
+				for _, v in pairs(EasyAppearance.Models) do
+					if v.strPatch == model then
+						local material = ply:GetSubMaterial(v.intSubMat)
+						rag:SetSubMaterial(v.intSubMat, material)
+					end
+				end
 			end
 
 			local wep = ply:GetActiveWeapon()
@@ -100,9 +102,6 @@ function Faking(ply, force)
 				ply.ActiveWeapon = wep
 
 				SpawnWeapon(ply)
-				--[[
-				timer.Simple(0.1, function() SpawnWeapon(ply) end)
-				timer.Simple(0.5, function() SpawnWeapon(ply) end) --]]
 			end
 
 			rag.bull = ents.Create("npc_bullseye")
@@ -229,12 +228,14 @@ function Faking(ply, force)
 			ply:DrawWorldModel(true)
 			ply:SetModel(rag:GetModel())
 
-			if not ply:IsBot() and ply.tAppearance and ply.tAppearance.strModel then
-				local model = ply.tAppearance.strModel
-				local sex = EasyAppearance.Sex[ply:GetModelSex()]
-				local tModelParms = EasyAppearance.Models[model]
-
-				ply:SetSubMaterial(tModelParms.intSubMat, EasyAppearance.Appearances[sex][ply.tAppearance.strColthesStyle])
+			if not ply:IsBot() then -- Apply the skin back to the player
+				local model = rag:GetModel()
+				for _, v in pairs(EasyAppearance.Models) do
+					if v.strPatch == model then
+						local material = rag:GetSubMaterial(v.intSubMat)
+						ply:SetSubMaterial(v.intSubMat, material)
+					end
+				end
 			end
 
 			rag.unfaked = true
