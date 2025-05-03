@@ -58,32 +58,6 @@ local validUserGroup = {
 	owner = true,
 }
 
---[[
-COMMANDS.noguilt = {
-	function(ply, args)
-		if not ply:IsAdmin() then return end
-		local value = (tonumber(args[2]) == 1 and true) or false
-		local plrs = player.GetListByName(args[1], ply)
-
-		for _, plr in pairs(plrs) do
-			plr.noguilt = value
-			plr:ChatPrint("NoGuilt for " .. table.concat(plrs, ", ") .. " currently: " .. tostring(value))
-		end
-	end,
-	1
-}
-
-COMMANDS.fake = {
-	function(ply, args)
-		if not ply:IsAdmin() then return end
-
-		for _, plr in pairs(player.GetListByName(args[1], ply)) do
-			Faking(plr)
-		end
-	end,
-	1
-} --]]
-
 function GuiltCheck(att, ply)
 	guiltVal = 100
 

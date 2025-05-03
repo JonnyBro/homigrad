@@ -185,11 +185,3 @@ COMMANDS.pointpages = {
 		PrintMessage(3, GetMaxDataPages(args[1]))
 	end
 }
-
-COMMANDS.points = {
-	function(ply, args)
-		for _, point in pairs(SpawnPointsList) do
-			ply:ChatPrint("	" .. point[1])
-		end
-	end
-}

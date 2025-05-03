@@ -50,17 +50,15 @@ function SWEP:PrimaryAttack()
 	local pos, ang = self:GetTrace()
 
 	if SERVER then
-		local grenade = ents.Create("ent_hgjack_40mm_contact") -- NOTE: replaced the gb_rocket_rp3 because i'm to lazy to convert it to current jmod (i should update jmod actually)
+		-- NOTE: replaced the gb_rocket_rp3 because i'm to lazy to convert it to current jmod (i should update jmod actually)
+		local grenade = ents.Create("ent_hgjack_40mm_contact")
 		grenade:SetPos(pos)
 		grenade:SetAngles(ang)
 		grenade:Spawn()
 		grenade:Arm()
 
 		local grenadePhys = grenade:GetPhysicsObject()
-
-		if IsValid(grenadePhys) then
-			grenadePhys:ApplyForceCenter(ang:Forward() * self.ThrowVel + self:GetOwner():GetVelocity() * 1)
-		end
+		if IsValid(grenadePhys) then grenadePhys:ApplyForceCenter(ang:Forward() * self.ThrowVel + self:GetOwner():GetVelocity() * 1) end
 	end
 
 	self:TakePrimaryAmmo(1)

@@ -62,4 +62,4 @@ SWEP.dwmAUp = 0
 SWEP.dwmARight = 0
 SWEP.dwmAForward = 0
 
-SWEP.SightPos = Vector(-32, 0, 3.2)
+SWEP.SightPos = Vector(-30, 0, 3.18)

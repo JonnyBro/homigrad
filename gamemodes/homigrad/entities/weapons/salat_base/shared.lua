@@ -190,7 +190,6 @@ function SWEP:BulletCallbackFunc(dmgAmt, ply, tr, dmg, tracer, hard, multi)
 		local vPoint = tr.HitPos
 		local effectdata = EffectData()
 		effectdata:SetOrigin(vPoint)
-		-- util.Effect("BloodImpact", effectdata)
 	end
 
 	if self.NumBullet or 1 > 1 then return end

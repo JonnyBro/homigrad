@@ -254,17 +254,6 @@ function GM:PlayerDisconnected(ply) end
 
 function GM:PlayerDeathSound() return true end
 
---[[
-COMMANDS.teamforce = {
-	function(ply, args)
-		local teamID = tonumber(args[2])
-
-		for _, plr in pairs(player.GetListByName(args[1], ply)) do
-			plr:SetTeam(teamID)
-		end
-	end
-} --]]
-
 local function PlayerCanJoinTeam(ply, teamID)
 	local addT, addCT = 0, 0
 
