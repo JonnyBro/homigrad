@@ -130,7 +130,7 @@ hook.Add("EntityTakeDamage", "ragdamage", function(ent, dmginfo)
 
 	if not IsValid(ent) then return end
 
-	if not hitarmor and dmginfo:IsDamageType(DMG_BULLET + DMG_BUCKSHOT + DMG_BLAST + DMG_SLASH) then
+	if not hitarmor and ent:IsRagdoll() and dmginfo:IsDamageType(DMG_BULLET + DMG_BUCKSHOT + DMG_BLAST + DMG_SLASH) then
 		local effdata = EffectData()
 			effdata:SetOrigin(dmginfo:GetDamagePosition())
 			effdata:SetRadius(1)
