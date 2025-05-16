@@ -1015,7 +1015,7 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 
 						local shadowparams = {
 							secondstoarrive = 0.4,
-							pos = head:GetPos() + eyeangs:Forward() * 50 + eyeangs:Right() * 0,
+							pos = head:GetPos() + eyeangs:Forward() * 80 + eyeangs:Right() * -5,
 							angle = ang,
 							maxangular = 670,
 							maxangulardamp = 100,
@@ -1031,6 +1031,7 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 						local pos = ply:EyePos()
 						pos[3] = head:GetPos()[3]
 
+						-- TODO: Fix 2-handed weapons
 						local phys = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand")))
 						local physa = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand")))
 						local ang = ply:EyeAngles()
@@ -1057,7 +1058,7 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 
 						local shadowparams = {
 							secondstoarrive = 0.4,
-							pos = physa:GetPos() + ang:Forward() * 10,
+							pos = head:GetPos() + ply.ActiveWeapon:GetAngles():Forward() * 10,
 							angle = ang,
 							maxangular = 670,
 							maxangulardamp = 100,
@@ -1106,9 +1107,9 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 					pos = head:GetPos() + vector_up * 40 / math.Clamp(rag:GetVelocity():Length() / 300, 1, 12),
 					angle = angs,
 					maxangulardamp = 10,
-					maxspeeddamp = 2, -- Previously 10
+					maxspeeddamp = 2,
 					maxangular = 370,
-					maxspeed = 40, -- Doubled from 40
+					maxspeed = 40,
 					teleportdistance = 0,
 					deltatime = deltatime,
 				}
@@ -1137,8 +1138,12 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 				local trace = util.TraceHull(traceinfo)
 
 				if trace.Hit and not trace.HitSky then
-					if not trace.Entity:IsWeapon() then
-						local cons = constraint.Weld(rag, trace.Entity, bone, trace.PhysicsBone, 0, false, false)
+					local ent = trace.Entity
+
+					if not ent:IsWeapon() then
+						if ent:IsPlayer() then Faking(ent) end
+
+						local cons = constraint.Weld(rag, ent, bone, trace.PhysicsBone, 0, false, false)
 
 						if IsValid(cons) then
 							rag.ZacConsLH = cons
@@ -1151,7 +1156,7 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 							rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger2"), Angle(0, -30, 0), true)
 						end
 					else
-						ply:PickupWeapon(trace.Entity)
+						ply:PickupWeapon(ent)
 					end
 				end
 			end
@@ -1167,7 +1172,7 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 			end
 		end
 
-		-- Pull up
+		-- Grab with right hand
 		if ply:KeyDown(IN_WALK) and not ply.unconscious and not timer.Exists("StunTime" .. ply:EntIndex()) then
 			local bone = rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand"))
 			local phys = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand")))
@@ -1186,8 +1191,12 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 				local trace = util.TraceHull(traceinfo)
 
 				if trace.Hit and not trace.HitSky then
-					if not trace.Entity:IsWeapon() then
-						local cons = constraint.Weld(rag, trace.Entity, bone, trace.PhysicsBone, 0, false, false)
+					local ent = trace.Entity
+
+					if not ent:IsWeapon() then
+						if ent:IsPlayer() then Faking(ent) end
+
+						local cons = constraint.Weld(rag, ent, bone, trace.PhysicsBone, 0, false, false)
 
 						if IsValid(cons) then
 							ply:SetNWBool("rhon", true)
@@ -1200,7 +1209,7 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 							rag.ZacConsRH = cons
 						end
 					else
-						ply:PickupWeapon(trace.Entity)
+						ply:PickupWeapon(ent)
 					end
 				end
 			end
@@ -1216,7 +1225,7 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 			end
 		end
 
-		-- Pull up w/ left hand
+		-- Pull up with left hand
 		if ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsLH) then
 			local phys = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Spine2")))
 			local angs = ply:EyeAngles()
@@ -1242,7 +1251,7 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 			end
 		end
 
-		-- Pull up w/ right hand
+		-- Pull up with right hand
 		if ply:KeyDown(IN_FORWARD) and IsValid(rag.ZacConsRH) then
 			local phys = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_Spine2")))
 			local angs = ply:EyeAngles()
@@ -1268,7 +1277,7 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 			end
 		end
 
-		-- Pull down w/ left hand
+		-- Pull down with left hand
 		if ply:KeyDown(IN_BACK) and IsValid(rag.ZacConsLH) then
 			local phys = rag:GetPhysicsObjectNum(1)
 			local angs = ply:EyeAngles()
@@ -1294,7 +1303,7 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 			end
 		end
 
-		-- Pull down w/ right hand
+		-- Pull down with right hand
 		if ply:KeyDown(IN_BACK) and IsValid(rag.ZacConsRH) then
 			local phys = rag:GetPhysicsObjectNum(1)
 			local angs = ply:EyeAngles()

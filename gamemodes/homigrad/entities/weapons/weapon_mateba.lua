@@ -49,10 +49,7 @@ function SWEP:ApplyEyeSpray()
 end
 
 local function rolldrum(ply, wpn)
-	print(wpn) -- TODO
 	local wep = type(wpn) == "string" and ply:GetActiveWeapon() or wpn
-	print(wep)
-
 	if not IsValid(ply) or not IsValid(wep) or wep:GetClass() ~= "weapon_mateba" then return end
 
 	wep.tries = math.random(math.max(7 - wep:Clip1(), 1))

@@ -359,7 +359,7 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:Reload()
-	if not self:GetOwner():KeyDown(IN_WALK) then
+	if not self:GetOwner():KeyDown(IN_USE) then
 		self.AmmoChek = 3
 
 		if timer.Exists("reload" .. self:EntIndex()) or self:Clip1() >= self:GetMaxClip1() or self:GetOwner():GetAmmoCount(self:GetPrimaryAmmoType()) <= 0 then return nil end
