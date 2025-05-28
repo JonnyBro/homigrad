@@ -44,9 +44,11 @@ function SWEP:PrimaryAttack()
 
 		local traceResult = util.TraceLine(tr)
 		local ent = traceResult.Entity
-		local ply = IsValid(RagdollOwner(ent)) and ent -- :shrug:
+		if not IsValid(ent) then return end
 
-		if IsValid(ply) then
+		local ply =  RagdollOwner(ent) and ent
+
+		if IsValid(ent) and ply then
 			self.CuffPly = ply
 			self.CuffTime = CurTime()
 
@@ -62,7 +64,7 @@ end
 local cuffTime = 2
 
 function SWEP:Think()
-	if SERVER and self.CuffPly and IsValid(self.CuffPly) then
+	if SERVER and IsValid(self.CuffPly) then
 		local pos1 = self.CuffPly:GetPos()
 		local pos2 = self:GetOwner():GetPos()
 
@@ -87,9 +89,12 @@ function SWEP:DrawHUD()
 
 	tr.endpos = tr.start + dir * 45
 	tr.filter = owner
+
 	local traceResult = util.TraceLine(tr)
 	local ent = traceResult.Entity
-	local ply = (ent:IsPlayer() and ent) or RagdollOwner(ent)
+
+	local ply = RagdollOwner(ent) or ent
+	ply = ply:IsPlayer() and ply
 
 	local hit = traceResult.Hit and 1 or 0
 	local x, y = traceResult.HitPos:ToScreen().x, traceResult.HitPos:ToScreen().y
