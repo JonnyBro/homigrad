@@ -74,11 +74,11 @@ function hideandseek.RoundEndCheck()
 				ply:Spawn()
 
 				--[[
-				local aviable = ReadDataMap("spawnpointsct")
-				local pos, key = RandomFromTable(aviable)
+				local points = ReadDataMap("spawnpointsct")
+				local pos, key = RandomFromTable(points)
 				if not pos then continue end
-				if #aviable > 1 then
-					table.remove(aviable, key)
+				if #points > 1 then
+					table.remove(points, key)
 				end
 				ply:SetPos(pos) --]]
 			end

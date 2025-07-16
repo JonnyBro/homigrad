@@ -5,7 +5,7 @@ function tdm.SpawnsTwoCommand()
 	return spawnsT, spawnsCT
 end
 
-function tdm.SpawnCommand(tbl, aviable, func, funcShould)
+function tdm.SpawnCommand(tbl, points, func, funcShould)
 	for _, ply in RandomPairs(tbl) do
 		if funcShould and funcShould(ply) ~= nil then continue end
 
@@ -16,14 +16,14 @@ function tdm.SpawnCommand(tbl, aviable, func, funcShould)
 
 		ply.allowFlashlights = true
 
-		if #aviable > 0 then
-			local key = math.random(#aviable)
-			local point = ReadPoint(aviable[key])
+		if #points > 0 then
+			local key = math.random(#points)
+			local point = ReadPoint(points[key])
 
 			if point then
 				ply:SetPos(point[1])
 
-				table.remove(aviable, key)
+				table.remove(points, key)
 			end
 		end
 	end

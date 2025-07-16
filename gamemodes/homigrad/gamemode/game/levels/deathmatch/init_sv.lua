@@ -20,10 +20,10 @@ function dm.StartRoundSV()
 		ply:SetTeam(1)
 	end
 
-	local aviable = dm.Spawns()
-	aviable = #aviable ~= 0 and aviable or homicide.Spawns()
+	local points = dm.Spawns()
+	points = #points ~= 0 and points or homicide.Spawns()
 
-	tdm.SpawnCommand(team.GetPlayers(1), aviable, function(ply)
+	tdm.SpawnCommand(team.GetPlayers(1), points, function(ply)
 		ply:Freeze(true)
 	end)
 

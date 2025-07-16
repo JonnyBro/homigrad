@@ -17,23 +17,23 @@ local function makeT(ply)
 end
 
 function juggernaut.SpawnsCT()
-	local aviable = {}
+	local points = {}
 
 	for _, point in pairs(ReadDataMap("spawnpointshiders")) do
-		table.insert(aviable, point)
+		table.insert(points, point)
 	end
 
-	return aviable
+	return points
 end
 
 function juggernaut.SpawnsT()
-	local aviable = {}
+	local points = {}
 
 	for _, point in pairs(ReadDataMap("spawnpoints_ss_school")) do
-		table.insert(aviable, point)
+		table.insert(points, point)
 	end
 
-	return aviable
+	return points
 end
 
 function juggernaut.StartRoundSV()
@@ -54,8 +54,8 @@ function juggernaut.StartRoundSV()
 
 	juggernaut.t = {}
 
-	local aviable = juggernaut.SpawnsCT()
-	local aviable2 = juggernaut.SpawnsT()
+	local pointsCT = juggernaut.SpawnsCT()
+	local pointsT = juggernaut.SpawnsT()
 	local players = PlayersInGame()
 	local count = 1
 
@@ -69,7 +69,7 @@ function juggernaut.StartRoundSV()
 
 	juggernaut.SyncRole()
 
-	tdm.SpawnCommand(players, aviable, function(ply)
+	tdm.SpawnCommand(players, pointsCT, function(ply)
 		ply.roleT = false
 
 		ply:Give("weapon_kukri")
@@ -85,7 +85,7 @@ function juggernaut.StartRoundSV()
 		if math.random(1, 8) == 8 then ply:Give("morphine") end
 	end)
 
-	tdm.SpawnCommand(juggernaut.t, aviable2, function(ply) timer.Simple(1, function() ply.nopain = true end) end)
+	tdm.SpawnCommand(juggernaut.t, pointsT, function(ply) timer.Simple(1, function() ply.nopain = true end) end)
 	tdm.CenterInit()
 
 	return {

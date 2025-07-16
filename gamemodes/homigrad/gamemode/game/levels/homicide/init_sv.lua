@@ -135,22 +135,13 @@ COMMANDS.russian_roulette = {
 }
 
 function homicide.Spawns()
-	local aviable = {}
+	local points = {}
 
-	for _, point in pairs(ReadDataMap("spawnpointshiders")) do
-		table.insert(aviable, point)
+	for _, point in pairs(ReadDataMap("regular")) do
+		table.insert(points, point)
 	end
 
-	--[[
-	for _, point in pairs(ReadDataMap("spawnpointst")) do
-		table.insert(aviable, point)
-	end
-
-	for _, point in pairs(ReadDataMap("spawnpointsct")) do
-		table.insert(aviable, point)
-	end --]]
-
-	return aviable
+	return points
 end
 
 sound.Add({
@@ -187,7 +178,7 @@ function TryAssignPolice(ply)
 end
 
 function SpawnPolicePlayers()
-	local aviable = ReadDataMap("spawnpointsct")
+	local points = ReadDataMap("spawnpointsct")
 	local playsound = true
 	local prePolicePlayers = PlayersDead(true)
 	if not prePolicePlayers or table.IsEmpty(prePolicePlayers) then return end
@@ -213,7 +204,7 @@ function SpawnPolicePlayers()
 		end
 	end)
 
-	tdm.SpawnCommand(prePolicePlayers, aviable, function(ply)
+	tdm.SpawnCommand(prePolicePlayers, points, function(ply)
 		timer.Simple(0, function()
 			if homicide.roundType == 1 then ply:SetPlayerClass("contr")
 			else ply:SetPlayerClass("police") end
@@ -263,9 +254,9 @@ function homicide.StartRoundSV()
 
 	local countT = 0
 	local countCT = 0
-	local aviable = homicide.Spawns()
+	local points = homicide.Spawns()
 
-	tdm.SpawnCommand(PlayersInGame(), aviable, function(ply)
+	tdm.SpawnCommand(PlayersInGame(), points, function(ply)
 		ply.roleT = false
 		ply.roleCT = false
 
