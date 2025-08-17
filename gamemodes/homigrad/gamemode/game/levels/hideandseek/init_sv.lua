@@ -30,7 +30,7 @@ function hideandseek.StartRoundSV(data)
 		ply:SetTeam(1)
 	end
 
-	local spawnsT = ReadDataMap("spawnpoints_ss_school")
+	local spawnsT = ReadDataMap("spawnpointsseekers")
 	local spawnsCT = ReadDataMap("spawnpointshiders")
 
 	tdm.SpawnCommand(team.GetPlayers(1), spawnsT)

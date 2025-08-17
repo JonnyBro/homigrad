@@ -17,8 +17,8 @@ SpawnPointsList = {
 	spawnpointsnaem = {"spawnpointsnaem", Color(0, 0, 255)},
 
 	spawnpoints_ss_police = {"police", Color(0, 0, 125)},
-	spawnpoints_ss_school = {"school", Color(0, 255, 0)},
-	-- spawnpoints_ss_killer = {"killer", Color(255, 55, 55)},
+	spawnpointsseekers = {"seekers", Color(255, 0, 0)},
+	spawnpointshiders = {"hiders", Color(0, 255, 0)},
 	spawnpoints_ss_exit = {"exit", Color(0, 125, 0), true},
 
 	points_nextbox = {"nextbot", Color(0, 255, 255)},

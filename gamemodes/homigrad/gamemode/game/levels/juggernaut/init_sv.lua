@@ -29,7 +29,7 @@ end
 function juggernaut.SpawnsT()
 	local points = {}
 
-	for _, point in pairs(ReadDataMap("spawnpoints_ss_school")) do
+	for _, point in pairs(ReadDataMap("spawnpointsseekers")) do
 		table.insert(points, point)
 	end
 
