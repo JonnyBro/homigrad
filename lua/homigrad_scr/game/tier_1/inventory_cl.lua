@@ -173,7 +173,7 @@ net.Receive("hg_inventory", function()
 				-- model first
 				local x, y = self:LocalToScreen(0, 0)
 				DrawWeaponSelectionEX(weapon, x, y, w, h)
-				
+
 				-- text after model
 				for i, text in pairs(text) do
 					draw.SimpleText(text, "DefaultFixedDropShadow", corner, corner + (i - 1) * 12, color_white)
