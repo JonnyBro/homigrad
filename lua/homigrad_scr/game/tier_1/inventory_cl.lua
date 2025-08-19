@@ -134,7 +134,7 @@ net.Receive("hg_inventory", function()
 
 		-- Don't show the text if player "remembers" target's inventory
 		if not hg_searched[targetID] then
-			draw.SimpleText(language.GetPhrase("hg.inventory.searching"), "HomigradDefaultFixedDropShadow", corner * 30, corner * 30, color_white)
+			draw.SimpleText(language.GetPhrase("hg.inventory.searching"), "DefaultFixedDropShadow", corner * 30, corner * 30, color_white)
 		end
 	end
 
@@ -170,12 +170,14 @@ net.Receive("hg_inventory", function()
 				surface.SetDrawColor(255, 255, 255, 128)
 				surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
 
+				-- model first
+				local x, y = self:LocalToScreen(0, 0)
+				DrawWeaponSelectionEX(weapon, x, y, w, h)
+				
+				-- text after model
 				for i, text in pairs(text) do
 					draw.SimpleText(text, "DefaultFixedDropShadow", corner, corner + (i - 1) * 12, color_white)
 				end
-
-				local x, y = self:LocalToScreen(0, 0)
-				DrawWeaponSelectionEX(weapon, x, y, w, h)
 			end
 
 			function button:OnRemove()
