@@ -40,7 +40,7 @@ function SpawnWeapon(ply)
 			if IsValid(cons) then ply.WepCons = cons end
 			-- rh:EnableMotion(false)
 
-			-- Use both hands.
+			-- Use both hands on two-handed weapons
 			if not weapon:IsPistolHoldType() and IsValid(lh) then
 				local rhang = rh:GetAngles()
 

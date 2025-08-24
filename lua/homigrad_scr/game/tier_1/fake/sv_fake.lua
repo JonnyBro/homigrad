@@ -1080,10 +1080,9 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 						local pos = ply:EyePos()
 						pos[3] = head:GetPos()[3]
 
-						
 						local phys = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand")))
 						local physa = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand")))
-						
+
 						-- Right Hand
 						local rang = ply:EyeAngles()
 						rang:RotateAroundAxis(eyeangs:Forward(), 90)
@@ -1103,7 +1102,7 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 
 						physa:Wake()
 						physa:ComputeShadowControl(shadowparams)
-						
+
 						-- Left Hand
 						local lang = ply:EyeAngles()
 						lang:RotateAroundAxis(eyeangs:Forward(), 90)
