@@ -40,7 +40,8 @@ function SpawnWeapon(ply)
 			if IsValid(cons) then ply.WepCons = cons end
 			-- rh:EnableMotion(false)
 
-			if not weapon.IsPistolHoldType and weapon:IsPistolHoldType() and IsValid(lh) then
+			-- Use both hands.
+			if not weapon:IsPistolHoldType() and IsValid(lh) then
 				local rhang = rh:GetAngles()
 
 				lh:SetPos(rh:GetPos() + rhang:Forward() * 4 + rhang:Up() * -3 + rhang:Right() * 2)
