@@ -621,9 +621,17 @@ for i = 1, 6 do
 	CustomWeight["models/monolithservers/mpd/male_0" .. i .. "_2.mdl"] = 90
 end
 
+for i = 7, 9 do
+	CustomWeight["models/monolithservers/mpd/male_0" .. i .. "_2.mdl"] = 90
+end
+
 IdealMassPlayer = {
 	["ValveBiped.Bip01_Pelvis"] = 12.775918006897,
+	["ValveBiped.Bip01_Spine"] = 18.0,
+	["ValveBiped.Bip01_Spine1"] = 20.0,
 	["ValveBiped.Bip01_Spine2"] = 24.36336517334,
+	["ValveBiped.Bip01_Spine4"] = 22.0,
+	["ValveBiped.Bip01_Neck1"] = 3.0,
 	["ValveBiped.Bip01_R_UpperArm"] = 3.4941370487213,
 	["ValveBiped.Bip01_L_UpperArm"] = 3.441034078598,
 	["ValveBiped.Bip01_L_Forearm"] = 1.7655730247498,
@@ -636,7 +644,40 @@ IdealMassPlayer = {
 	["ValveBiped.Bip01_L_Thigh"] = 10.213202476501,
 	["ValveBiped.Bip01_L_Calf"] = 4.9809679985046,
 	["ValveBiped.Bip01_L_Foot"] = 2.3848159313202,
-	["ValveBiped.Bip01_R_Foot"] = 2.3848159313202
+	["ValveBiped.Bip01_R_Foot"] = 2.3848159313202,
+	-- MORE MASS CAUSE WHY NOT?
+	["ValveBiped.Bip01_L_Toe0"] = 0.5,
+	["ValveBiped.Bip01_R_Toe0"] = 0.5,
+	["ValveBiped.Bip01_L_Finger0"] = 0.2,
+	["ValveBiped.Bip01_L_Finger01"] = 0.15,
+	["ValveBiped.Bip01_L_Finger02"] = 0.1,
+	["ValveBiped.Bip01_L_Finger1"] = 0.2,
+	["ValveBiped.Bip01_L_Finger11"] = 0.15,
+	["ValveBiped.Bip01_L_Finger12"] = 0.1,
+	["ValveBiped.Bip01_L_Finger2"] = 0.2,
+	["ValveBiped.Bip01_L_Finger21"] = 0.15,
+	["ValveBiped.Bip01_L_Finger22"] = 0.1,
+	["ValveBiped.Bip01_L_Finger3"] = 0.2,
+	["ValveBiped.Bip01_L_Finger31"] = 0.15,
+	["ValveBiped.Bip01_L_Finger32"] = 0.1,
+	["ValveBiped.Bip01_L_Finger4"] = 0.2,
+	["ValveBiped.Bip01_L_Finger41"] = 0.15,
+	["ValveBiped.Bip01_L_Finger42"] = 0.1,
+	["ValveBiped.Bip01_R_Finger0"] = 0.2,
+	["ValveBiped.Bip01_R_Finger01"] = 0.15,
+	["ValveBiped.Bip01_R_Finger02"] = 0.1,
+	["ValveBiped.Bip01_R_Finger1"] = 0.2,
+	["ValveBiped.Bip01_R_Finger11"] = 0.15,
+	["ValveBiped.Bip01_R_Finger12"] = 0.1,
+	["ValveBiped.Bip01_R_Finger2"] = 0.2,
+	["ValveBiped.Bip01_R_Finger21"] = 0.15,
+	["ValveBiped.Bip01_R_Finger22"] = 0.1,
+	["ValveBiped.Bip01_R_Finger3"] = 0.2,
+	["ValveBiped.Bip01_R_Finger31"] = 0.15,
+	["ValveBiped.Bip01_R_Finger32"] = 0.1,
+	["ValveBiped.Bip01_R_Finger4"] = 0.2,
+	["ValveBiped.Bip01_R_Finger41"] = 0.15,
+	["ValveBiped.Bip01_R_Finger42"] = 0.1
 }
 
 function PlayerMeta:CreateRagdoll(attacker, dmginfo, force)
@@ -698,7 +739,52 @@ function PlayerMeta:CreateRagdoll(attacker, dmginfo, force)
 
 		local matrix = self:GetBoneMatrix(bone)
 
-		phys:SetMass(CustomWeight[rag:GetModel()] or IdealMassPlayer[rag:GetBoneName(bone)] or 65)
+		-- WEIGHT OF MODELS AND SHEEEIT
+		local boneName = rag:GetBoneName(bone)
+		local modelWeight = CustomWeight[rag:GetModel()]
+		local baseMass = IdealMassPlayer[boneName]
+		
+		-- NO MASS, DO THIS.
+		if not baseMass then
+			if string.find(boneName, "Head") or string.find(boneName, "Neck") then
+				baseMass = 5.0
+			elseif string.find(boneName, "Pelvis") or string.find(boneName, "Hip") then
+				baseMass = 12.0
+			elseif string.find(boneName, "Spine") or string.find(boneName, "Chest") then
+				baseMass = 20.0
+			elseif string.find(boneName, "Thigh") or string.find(boneName, "UpperLeg") then
+				baseMass = 10.0
+			elseif string.find(boneName, "Calf") or string.find(boneName, "LowerLeg") or string.find(boneName, "Shin") then
+				baseMass = 5.0
+			elseif string.find(boneName, "UpperArm") then
+				baseMass = 3.5
+			elseif string.find(boneName, "Forearm") or string.find(boneName, "LowerArm") then
+				baseMass = 1.8
+			elseif string.find(boneName, "Hand") then
+				baseMass = 1.0
+			elseif string.find(boneName, "Foot") or string.find(boneName, "Toe") then
+				baseMass = 2.0
+			elseif string.find(boneName, "Finger") then
+				baseMass = 0.15
+			else
+				-- FALLBACK FOR UNKNOWN MASS
+				baseMass = 3.0
+			end
+		end
+		
+		-- APPLY MODEL WEIGHT FIXING IF IT'S POSSIBLE, IF NOT USE BASE MASS
+		local mass = baseMass
+		if modelWeight then
+			-- NO PHYSICS ISSUES AND SHEIT
+			local scaleFactor = math.sqrt(modelWeight / 65)
+			mass = baseMass * scaleFactor
+			
+			-- FOR STABILITY
+			mass = math.max(mass, 0.5)
+		end
+		-- REMOVE THIS IF YOU WANT ALLAH TO POSESS YOU.
+		
+		phys:SetMass(mass)
 		phys:SetVelocity(vel)
 
 		if phys_bone and phys_bone == physNum then phys:ApplyForceOffset(dmginfo:GetDamageForce() * 10, dmginfo:GetDamagePosition()) end
