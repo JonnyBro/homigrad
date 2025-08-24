@@ -1080,16 +1080,39 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 						local pos = ply:EyePos()
 						pos[3] = head:GetPos()[3]
 
-						-- TODO: Fix 2-handed weapons
+						
 						local phys = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand")))
 						local physa = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand")))
-						local ang = ply:EyeAngles()
-						ang:RotateAroundAxis(eyeangs:Forward(), 90)
+						
+						-- Right Hand
+						local rang = ply:EyeAngles()
+						rang:RotateAroundAxis(eyeangs:Forward(), 90)
+						rang:RotateAroundAxis(eyeangs:Right(), -10)
 
 						local shadowparams = {
 							secondstoarrive = 0.4,
-							pos = head:GetPos() + eyeangs:Forward() * 60 + eyeangs:Right() * 10 + eyeangs:Up() * 0,
-							angle = ang,
+							pos = head:GetPos() + eyeangs:Forward() * 65 + eyeangs:Right() * 5 + eyeangs:Up() * -5,
+							angle = rang,
+							maxangular = 670,
+							maxangulardamp = 600,
+							maxspeeddamp = 50,
+							maxspeed = 500,
+							teleportdistance = 0,
+							deltatime = deltatime,
+						}
+
+						physa:Wake()
+						physa:ComputeShadowControl(shadowparams)
+						
+						-- Left Hand
+						local lang = ply:EyeAngles()
+						lang:RotateAroundAxis(eyeangs:Forward(), 90)
+						lang:RotateAroundAxis(eyeangs:Right(), 10)
+
+						local shadowparams2 = {
+							secondstoarrive = 0.4,
+							pos = head:GetPos() + eyeangs:Forward() * 55 + eyeangs:Right() * -10 + eyeangs:Up() * -2,
+							angle = lang,
 							maxangular = 670,
 							maxangulardamp = 600,
 							maxspeeddamp = 50,
@@ -1099,26 +1122,7 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 						}
 
 						phys:Wake()
-						phys:ComputeShadowControl(shadowparams)
-
-						local ang = ply:EyeAngles()
-						ang:RotateAroundAxis(eyeangs:Forward(), 90)
-						ang:RotateAroundAxis(eyeangs:Forward(), 90)
-
-						local shadowparams = {
-							secondstoarrive = 0.4,
-							pos = head:GetPos() + ply.ActiveWeapon:GetAngles():Forward() * 10,
-							angle = ang,
-							maxangular = 670,
-							maxangulardamp = 100,
-							maxspeeddamp = 50,
-							maxspeed = 600,
-							teleportdistance = 0,
-							deltatime = deltatime,
-						}
-
-						physa:Wake()
-						physa:ComputeShadowControl(shadowparams)
+						phys:ComputeShadowControl(shadowparams2)
 					end
 				else
 					local physa = rag:GetPhysicsObjectNum(rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand")))
