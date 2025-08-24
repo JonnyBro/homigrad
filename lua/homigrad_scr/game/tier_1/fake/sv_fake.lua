@@ -645,7 +645,6 @@ IdealMassPlayer = {
 	["ValveBiped.Bip01_L_Calf"] = 4.9809679985046,
 	["ValveBiped.Bip01_L_Foot"] = 2.3848159313202,
 	["ValveBiped.Bip01_R_Foot"] = 2.3848159313202,
-	-- MORE MASS CAUSE WHY NOT?
 	["ValveBiped.Bip01_L_Toe0"] = 0.5,
 	["ValveBiped.Bip01_R_Toe0"] = 0.5,
 	["ValveBiped.Bip01_L_Finger0"] = 0.2,
@@ -738,53 +737,18 @@ function PlayerMeta:CreateRagdoll(attacker, dmginfo, force)
 		if bone < 0 then continue end
 
 		local matrix = self:GetBoneMatrix(bone)
-
-		-- WEIGHT OF MODELS AND SHEEEIT
 		local boneName = rag:GetBoneName(bone)
 		local modelWeight = CustomWeight[rag:GetModel()]
 		local baseMass = IdealMassPlayer[boneName]
-		
-		-- NO MASS, DO THIS.
-		if not baseMass then
-			if string.find(boneName, "Head") or string.find(boneName, "Neck") then
-				baseMass = 5.0
-			elseif string.find(boneName, "Pelvis") or string.find(boneName, "Hip") then
-				baseMass = 12.0
-			elseif string.find(boneName, "Spine") or string.find(boneName, "Chest") then
-				baseMass = 20.0
-			elseif string.find(boneName, "Thigh") or string.find(boneName, "UpperLeg") then
-				baseMass = 10.0
-			elseif string.find(boneName, "Calf") or string.find(boneName, "LowerLeg") or string.find(boneName, "Shin") then
-				baseMass = 5.0
-			elseif string.find(boneName, "UpperArm") then
-				baseMass = 3.5
-			elseif string.find(boneName, "Forearm") or string.find(boneName, "LowerArm") then
-				baseMass = 1.8
-			elseif string.find(boneName, "Hand") then
-				baseMass = 1.0
-			elseif string.find(boneName, "Foot") or string.find(boneName, "Toe") then
-				baseMass = 2.0
-			elseif string.find(boneName, "Finger") then
-				baseMass = 0.15
-			else
-				-- FALLBACK FOR UNKNOWN MASS
-				baseMass = 3.0
-			end
-		end
-		
-		-- APPLY MODEL WEIGHT FIXING IF IT'S POSSIBLE, IF NOT USE BASE MASS
-		local mass = baseMass
+		if not baseMass then baseMass = 2.0 end
+
 		if modelWeight then
-			-- NO PHYSICS ISSUES AND SHEIT
 			local scaleFactor = math.sqrt(modelWeight / 65)
-			mass = baseMass * scaleFactor
-			
-			-- FOR STABILITY
-			mass = math.max(mass, 0.5)
+			baseMass = baseMass * scaleFactor
+			baseMass = math.max(baseMass, 0.5)
 		end
-		-- REMOVE THIS IF YOU WANT ALLAH TO POSESS YOU.
-		
-		phys:SetMass(mass)
+
+		phys:SetMass(baseMass)
 		phys:SetVelocity(vel)
 
 		if phys_bone and phys_bone == physNum then phys:ApplyForceOffset(dmginfo:GetDamageForce() * 10, dmginfo:GetDamagePosition()) end
