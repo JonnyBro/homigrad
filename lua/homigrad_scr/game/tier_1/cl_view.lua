@@ -1,7 +1,7 @@
 CameraSetFOV = 120
 
-local hg_cool_camera = CreateClientConVar("hg_cool_camera", "1", true, false, "epic camera", 0, 1)
-CreateClientConVar("hg_fov", "120", true, false, nil, 70, 120)
+local hg_cool_camera = CreateClientConVar("hg_cool_camera", "0", true, false, "epic camera", 0, 1)
+local hg_fov = CreateClientConVar("hg_fov", "120", true, false, nil, 70, 120)
 CreateClientConVar("hg_smooth_cam", "1", true, false, nil, 0, 1)
 CreateClientConVar("hg_bodycam", "0", true, false, nil, 0, 1)
 CreateClientConVar("hg_fakecam_mode", "0", true, false, nil, 0, 1)
@@ -9,7 +9,7 @@ CreateClientConVar("hg_deathsound", "1", true, false, nil, 0, 1)
 CreateClientConVar("hg_deathscreen", "1", true, false, nil, 0, 1)
 
 function SETFOV(value)
-	CameraSetFOV = value or GetConVar("hg_fov"):GetInt()
+	CameraSetFOV = value or hg_fov:GetInt()
 end
 
 SETFOV()
@@ -457,7 +457,7 @@ function CalcView(ply, vec, ang, fov, znear, zfar)
 	oldangles = lply:EyeAngles()
 	diffang2 = LerpFT(0.05, diffang2, lang * val)
 
-	if RENDERSCENE and hg_cool_camera:GetBool() then
+	if RENDERSCENE and hg_cool_camera:GetBool() then -- FIXME: Buggy with low FPS and something just for funsies
 		output_ang[3] = output_ang[3] + math_min(diffang:Dot(output_ang:Right()) * val, 10)
 		output_ang[3] = output_ang[3] + math_min(diffpos:Dot(output_ang:Right()) * 10 * val, 10)
 	end
