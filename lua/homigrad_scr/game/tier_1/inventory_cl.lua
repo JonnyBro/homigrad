@@ -5,18 +5,22 @@ local blackListedAmmo = {
 }
 
 local AmmoTypes = {
-	[47] = "vgui/hud/hmcd_round_792",
-	[44] = "vgui/hud/hmcd_round_792",
+	[1] = "vgui/hud/hmcd_round_556",
 	[2] = "vgui/hud/hmcd_health",
-	[48] = "vgui/hud/hmcd_round_9",
-	[45] = "vgui/hud/hmcd_round_556",
-	[38] = "vgui/hud/hmcd_round_38",
 	[6] = "vgui/hud/hmcd_round_arrow",
-	[41] = "vgui/hud/hmcd_round_12",
 	[8] = "vgui/wep_jack_hmcd_oldgrenade",
 	[9] = "vgui/wep_jack_hmcd_oldgrenade",
 	[10] = "vgui/wep_jack_hmcd_oldgrenade",
-	[11] = "vgui/wep_jack_hmcd_ied"
+	[11] = "vgui/wep_jack_hmcd_ied",
+	[38] = "vgui/hud/hmcd_round_38",
+	[40] = "vgui/hud/hmcd_round_792",
+	[41] = "vgui/hud/hmcd_round_12",
+	[44] = "vgui/hud/hmcd_round_792",
+	[45] = "vgui/hud/hmcd_round_556",
+	[46] = "vgui/hud/hmcd_round_556",
+	[47] = "vgui/hud/hmcd_round_792",
+	[48] = "vgui/hud/hmcd_round_9",
+	[49] = "vgui/hud/hmcd_round_9",
 }
 
 local black = Color(0, 0, 0, 128)
