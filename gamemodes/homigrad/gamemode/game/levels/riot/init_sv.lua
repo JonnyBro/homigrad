@@ -61,7 +61,7 @@ function riot.PlayerSpawn2(ply,teamID)
 	end
 
 	if roundStarter then
-		ply.allowFlashlights = false
+		ply.allowFlashlight = false
 	end
 end
 

@@ -299,6 +299,7 @@ local laserweps = {
 	["weapon_mateba"] = true,
 	["weapon_beanbag"] = true,
 	["weapon_glock"] = true,
+	["weapon_sar2"] = true,
 }
 
 laserplayers = laserplayers or {}
@@ -332,7 +333,7 @@ hook.Add("PostDrawOpaqueRenderables", "laser", function()
 				render.SetMaterial(mat)
 				render.DrawBeam(tr.StartPos, tr.HitPos, 1, 0, 15.5, Color(255, 0, 0))
 
-				local Size = math.random(3, 4)
+				local size = math.random(3, 4)
 				render.SetMaterial(mat2)
 
 				local tra = util.TraceLine({
@@ -343,10 +344,10 @@ hook.Add("PostDrawOpaqueRenderables", "laser", function()
 				})
 
 				if not tra.Hit then
-					render.DrawSprite(tr.HitPos, Size, Size, Color(255, 0, 0))
+					render.DrawSprite(tr.HitPos, size, size, Color(255, 0, 0))
 				end
 
-				-- render.DrawQuadEasy(tr.HitPos, (tr.StartPos - tr.HitPos):GetNormal(), Size, Size, Color(255, 0, 0), 0)
+				-- render.DrawQuadEasy(tr.HitPos, (tr.StartPos - tr.HitPos):GetNormal(), size, size, Color(255, 0, 0), 0)
 			cam.End3D()
 		end
 	end
@@ -447,9 +448,9 @@ local function ToggleMenu(toggle)
 			end
 		end
 
-		local EZarmor = LocalPlayer().EZarmor
+		local ezArmor = LocalPlayer().EZarmor
 
-		if JMod.GetItemInSlot(EZarmor, "eyes") then
+		if JMod.GetItemInSlot(ezArmor, "eyes") then
 			plyMenu:AddOption("#hg.cmenu.head", function()
 				LocalPlayer():ConCommand("jmod_ez_toggleeyes")
 			end)

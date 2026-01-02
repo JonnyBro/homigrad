@@ -96,7 +96,7 @@ function SWEP:Heal(ent)
 	end
 
 	if ent:Health() < 150 then
-		ent:SetHealth(math.Clamp(self:GetOwner():Health() + 10, 0, 150))
+		ent:SetHealth(math.Clamp(ent:Health() + 10, 0, 150))
 
 		ent.hungryregen = ent.hungryregen + 6
 

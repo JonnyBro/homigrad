@@ -122,7 +122,7 @@ if CLIENT then
 	end)
 else
 	hook.Add("PlayerSwitchFlashlight", "DynamicFlashlight.Switch", function(ply, state)
-		if not ply.allowFlashlights then
+		if not ply.allowFlashlight then
 			ply:SetNWBool("DynamicFlashlight", false)
 
 			return false

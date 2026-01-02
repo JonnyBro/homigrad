@@ -14,7 +14,7 @@ function tdm.SpawnCommand(tbl, points, func, funcShould)
 
 		ply:Spawn()
 
-		ply.allowFlashlights = true
+		ply.allowFlashlight = true
 
 		if #points > 0 then
 			local key = math.random(#points)
@@ -77,8 +77,8 @@ changeClass = {
 	["item_ammo_357_large"] = "ent_ammo_.44magnum",
 	["item_ammo_pistol"] = "ent_ammo_9x19mm",
 	["item_ammo_pistol_large"] = "ent_ammo_9x19mm",
-	["item_ammo_ar2"] = "ent_ammo_556x45mm",
-	["item_ammo_ar2_large"] = "ent_ammo_556x45mm",
+	-- ["item_ammo_ar2"] = "ent_ammo_556x45mm",
+	-- ["item_ammo_ar2_large"] = "ent_ammo_556x45mm",
 	["item_ammo_ar2_smg1"] = "ent_ammo_545x39mm",
 	["item_ammo_ar2_large"] = "ent_ammo_556x45mm",
 	["item_ammo_smg1"] = "ent_ammo_545x39mm",
@@ -155,7 +155,7 @@ end
 function tdm.RoundEndCheck()
 	tdm.Center()
 
-	if roundTimeStart + roundTime - CurTime() <= 0 then return EndRound() end
+	if roundTimeStart + roundTime - CurTime() <= 0 then return EndRound(0) end
 
 	local TAlive = tdm.GetCountAlive(team.GetPlayers(1))
 	local CTAlive = tdm.GetCountAlive(team.GetPlayers(2))

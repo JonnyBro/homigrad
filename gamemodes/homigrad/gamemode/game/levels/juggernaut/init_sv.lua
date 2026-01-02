@@ -151,7 +151,7 @@ function juggernaut.PlayerSpawn2(ply, teamID)
 	ply:SetPlayerColor(color:ToVector())
 	ply:Give("weapon_hands")
 
-	timer.Simple(0, function() ply.allowFlashlights = false end)
+	timer.Simple(0, function() ply.allowFlashlight = false end)
 end
 
 function juggernaut.PlayerInitialSpawn(ply)

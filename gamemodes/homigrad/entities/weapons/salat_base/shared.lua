@@ -565,12 +565,14 @@ function SWEP:FireBullet()
 	end
 
 	ply:LagCompensation(false)
+
 	-- local effectdata = EffectData()
 	-- effectdata:SetOrigin(shootOrigin)
 	-- effectdata:SetAngles(shootAngles)
 	-- effectdata:SetScale(self:IsSighted() and 0.1 or 1)
 	-- effectdata:SetNormal(shootDir)
-	-- util.Effect(self.Efect or "MuzzleEffect", effectdata, true, true)
+	-- util.Effect(self.Effect or "MuzzleEffect", effectdata, true, true)
+
 	if self:GetOwner():IsNPC() then self:SendWeaponAnim(ACT_VM_PRIMARYATTACK) end
 end
 

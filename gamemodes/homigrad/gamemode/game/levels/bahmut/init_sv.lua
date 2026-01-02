@@ -319,7 +319,7 @@ function bahmut.PlayerSpawn2(ply, teamID)
 		ply:Give("weapon_gredmimomet")
 		ply:Give("weapon_gredammo")
 		-- ply:Give("weapon_phone")
-		ply.allowFlashlights = true
+		ply.allowFlashlight = true
 	end
 end
 

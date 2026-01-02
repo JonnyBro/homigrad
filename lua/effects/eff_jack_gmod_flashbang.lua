@@ -12,8 +12,10 @@ end
 
 function EFFECT:Render()
 	local Frac = (self.DieTime - CurTime()) / self.LifeTime
+
 	render.SetMaterial(Glow)
 	render.DrawSprite(self.Position, 6000 * Frac ^ 2, 6000 * Frac ^ 2, Color(255, 255, 255, 255))
+
 	local dlight = DynamicLight(self:EntIndex())
 
 	if dlight then

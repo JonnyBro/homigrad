@@ -85,9 +85,10 @@ local function makeT(ply)
 		ply:Give("weapon_radar")
 	end
 
+	--[[
 	timer.Simple(1, function()
-		ply.allowFlashlights = true
-	end)
+		ply.allowFlashlight = true
+	end) --]]
 end
 
 local function makeCT(ply)
@@ -404,7 +405,7 @@ function homicide.PlayerSpawn2(ply, teamID)
 
 	ply:Give("weapon_hands")
 
-	timer.Simple(0, function() ply.allowFlashlights = false end)
+	timer.Simple(0, function() ply.allowFlashlight = false end)
 end
 
 function homicide.PlayerCanJoinTeam(ply, teamID)

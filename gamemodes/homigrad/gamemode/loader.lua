@@ -167,10 +167,10 @@ end
 local oldHook = oldHook or hook.Call
 
 function hook.Call(name, gm, ...)
-	local Current = roundActiveName
+	local current = roundActiveName
 
-	if hg.modesHooks[Current] and hg.modesHooks[Current][name] then
-		local a, b, c, d, e, f = hg.modesHooks[Current][name](...)
+	if hg.modesHooks[current] and hg.modesHooks[current][name] then
+		local a, b, c, d, e, f = hg.modesHooks[current][name](...)
 		if a ~= nil then return a, b, c, d, e, f end
 	end
 

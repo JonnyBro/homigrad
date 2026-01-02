@@ -177,7 +177,7 @@ function hideandseek.PlayerSpawn2(ply, teamID)
 		ply:SetPlayerColor(Color(math.random(160), math.random(160), math.random(160)):ToVector())
 	end
 
-	ply.allowFlashlights = false
+	ply.allowFlashlight = false
 end
 
 function hideandseek.PlayerInitialSpawn(ply)

@@ -16,7 +16,7 @@ function GM:PlayerSpawn(ply)
 
 	if PLYSPAWN_OVERRIDE then return end
 
-	ply.allowFlashlights = false
+	ply.allowFlashlight = false
 
 	ply:RemoveFlags(FL_ONGROUND)
 	ply:SetMaterial("")
@@ -111,14 +111,6 @@ function GM:PlayerSpawn(ply)
 
 		ply:Give("weapon_vape")
 	end
-
-	-- actually terrible code, but we need it for the time being to make sure that players who havent donated aren't reaping the benefits.
-	-- We can remove this line of code in late Jan / early feb
-	--[[
-	if ply:GetUserGroup() == "user" or ply:GetUserGroup() == "regular" or ply:GetUserGroup() == "supporter" or ply:GetUserGroup() == "supporterplus" then
-		RunConsoleCommand("hg_usecustommodel", "false")
-		RunConsoleCommand("cl_playermodel", "none")
-	end --]]
 
 	TableRound().PlayerSpawn2(ply, ply:Team())
 end

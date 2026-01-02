@@ -20,7 +20,7 @@ function css.SpawnCommand(tbl,aviable,func,funcShould)
 		if func then func(ply) end
 
 		ply:Spawn()
-		ply.allowFlashlights = true
+		ply.allowFlashlight = true
 
 		local point,key = RandomFromTable(aviable)
 		point = ReadPoint(point)
@@ -79,8 +79,8 @@ changeClass = {
 	["item_ammo_357_large"]="ent_ammo_.44magnum",
 	["item_ammo_pistol"]="ent_ammo_9x19mm",
 	["item_ammo_pistol_large"]="ent_ammo_9x19mm",
-	["item_ammo_ar2"]="ent_ammo_556x45mm",
-	["item_ammo_ar2_large"]="ent_ammo_556x45mm",
+	-- ["item_ammo_ar2"]="ent_ammo_556x45mm",
+	-- ["item_ammo_ar2_large"]="ent_ammo_556x45mm",
 	["item_ammo_ar2_smg1"]="ent_ammo_545x39mm",
 	["item_ammo_ar2_large"]="ent_ammo_556x45mm",
 	["item_ammo_smg1"]="ent_ammo_545x39mm",

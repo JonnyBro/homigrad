@@ -151,7 +151,7 @@ function zombie.PlayerSpawn2(ply,teamID)
 
 	ply:SetPlayerColor(Color(math.random(160),math.random(160),math.random(160)):ToVector())
 
-	ply.allowFlashlights = false
+	ply.allowFlashlight = false
 end
 
 function zombie.PlayerInitialSpawn(ply) ply:SetTeam(2) end

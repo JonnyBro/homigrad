@@ -19,7 +19,7 @@ SWEP.ViewModelFlip = false
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
 
-SWEP.Slot = 1
+SWEP.Slot = 0
 SWEP.SlotPos = 2
 
 SWEP.UseHands = true

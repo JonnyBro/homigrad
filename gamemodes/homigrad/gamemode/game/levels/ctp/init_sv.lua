@@ -133,7 +133,7 @@ function ctp.PlayerSpawn2(ply, teamID)
 	ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
 	ply:SetPlayerColor(color:ToVector())
 
-	ply.allowFlashlights = true
+	ply.allowFlashlight = true
 
 	for _, weapon in pairs(teamTbl.weapons) do
 		ply:Give(weapon)

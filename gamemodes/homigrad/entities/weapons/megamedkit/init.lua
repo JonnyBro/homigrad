@@ -16,13 +16,29 @@ function SWEP:Heal(ent)
 		used = true
 	end
 
+	if ent.LeftLeg < 1 then
+		ent.LeftLeg = 1
+	end
+
+	if ent.RightLeg < 1 then
+		ent.RightLeg = 1
+	end
+
+	if ent.RightArm < 1 then
+		ent.RightLeg = 1
+	end
+
+	if ent.LeftArm < 1 then
+		ent.RightLeg = 1
+	end
+
 	if ent:Health() < 100 then
-		ent:SetHealth(math.Clamp(ent + 75, 0, 100))
+		ent:SetHealth(math.Clamp(ent:Health() + 75, 0, 100))
 		used = true
 	end
 
 	if used then
-		sound.Play(healsound, ent:GetPos(), nil, nil, 0.5)
+		sound.Play(healsound, ent:GetPos(), nil, nil, .5)
 
 		self:Remove()
 	end

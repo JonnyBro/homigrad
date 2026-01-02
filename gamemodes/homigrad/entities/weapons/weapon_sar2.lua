@@ -26,7 +26,7 @@ SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.1
 SWEP.ReloadSound = "weapons/arccw/npc_ar2_reload.wav"
 SWEP.TwoHands = true
-SWEP.Efect = "AR2Impact"
+SWEP.Effect = "AR2Impact"
 SWEP.Tracer = "AR2Tracer"
 
 SWEP.Secondary.ClipSize = -1
@@ -62,4 +62,4 @@ SWEP.dwmAUp = 0
 SWEP.dwmARight = 0
 SWEP.dwmAForward = 0
 
-SWEP.SightPos = Vector(-30, 0, 3.18)
+SWEP.SightPos = Vector(-30, 2, 3.18)

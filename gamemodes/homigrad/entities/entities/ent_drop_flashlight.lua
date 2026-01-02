@@ -18,10 +18,8 @@ if SERVER then
 	end
 
 	function ENT:Use(ply)
-		-- if not ply:CanUseFlashlight() then
-		if not ply.allowFlashlights then
-			-- ply:AllowFlashlight(true)
-			ply.allowFlashlights = true
+		if not ply.allowFlashlight then
+			ply.allowFlashlight = true
 
 			ply:EmitSound("items/ammo_pickup.wav")
 

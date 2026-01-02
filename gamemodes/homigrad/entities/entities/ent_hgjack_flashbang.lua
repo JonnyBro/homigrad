@@ -7,7 +7,7 @@ ENT.Category = "JModHomigrad"
 ENT.Spawnable = true
 ENT.JModPreferredCarryAngles = Angle(0, 140, 0)
 ENT.Model = "models/jmod/explosives/grenades/flashbang/flashbang.mdl"
-ENT.ModelScale=0.8
+ENT.ModelScale = 0.8
 ENT.SpoonScale = 2
 
 if SERVER then
@@ -46,17 +46,24 @@ if SERVER then
 
 	function ENT:Detonate()
 		if self.Exploded then return end
+
 		self.Exploded = true
+
 		local SelfPos, Time = self:GetPos() + Vector(0, 0, 10), CurTime()
+
 		JMod.Sploom(self:GetOwner(), self:GetPos(), 20)
+
 		self:EmitSound("snd_jack_fragsplodeclose.wav", 511, 140)
 		self:EmitSound("snd_jack_fragsplodeclose.wav", 511, 140)
+
 		local plooie = EffectData()
 		plooie:SetOrigin(SelfPos)
+		
 		util.Effect("eff_jack_gmod_flashbang", plooie, true, true)
+
 		util.ScreenShake(SelfPos, 20, 20, .2, 1000)
 
-		for k, v in pairs(ents.FindInSphere(SelfPos, 200)) do
+		for _, v in pairs(ents.FindInSphere(SelfPos, 200)) do
 			if v:IsNPC() then
 				v.EZNPCincapacitate = Time + math.Rand(3, 5)
 			end
@@ -71,17 +78,20 @@ if SERVER then
 
 		local Pos = self:GetPos()
 
-		for i,ply in player.Iterator() do
+		for _, ply in player.Iterator() do
 			local plyPos = ply:GetPos()
 			local dis = Pos:Distance(plyPos)
+
+			-- self:EmitSound("hmgd/ear_ringing.wav", nil, nil, .5)
+			sound.Play("hmgd/ear_ringing.wav", plyPos, nil, nil, .5)
 
 			if dis < 1000 then
 				if not util.TraceLine({
 					start = Pos,
 					endpos = plyPos,
-					filter = {self,ply}
+					filter = {self, ply}
 				}).Hit then
-					player.Event(ply,"flashbang",1 - dis / 1000)
+					player.Event(ply, "flashbang", 1 - dis / 1000)
 				end
 			end
 		end

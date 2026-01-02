@@ -321,7 +321,9 @@ local reverse = {
 	["5.7x28 mm"] = "57x28mm",
 	[".44 Magnum"] = ".44magnum",
 	["9x39 mm"] = "9x39mm",
-	["12.7x99 mm"] = "127x99mm"
+	["12.7x99 mm"] = "127x99mm",
+	["AR2"] = "ar2",
+	["XBowBolt"] = "XBowBolt"
 }
 
 if SERVER then
@@ -332,7 +334,7 @@ if SERVER then
 
 		local ammotype = net.ReadFloat()
 		local count = net.ReadFloat()
-		local pos = ply:EyePos() + ply:EyeAngles():Forward() * 15
+		local pos = ply:EyePos() + ply:EyeAngles():Forward() * 70
 		local ammo = reverse[ammolist[ammotype]]
 		count = count == 0 and ply:GetAmmoCount(ammotype) or math.min(count, ply:GetAmmoCount(ammotype))
 
@@ -360,10 +362,17 @@ if SERVER then
 			return
 		end
 
-		local AmmoEnt = ents.Create("ent_ammo_" .. ammo)
+		local AmmoEnt = ents.Create("ent_ammo_" .. string.lower(ammo))
+		if not IsValid(AmmoEnt) then
+			AmmoEnt = ents.Create("item_ammo_" .. string.lower(ammo))
+		end
+
+		if not IsValid(AmmoEnt) then return end
+
 		AmmoEnt:SetPos(pos)
 		AmmoEnt:Spawn()
-		AmmoEnt.AmmoCount = count
+
+		if string.StartsWith(AmmoEnt:GetClass(), "ent_ammo") then AmmoEnt.AmmoCount = count end
 
 		ply:SetAmmo(ply:GetAmmoCount(ammotype) - count, ammotype)
 		ply:EmitSound("snd_jack_hmcd_ammobox.wav", 75, math.random(80, 90), 1, CHAN_ITEM)
