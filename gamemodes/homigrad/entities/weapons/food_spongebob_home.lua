@@ -7,6 +7,7 @@ if CLIENT then
 	SWEP.Author = "Homigrad"
 	SWEP.Purpose = language.GetPhrase("hg.pineapple.inst")
 	SWEP.Category = language.GetPhrase("hg.category.food")
+	SWEP.IconOverride = "materials/items_icons/pineappleicon.png"
 end
 
 SWEP.Slot = 3

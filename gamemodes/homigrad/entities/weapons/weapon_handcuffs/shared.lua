@@ -7,6 +7,7 @@ if CLIENT then
 	SWEP.Author = "Homigrad"
 	SWEP.Instructions = language.GetPhrase("hg.handcuffs.inst")
 	SWEP.Category = language.GetPhrase("hg.category.tools")
+	SWEP.IconOverride = "materials/items_icons/handcuffsicon.png"
 end
 
 SWEP.Slot = 5

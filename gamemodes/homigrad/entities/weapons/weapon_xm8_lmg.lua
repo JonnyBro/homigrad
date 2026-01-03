@@ -5,6 +5,7 @@ if CLIENT then
 	SWEP.Author = "Homigrad"
 	SWEP.Instructions = language.GetPhrase("hg.xm8lmg.inst")
 	SWEP.Category = language.GetPhrase("hg.category.weapons")
+	SWEP.IconOverride = "materials/items_icons/xm8icon.png"
 end
 
 SWEP.Spawnable = true

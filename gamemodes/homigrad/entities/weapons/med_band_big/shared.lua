@@ -7,6 +7,7 @@ if CLIENT then
 	SWEP.Author = "Homigrad"
 	SWEP.Instructions = language.GetPhrase("hg.bigband.inst")
 	SWEP.Category = language.GetPhrase("hg.category.medicine")
+	SWEP.IconOverride = "materials/items_icons/bandbigicon.png"
 end
 
 SWEP.Spawnable = true

@@ -7,6 +7,7 @@ if CLIENT then
 	SWEP.Author = "Homigrad"
 	SWEP.Instructions = language.GetPhrase("hg.medkit.inst")
 	SWEP.Category = language.GetPhrase("hg.category.medicine")
+	SWEP.IconOverride = "materials/items_icons/medkiticon.png"
 end
 
 SWEP.Spawnable = true

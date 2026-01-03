@@ -4,6 +4,7 @@ if CLIENT then
 	SWEP.PrintName = language.GetPhrase("hg.m249.name")
 	SWEP.Instructions = language.GetPhrase("hg.m249.inst")
 	SWEP.Category = language.GetPhrase("hg.category.weapons")
+	SWEP.IconOverride = "materials/items_icons/m249icon.png"
 end
 
 SWEP.Spawnable = true

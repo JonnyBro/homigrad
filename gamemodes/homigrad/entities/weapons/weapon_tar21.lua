@@ -5,6 +5,7 @@ if CLIENT then
 	SWEP.Author = "Homigard"
 	SWEP.Instructions = language.GetPhrase("hg.tar21.inst")
 	SWEP.Category = language.GetPhrase("hg.category.weapons")
+	SWEP.IconOverride = "materials/items_icons/tar21icon.png"
 end
 
 SWEP.Spawnable = true
