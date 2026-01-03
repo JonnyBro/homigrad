@@ -14,6 +14,8 @@ hook.Add("player_spawn", "player_activatehg", function(data)
 	hook.Run("Player Activate", ply)
 
 	ply.RenderOverride = function(self)
+		if vrmod and vrmod.IsPlayerInVR(ply) then self:DrawModel() return end
+
 		local ply = self:IsPlayer() and self or IsValid(self:GetNWEntity("RagdollOwner", NULL)) and self:GetNWEntity("RagdollOwner", NULL)
 		local ent = ply and IsValid(ply:GetNWEntity("Ragdoll", NULL)) and ply:GetNWEntity("Ragdoll", NULL) or ply or self
 

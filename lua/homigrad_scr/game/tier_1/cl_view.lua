@@ -69,6 +69,7 @@ local ScrW = ScrW
 local TEXT_ALIGN_CENTER = TEXT_ALIGN_CENTER
 
 hook.Add("RenderScene", "homigrad_mainrenderscene", function(pos, angle, fov)
+	if g_VR and g_VR.active then return end
 	if RealFrameTime() > 0.02 then return end
 
 	--[[
@@ -310,6 +311,7 @@ local vector_origin = vector_origin
 local WorldToLocal = WorldToLocal
 
 function CalcView(ply, vec, ang, fov, znear, zfar)
+	if g_VR and g_VR.active then return end
 	if STOPRENDER then return end
 
 	local lply = LocalPlayer()
