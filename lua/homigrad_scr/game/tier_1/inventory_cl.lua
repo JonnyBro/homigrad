@@ -15,6 +15,7 @@ local AmmoTypes = {
 	[38] = "vgui/hud/hmcd_round_38",
 	[40] = "vgui/hud/hmcd_round_792",
 	[41] = "vgui/hud/hmcd_round_12",
+	[42] = "vgui/hud/hmcd_round_12",
 	[44] = "vgui/hud/hmcd_round_792",
 	[45] = "vgui/hud/hmcd_round_556",
 	[46] = "vgui/hud/hmcd_round_556",

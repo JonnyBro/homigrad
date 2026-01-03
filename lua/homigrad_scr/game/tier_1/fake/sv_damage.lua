@@ -332,8 +332,6 @@ hook.Add("Player Death", "plymessage", function(ply, hitgroup, dmginfo)
 	local reason = ply.KillReason
 	local dmgInfo = dmgInfo or ply.LastDMGInfo
 
-	-- TODO: Check if works
-	-- I hope so...
 	if ply == att then
 		local tbl = boneName and {"#hg.deathreasons.inbone", "#hg.deathreasons.killyourself", boneName} or {"#hg.deathreasons.killyourself"}
 

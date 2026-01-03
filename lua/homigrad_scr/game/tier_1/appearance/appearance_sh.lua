@@ -171,7 +171,6 @@ local AddAttach = EasyAppearance.AddAttachmet
     /_|_\____\
 --]]
 
-
 -- uniName, modelPath, materialPath, Bone, ShoulDraw in localPlayer, PosMale, PosFemale, AngMale, AngFemale, Skin, Bodygroups
 AddAttach("Gray Cap", "models/modified/hat07.mdl", nil, "ValveBiped.Bip01_Head1", false, Vector(5, 0, 0), Vector(4, 0.1, 0), Angle(0, -80, -90), Angle(0, -80, -90), 0, "00000")
 AddAttach("Red Headphones", "models/modified/headphones.mdl", nil, "ValveBiped.Bip01_Head1", false, Vector(2.8, -.2, 0), Vector(1.3, -1, 0), Angle(0, -80, -90), Angle(0, -80, -90), 0, "00000")

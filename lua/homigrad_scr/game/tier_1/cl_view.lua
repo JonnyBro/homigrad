@@ -133,7 +133,7 @@ end)
 
 local whitelistweps = {
 	["weapon_physgun"] = true,
-	["weapon_gravgun"] = true,
+	["weapon_physcannon"] = true,
 	["gmod_tool"] = true,
 	["gmod_camera"] = true,
 	["drgbase_possessor"] = true,
@@ -194,6 +194,10 @@ local deathtexts = {
 	"taking it like a champ",
 	"would you look at that",
 	"try again",
+	"bye unc",
+	"helpless",
+	"ты умер",
+	"лох",
 	"cука блять",
 	"поздравляю",
 	"вмер",
@@ -213,6 +217,7 @@ end) --]]
 
 local oldrag
 
+-- TODO: Render deathtexts on death for funnie messages
 hook.Add("Player Death", "hgPlayerDeath2", function(ent)
 	if ent ~= LocalPlayer() then return end
 
@@ -808,7 +813,7 @@ hook.Add("RenderScreenspaceEffects", "BloomEffect-homigrad", function()
 		BlurScreen(1, 155)
 
 		draw.Text({
-			text = deathtext,
+			text = string.upper(deathtext),
 			font = "BodyCamFont",
 			pos = {ScrW() / 2, ScrH() / 1.2},
 			xalign = TEXT_ALIGN_CENTER,

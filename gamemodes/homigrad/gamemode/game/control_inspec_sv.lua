@@ -11,7 +11,7 @@ hook.Add("Player Think", "ControlPlayersAdmins", function(ply, time)
 			print(text)
 		end
 
-		if not IsValid(enta) or not IsValid(enta:GetPhysicsObject()) then return end
+		if enta == NULL or not IsValid(enta:GetPhysicsObject()) then return end
 
 		ply.CarryEntPhysbone = ply.CarryEntPhysbone or ply:GetEyeTrace().PhysicsBone
 
