@@ -17,9 +17,9 @@ if SERVER then
 		self:SpoonEffect()
 
 		local time = 2.5
-		timer.Simple(time - 1,function()
+		timer.Simple(time - 1, function()
 			if IsValid(self) then
-				player.EventPoint(self:GetPos(),"flashbang pre detonate",1024,self)
+				player.EventPoint(self:GetPos(), "flashbang pre detonate", 1024, self)
 			end
 		end)
 
@@ -58,7 +58,7 @@ if SERVER then
 
 		local plooie = EffectData()
 		plooie:SetOrigin(SelfPos)
-		
+
 		util.Effect("eff_jack_gmod_flashbang", plooie, true, true)
 
 		util.ScreenShake(SelfPos, 20, 20, .2, 1000)
@@ -78,12 +78,14 @@ if SERVER then
 
 		local Pos = self:GetPos()
 
+		sound.Play("hmgd/ear_ringing.wav", Pos, nil, nil, .5)
+
 		for _, ply in player.Iterator() do
 			local plyPos = ply:GetPos()
 			local dis = Pos:Distance(plyPos)
 
 			-- self:EmitSound("hmgd/ear_ringing.wav", nil, nil, .5)
-			sound.Play("hmgd/ear_ringing.wav", plyPos, nil, nil, .5)
+			-- sound.Play("hmgd/ear_ringing.wav", plyPos, nil, nil, .5)
 
 			if dis < 1000 then
 				if not util.TraceLine({
