@@ -1,3 +1,5 @@
+-- NOTE: Do we need this?
+
 TFAVOX_Models = TFAVOX_Models or {}
 
 if SERVER then
