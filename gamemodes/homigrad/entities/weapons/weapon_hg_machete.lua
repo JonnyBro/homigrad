@@ -4,6 +4,7 @@ if CLIENT then
 	SWEP.PrintName = language.GetPhrase("hg.machete.name")
 	SWEP.Instructions = language.GetPhrase("hg.machete.inst")
 	SWEP.Category = language.GetPhrase("hg.category.melee")
+	SWEP.IconOverride = "materials/items_icons/macheteicon.png"
 end
 
 SWEP.Spawnable = true

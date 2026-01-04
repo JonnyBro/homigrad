@@ -4,6 +4,7 @@ if CLIENT then
 	SWEP.PrintName = language.GetPhrase("hg.sledgehammer.name")
 	SWEP.Instructions = language.GetPhrase("hg.sledgehammer.inst")
 	SWEP.Category = language.GetPhrase("hg.category.melee")
+	SWEP.IconOverride = "materials/items_icons/sledgehammericon.png"
 end
 
 SWEP.Spawnable = true

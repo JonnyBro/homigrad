@@ -8,6 +8,7 @@ if CLIENT then
 	SWEP.Author = "Homigrad"
 	SWEP.Instructions = language.GetPhrase("hg.tomahawk.inst")
 	SWEP.Category = language.GetPhrase("hg.category.melee")
+	SWEP.IconOverride = "materials/items_icons/tomahawkicon.png"
 end
 
 SWEP.Spawnable = true

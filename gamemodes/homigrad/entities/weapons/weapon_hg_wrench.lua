@@ -4,6 +4,7 @@ if CLIENT then
 	SWEP.PrintName = language.GetPhrase("hg.wrench.name")
 	SWEP.Instructions = language.GetPhrase("hg.wrench.inst")
 	SWEP.Category = language.GetPhrase("hg.category.melee")
+	SWEP.IconOverride = "materials/items_icons/wrenchicon.png"
 end
 
 SWEP.Spawnable = true

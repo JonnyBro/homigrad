@@ -5,6 +5,7 @@ if CLIENT then
 	SWEP.Author = "Homigrad"
 	SWEP.Instructions = language.GetPhrase("hg.phone.inst")
 	SWEP.Category = language.GetPhrase("hg.category.tools")
+	SWEP.IconOverride = "materials/items_icons/phoneicon.png"
 end
 
 SWEP.Spawnable = true

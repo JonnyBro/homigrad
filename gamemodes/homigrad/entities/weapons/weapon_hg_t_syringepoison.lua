@@ -5,6 +5,7 @@ if CLIENT then
 	SWEP.Author = "Secret Society"
 	SWEP.Instructions = language.GetPhrase("hg.syringepoison.inst")
 	SWEP.Category = language.GetPhrase("hg.category.traitors")
+	SWEP.IconOverride = "materials/items_icons/syringepoisonicon.png"
 end
 
 SWEP.Spawnable = true

@@ -4,6 +4,7 @@ if CLIENT then
 	SWEP.PrintName = language.GetPhrase("hg.fireaxe.name")
 	SWEP.Instructions = language.GetPhrase("hg.fireaxe.inst")
 	SWEP.Category = language.GetPhrase("hg.category.melee")
+	SWEP.IconOverride = "materials/items_icons/fireaxeicon.png"
 end
 
 SWEP.Spawnable = true
