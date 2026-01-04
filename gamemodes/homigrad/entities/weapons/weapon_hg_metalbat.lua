@@ -4,6 +4,7 @@ if CLIENT then
 	SWEP.PrintName = language.GetPhrase("hg.metalbat.name")
 	SWEP.Instructions = language.GetPhrase("hg.metalbat.inst")
 	SWEP.Category = language.GetPhrase("hg.category.melee")
+	SWEP.IconOverride = "materials/items_icons/metalbaticon.png"
 end
 
 SWEP.Spawnable = true

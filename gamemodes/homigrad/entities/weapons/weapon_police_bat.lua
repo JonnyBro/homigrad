@@ -5,6 +5,7 @@ if CLIENT then
 	SWEP.Instructions = language.GetPhrase("hg.baton.inst")
 	SWEP.Author = "Homigrad"
 	SWEP.Category = language.GetPhrase("hg.category.melee")
+	SWEP.IconOverride = "materials/items_icons/policebaticon.png"
 end
 
 SWEP.Spawnable = true

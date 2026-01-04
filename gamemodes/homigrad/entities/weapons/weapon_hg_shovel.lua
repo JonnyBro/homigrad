@@ -4,6 +4,7 @@ if CLIENT then
 	SWEP.PrintName = language.GetPhrase("hg.shovel.name")
 	SWEP.Instructions = language.GetPhrase("hg.shovel.inst")
 	SWEP.Category = language.GetPhrase("hg.category.melee")
+	SWEP.IconOverride = "materials/items_icons/shovelicon.png"
 end
 
 SWEP.Spawnable = true

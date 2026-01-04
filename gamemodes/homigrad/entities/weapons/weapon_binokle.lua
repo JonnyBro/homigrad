@@ -5,6 +5,7 @@ if CLIENT then
 	SWEP.Author = "Homigrad"
 	SWEP.Instructions = language.GetPhrase("hg.binoculars.inst")
 	SWEP.Category = language.GetPhrase("hg.category.tools")
+	SWEP.IconOverride = "materials/items_icons/binocularsicon.png"
 end
 
 SWEP.Spawnable = true

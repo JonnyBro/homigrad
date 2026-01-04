@@ -5,6 +5,7 @@ if CLIENT then
 	SWEP.Author = "Homigrad"
 	SWEP.Instructions = language.GetPhrase("hg.f1.inst")
 	SWEP.Category = language.GetPhrase("hg.category.grenades")
+	SWEP.IconOverride = "materials/items_icons/f1icon.png"
 end
 
 SWEP.Slot = 4

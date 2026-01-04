@@ -5,6 +5,7 @@ if CLIENT then
 	SWEP.Author = "Secret Society" -- Thanks Harrison!
 	SWEP.Instructions = language.GetPhrase("hg.radar.inst")
 	SWEP.Category = language.GetPhrase("hg.category.traitors")
+	SWEP.IconOverride = "materials/items_icons/radaricon.png"
 end
 
 SWEP.Spawnable = true

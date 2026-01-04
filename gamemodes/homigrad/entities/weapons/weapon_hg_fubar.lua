@@ -4,6 +4,7 @@ if CLIENT then
 	SWEP.PrintName = language.GetPhrase("hg.fubar.name")
 	SWEP.Instructions = language.GetPhrase("hg.fubar.inst")
 	SWEP.Category = language.GetPhrase("hg.category.melee")
+	SWEP.IconOverride = "materials/items_icons/fubaricon.png"
 end
 
 SWEP.Spawnable = true

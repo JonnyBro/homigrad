@@ -4,6 +4,7 @@ if CLIENT then
 	SWEP.PrintName = language.GetPhrase("hg.kabar.name")
 	SWEP.Instructions = language.GetPhrase("hg.kabar.inst")
 	SWEP.Category = language.GetPhrase("hg.category.melee")
+	SWEP.IconOverride = "materials/items_icons/kabaricon.png"
 end
 
 SWEP.Spawnable = true

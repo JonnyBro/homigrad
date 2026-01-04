@@ -5,6 +5,7 @@ if CLIENT then
 	SWEP.Author = "Homigrad"
 	SWEP.Instructions = language.GetPhrase("Loaded with tons of grenades, ribbed for YOUR pleasure!")
 	SWEP.Category = language.GetPhrase("hg.category.weapons")
+	SWEP.IconOverride = "materials/items_icons/igibicon.png"
 end
 
 SWEP.Spawnable = true

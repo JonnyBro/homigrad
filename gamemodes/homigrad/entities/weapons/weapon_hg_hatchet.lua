@@ -4,6 +4,7 @@ if CLIENT then
 	SWEP.PrintName = language.GetPhrase("hg.hatchet.name")
 	SWEP.Instructions = language.GetPhrase("hg.hatchet.inst")
 	SWEP.Category = language.GetPhrase("hg.category.melee")
+	SWEP.IconOverride = "materials/items_icons/hatcheticon.png"
 end
 
 SWEP.Spawnable = true
