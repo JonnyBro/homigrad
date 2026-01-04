@@ -74,14 +74,14 @@ local Appearances = {
 local Models = {
 	-- Male
 	["Male 01"] = {strPatch = "models/player/group01/male_01.mdl", intSubMat = 3},
-	["Male 02"] = {strPatch = "models/player/group01/male_02.mdl", intSubMat = 2},
+	["Male 02"] = {strPatch = "models/player/group01/male_02.mdl", intSubMat = 3},
 	["Male 03"] = {strPatch = "models/player/group01/male_03.mdl", intSubMat = 4},
-	["Male 04"] = {strPatch = "models/player/group01/male_04.mdl", intSubMat = 4},
-	["Male 05"] = {strPatch = "models/player/group01/male_05.mdl", intSubMat = 4},
-	["Male 06"] = {strPatch = "models/player/group01/male_06.mdl", intSubMat = 0},
+	["Male 04"] = {strPatch = "models/player/group01/male_04.mdl", intSubMat = 5},
+	["Male 05"] = {strPatch = "models/player/group01/male_05.mdl", intSubMat = 5},
+	["Male 06"] = {strPatch = "models/player/group01/male_06.mdl", intSubMat = 1},
 	["Male 07"] = {strPatch = "models/player/group01/male_07.mdl", intSubMat = 4},
 	["Male 08"] = {strPatch = "models/player/group01/male_08.mdl", intSubMat = 0},
-	["Male 09"] = {strPatch = "models/player/group01/male_09.mdl", intSubMat = 2},
+	["Male 09"] = {strPatch = "models/player/group01/male_09.mdl", intSubMat = 3},
 	-- Female
 	["Female 01"] = {strPatch = "models/player/group01/female_01.mdl", intSubMat = 2},
 	["Female 02"] = {strPatch = "models/player/group01/female_02.mdl", intSubMat = 3},

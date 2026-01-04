@@ -10,14 +10,14 @@ EasyAppearance.OpenedMenu = EasyAppearance.OpenedMenu or nil
 local Models = {
 	-- Male
 	["models/player/group01/male_01.mdl"] = {1, 3},
-	["models/player/group01/male_02.mdl"] = {1, 2},
+	["models/player/group01/male_02.mdl"] = {1, 3},
 	["models/player/group01/male_03.mdl"] = {1, 4},
-	["models/player/group01/male_04.mdl"] = {1, 4},
-	["models/player/group01/male_05.mdl"] = {1, 4},
-	["models/player/group01/male_06.mdl"] = {1, 0},
+	["models/player/group01/male_04.mdl"] = {1, 5},
+	["models/player/group01/male_05.mdl"] = {1, 5},
+	["models/player/group01/male_06.mdl"] = {1, 1},
 	["models/player/group01/male_07.mdl"] = {1, 4},
 	["models/player/group01/male_08.mdl"] = {1, 0},
-	["models/player/group01/male_09.mdl"] = {1, 2},
+	["models/player/group01/male_09.mdl"] = {1, 3},
 	-- Female
 	["models/player/group01/female_01.mdl"] = {2, 2},
 	["models/player/group01/female_02.mdl"] = {2, 3},
