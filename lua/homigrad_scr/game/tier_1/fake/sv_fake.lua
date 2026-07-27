@@ -1170,7 +1170,10 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 				head:ComputeShadowControl(shadowparams)
 			end
 		end
-
+		
+		local fingerL1 = rag:LookupBone("ValveBiped.Bip01_L_Finger1")
+		local fingerL2 = rag:LookupBone("ValveBiped.Bip01_L_Finger2")
+		
 		-- Grab with left hand
 		if ply:KeyDown(IN_SPEED) and not ply.unconscious and not timer.Exists("StunTime" .. ply:EntIndex()) then
 			local bone = rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand"))
@@ -1204,8 +1207,8 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 
 							rag:EmitSound("physics/body/body_medium_impact_soft" .. math.random(1, 7) .. ".wav", 50, math.random(95, 105))
 
-							rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger1"), Angle(0, -30, 0), true)
-							rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger2"), Angle(0, -30, 0), true)
+							if fingerL1 then rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger1"), Angle(0, -30, 0), true) end
+							if fingerL2 then rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger2"), Angle(0, -30, 0), true) end
 						end
 					else
 						ply:PickupWeapon(ent)
@@ -1216,14 +1219,17 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 			if IsValid(rag.ZacConsLH) then
 				ply:SetNWBool("lhon", false)
 
-				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger1"), Angle(0, 0, 0), true)
-				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger2"), Angle(0, 0, 0), true)
+				if fingerL1 then rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger1"), Angle(0, 0, 0), true) end
+				if fingerL2 then rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_L_Finger2"), Angle(0, 0, 0), true) end
 
 				rag.ZacConsLH:Remove()
 				rag.ZacConsLH = nil
 			end
 		end
 
+		local fingerR1 = rag:LookupBone("ValveBiped.Bip01_R_Finger1")
+		local fingerR2 = rag:LookupBone("ValveBiped.Bip01_R_Finger2")
+		
 		-- Grab with right hand
 		if ply:KeyDown(IN_WALK) and not ply.unconscious and not timer.Exists("StunTime" .. ply:EntIndex()) then
 			local bone = rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand"))
@@ -1255,8 +1261,8 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 
 							rag:EmitSound("physics/body/body_medium_impact_soft" .. math.random(1, 7) .. ".wav", 50, math.random(95, 105))
 
-							rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger1"), Angle(0, -30, 0), true)
-							rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger2"), Angle(0, -30, 0), true)
+							if fingerR1 then rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger1"), Angle(0, -30, 0), true) end
+							if fingerR2 then rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger2"), Angle(0, -30, 0), true) end
 
 							rag.ZacConsRH = cons
 						end
@@ -1269,8 +1275,8 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 			if IsValid(rag.ZacConsRH) then
 				ply:SetNWBool("rhon", false)
 
-				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger1"), Angle(0, 0, 0), true)
-				rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger2"), Angle(0, 0, 0), true)
+				if fingerR1 then rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger1"), Angle(0, 0, 0), true) end
+				if fingerR2 then rag:ManipulateBoneAngles(rag:LookupBone("ValveBiped.Bip01_R_Finger2"), Angle(0, 0, 0), true) end
 
 				rag.ZacConsRH:Remove()
 				rag.ZacConsRH = nil
