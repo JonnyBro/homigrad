@@ -288,7 +288,6 @@ local laserweps = {
 	["weapon_hk_usp"] = true,
 	["weapon_hk416"] = true,
 	["weapon_p99"] = true,
-	-- ["weapon_hk_usps"] = true,
 	["weapon_fiveseven"] = true,
 	["weapon_m4a1"] = true,
 	["weapon_ar15"] = true,
@@ -346,23 +345,10 @@ hook.Add("PostDrawOpaqueRenderables", "laser", function()
 				if not tra.Hit then
 					render.DrawSprite(tr.HitPos, size, size, Color(255, 0, 0))
 				end
-
-				-- render.DrawQuadEasy(tr.HitPos, (tr.StartPos - tr.HitPos):GetNormal(), size, size, Color(255, 0, 0), 0)
 			cam.End3D()
 		end
 	end
 end)
-
--- local function PlayerModelMenu()
--- 	local newv = list.Get("DesktopWindows")["PlayerEditor"]
--- 	local Window = vgui.Create("DFrame")
--- 	Window:SetSize(newv.width, newv.height)
--- 	Window:SetTitle(newv.title)
--- 	Window:Center()
--- 	Window:MakePopup()
-
--- 	newv.init(nil, Window)
--- end
 
 local function ToggleMenu(toggle)
 	if toggle then
@@ -493,11 +479,9 @@ hook.Add("OnEntityCreated", "homigrad-colorragdolls", function(ent)
 			if IsValid(ent) then
 				local owner = RagdollOwner(ent)
 				local plr_clr
-				if owner then
-					plr_clr = owner:GetPlayerColor()
-				end
+				if owner then plr_clr = owner:GetPlayerColor() end
 
-				ent.playerColor = ent:GetNWVector("plycolor", plr_clr) or plr_clr
+				ent.playerColor = ent:GetNWVector("plycolor", plr_clr)
 				ent.GetPlayerColor = function() return ent.playerColor end
 
 				timer.Remove("ragdollcolors-timer" .. tostring(ent))
@@ -505,15 +489,6 @@ hook.Add("OnEntityCreated", "homigrad-colorragdolls", function(ent)
 		end)
 	end
 end)
-
---[[
-local function GetClipForCurrentWeapon(ply)
-	if not IsValid(ply) then return -1 end
-	local wep = ply:GetActiveWeapon()
-	if not IsValid(wep) then return -1 end
-
-	return wep:Clip1(), wep:GetMaxClip1(), ply:GetAmmoCount(wep:GetPrimaryAmmoType())
-end --]]
 
 hook.Add("HUDShouldDraw", "HideHUD_ammo", function(name)
 	if name == "CHudAmmo" then return false end
@@ -553,20 +528,6 @@ concommand.Add("hg_getentity", function()
 	print(ent:GetModel())
 	print(ent:GetClass())
 end)
-
---[[
-gameevent.Listen("player_spawn")
-hook.Add("player_spawn", "gg", function(data)
-	local ply = Player(data.userid)
-
-	if ply.SetHull then
-		ply:SetHull(ply:GetNWVector("HullMin"), ply:GetNWVector("Hull"))
-		ply:SetHullDuck(ply:GetNWVector("HullMin"), ply:GetNWVector("HullDuck"))
-	end
-
-	hook.Run("Player Spawn", ply)
-
-end) --]]
 
 hook.Add("DrawDeathNotice", "no", function() return false end)
 

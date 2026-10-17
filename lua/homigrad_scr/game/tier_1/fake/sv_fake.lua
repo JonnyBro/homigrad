@@ -1170,10 +1170,10 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 				head:ComputeShadowControl(shadowparams)
 			end
 		end
-		
+
 		local fingerL1 = rag:LookupBone("ValveBiped.Bip01_L_Finger1")
 		local fingerL2 = rag:LookupBone("ValveBiped.Bip01_L_Finger2")
-		
+
 		-- Grab with left hand
 		if ply:KeyDown(IN_SPEED) and not ply.unconscious and not timer.Exists("StunTime" .. ply:EntIndex()) then
 			local bone = rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand"))
@@ -1229,7 +1229,7 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 
 		local fingerR1 = rag:LookupBone("ValveBiped.Bip01_R_Finger1")
 		local fingerR2 = rag:LookupBone("ValveBiped.Bip01_R_Finger2")
-		
+
 		-- Grab with right hand
 		if ply:KeyDown(IN_WALK) and not ply.unconscious and not timer.Exists("StunTime" .. ply:EntIndex()) then
 			local bone = rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand"))
