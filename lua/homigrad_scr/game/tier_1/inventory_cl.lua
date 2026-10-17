@@ -52,8 +52,11 @@ local function getText(text, limitW)
 end
 
 local panel
-local searchCounter = 0
 hg_searched = {}
+
+local slotEmptyColor = Color(0, 0, 0, 160)
+local slotProgressColor = Color(255, 255, 255, 40)
+local slotQuestionColor = Color(255, 255, 255, 40)
 
 net.Receive("hg_inventory", function()
 	if IsValid(panel) then
@@ -109,22 +112,13 @@ net.Receive("hg_inventory", function()
 	end
 
 	function panel:OnKeyCodePressed(key)
-		if key == KEY_W or key == KEY_S or key == KEY_A or key == KEY_D then
+		if key == KEY_W or key == KEY_S or key == KEY_A or key == KEY_D or key == KEY_E then
 			self:Remove()
 		end
 	end
 
-	function panel:OnRemove()
-		if self.searchTimer then timer.Remove(self.searchTimer) end
-		if self.override then return end
-
-		net.Start("hg_inventory")
-			net.WriteEntity(lootEnt)
-		net.SendToServer()
-	end
-
 	local frame = panel
-	local lootingTime = math.Clamp(GetConVar("hg_SearchTime"):GetInt(), 0, 10)
+	local lootingTime = math.Clamp(GetConVar("hg_SearchTime"):GetFloat(), 0, 10)
 	local corner = 6
 	local x, y = 40, 40
 
@@ -134,6 +128,17 @@ net.Receive("hg_inventory", function()
 	if not istable(found) then
 		found = {}
 		hg_searched[targetID] = found
+	end
+
+	function panel:OnRemove()
+		if self.override then return end
+
+		found.__progressKey = nil
+		found.__progressStart = nil
+
+		net.Start("hg_inventory")
+			net.WriteEntity(lootEnt)
+		net.SendToServer()
 	end
 
 	local entries = {}
@@ -148,10 +153,14 @@ net.Receive("hg_inventory", function()
 		entries[#entries + 1] = {key = "a:" .. ammo, ammo = ammo}
 	end
 
+	table.sort(entries, function(a, b) return a.key < b.key end)
+
 	local pending = {}
+	local current
+	local searchStart = 0
 
 	panel.Paint = function(self, w, h)
-		if not IsValid(lootEnt) or not plr:Alive() then return panel:Remove() end
+		if not IsValid(lootEnt) or not plr:Alive() then return self:Remove() end
 
 		local nickname = lootEnt:IsPlayer() and lootEnt:Name() or lootEnt:GetNWString("Nickname") or ""
 
@@ -160,7 +169,7 @@ net.Receive("hg_inventory", function()
 		surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
 		draw.SimpleText(language.GetPhrase("hg.inventory.title"):format(nickname), "DefaultFixedDropShadow", corner, corner, color_white)
 
-		if #pending > 0 then
+		if current then
 			draw.SimpleText(language.GetPhrase("hg.inventory.searching"), "DefaultFixedDropShadow", corner, h - corner - 12, color_white)
 		end
 	end
@@ -179,10 +188,27 @@ net.Receive("hg_inventory", function()
 		button:SetText("")
 	end
 
-	local function addWeaponButton(wep, weapon)
-		local button = vgui.Create("DButton", frame)
-		nextSlot(button)
+	local function paintHidden(entry)
+		return function(self, w, h)
+			draw.RoundedBox(0, 0, 0, w, h, slotEmptyColor)
+			surface.SetDrawColor(255, 255, 255, 48)
+			surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
 
+			if entry == current then
+				local frac = lootingTime > 0 and math.Clamp((CurTime() - searchStart) / lootingTime, 0, 1) or 1
+				local fillH = math.floor((h - 4) * frac)
+
+				draw.RoundedBox(0, 2, h - 2 - fillH, w - 4, fillH, slotProgressColor)
+
+				local dots = string.rep(".", math.floor(CurTime() * 3) % 4)
+				draw.SimpleText(dots, "DefaultFixedDropShadow", w / 2, h / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			else
+				draw.SimpleText("?", "DefaultFixedDropShadow", w / 2, h / 2, slotQuestionColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+		end
+	end
+
+	local function setupWeaponButton(button, wep, weapon)
 		local text = weapon.PrintName or wep
 		text = getText(text, button:GetWide() - corner * 2)
 
@@ -209,10 +235,7 @@ net.Receive("hg_inventory", function()
 		button.DoRightClick = button.DoClick
 	end
 
-	local function addAmmoButton(ammo)
-		local button = vgui.Create("DButton", frame)
-		nextSlot(button)
-
+	local function setupAmmoButton(button, ammo)
 		local text = game.GetAmmoName(ammo) or tostring(ammo)
 		text = getText(text, button:GetWide() - corner * 2)
 
@@ -246,31 +269,49 @@ net.Receive("hg_inventory", function()
 		found[entry.key] = true
 
 		if entry.wep then
-			addWeaponButton(entry.wep, entry.weapon)
+			setupWeaponButton(entry.button, entry.wep, entry.weapon)
 		else
-			addAmmoButton(entry.ammo)
+			setupAmmoButton(entry.button, entry.ammo)
 		end
 	end
 
+	local function nextSearch(start)
+		current = table.remove(pending, 1)
+		searchStart = start or CurTime()
+
+		found.__progressKey = current and current.key or nil
+		found.__progressStart = current and searchStart or nil
+	end
+
 	for _, entry in ipairs(entries) do
+		local button = vgui.Create("DButton", frame)
+		nextSlot(button)
+
+		entry.button = button
+
 		if found[entry.key] or lootingTime <= 0 then
 			reveal(entry)
 		else
+			button.Paint = paintHidden(entry)
+			button.DoClick = function() end
+			button.DoRightClick = button.DoClick
+
 			pending[#pending + 1] = entry
 		end
 	end
 
-	if #pending > 0 then
-		searchCounter = searchCounter + 1
-		local timerName = "hg_searching_" .. searchCounter
-		frame.searchTimer = timerName
+	if pending[1] and found.__progressKey == pending[1].key then
+		nextSearch(found.__progressStart)
+	else
+		nextSearch()
+	end
 
-		timer.Create(timerName, lootingTime, #pending, function()
-			if not IsValid(frame) then return timer.Remove(timerName) end
+	function panel:Think()
+		if not current then return end
+		if CurTime() - searchStart < lootingTime then return end
 
-			local entry = table.remove(pending, 1)
-			if entry then reveal(entry) end
-		end)
+		reveal(current)
+		nextSearch()
 	end
 
 	timer.Create("hg_forget_inventory_" .. targetID, 60, 1, function() hg_searched[targetID] = nil end)
