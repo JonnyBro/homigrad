@@ -49,6 +49,43 @@ end
 
 function SWEP:Initialize()
 	self:SetHoldType("normal")
+
+	if SERVER then
+		timer.Simple(0, function()
+			if IsValid(self) then self:EnsurePhysics() end
+		end)
+	end
+end
+
+if SERVER then
+	local physMins, physMaxs = Vector(-5, -1.5, -1.5), Vector(5, 1.5, 1.5)
+
+	function SWEP:EnsurePhysics()
+		if IsValid(self:GetOwner()) then return end
+		if IsValid(self:GetPhysicsObject()) then return end
+
+		local vel = self:GetVelocity()
+
+		self:PhysicsInitBox(physMins, physMaxs)
+		self:SetCollisionBounds(physMins, physMaxs)
+		self:SetMoveType(MOVETYPE_VPHYSICS)
+		self:SetSolid(SOLID_VPHYSICS)
+		self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+
+		local phys = self:GetPhysicsObject()
+		if not IsValid(phys) then return end
+
+		phys:SetMass(.5)
+		phys:SetMaterial("metal")
+		phys:Wake()
+		phys:SetVelocity(vel)
+	end
+
+	function SWEP:OnDrop()
+		timer.Simple(0, function()
+			if IsValid(self) then self:EnsurePhysics() end
+		end)
+	end
 end
 
 function SWEP:PrimaryAttack()

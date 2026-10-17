@@ -64,7 +64,7 @@ else
 					local col
 					if Tr.Entity:IsPlayer() then
 						col = Tr.Entity:GetPlayerColor():ToColor()
-					elseif Tr.Entity.GetPlayerColor ~= nil then
+					elseif Tr.Entity.playerColor then
 						col = Tr.Entity.playerColor:ToColor()
 					else
 						col = Color(255, 255, 255, 255)

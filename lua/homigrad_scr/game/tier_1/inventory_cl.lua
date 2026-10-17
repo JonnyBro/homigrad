@@ -54,6 +54,10 @@ end
 local panel
 hg_searched = {}
 
+local slotEmptyColor = Color(0, 0, 0, 160)
+local slotProgressColor = Color(255, 255, 255, 40)
+local slotQuestionColor = Color(255, 255, 255, 40)
+
 net.Receive("hg_inventory", function()
 	if IsValid(panel) then
 		panel.override = true
@@ -108,27 +112,55 @@ net.Receive("hg_inventory", function()
 	end
 
 	function panel:OnKeyCodePressed(key)
-		if key == KEY_W or key == KEY_S or key == KEY_A or key == KEY_D then
-			if timer.Exists("hg_searching_" .. plr:SteamID64() .. "_" .. targetID) then timer.Remove("hg_searching_" .. plr:SteamID64() .. "_" .. targetID) end
-
+		if key == KEY_W or key == KEY_S or key == KEY_A or key == KEY_D or key == KEY_E then
 			self:Remove()
 		end
 	end
 
+	local frame = panel
+	local lootingTime = math.Clamp(GetConVar("hg_SearchTime"):GetFloat(), 0, 10)
+	local corner = 6
+	local x, y = 40, 40
+
+	if not targetID then return end
+
+	local found = hg_searched[targetID]
+	if not istable(found) then
+		found = {}
+		hg_searched[targetID] = found
+	end
+
 	function panel:OnRemove()
 		if self.override then return end
+
+		found.__progressKey = nil
+		found.__progressStart = nil
 
 		net.Start("hg_inventory")
 			net.WriteEntity(lootEnt)
 		net.SendToServer()
 	end
 
-	local lootingTime = math.Clamp(GetConVar("hg_SearchTime"):GetInt(), 0, 10)
-	local corner = 6
-	local x, y = 40, 40
+	local entries = {}
+
+	for wep, weapon in pairs(items) do
+		entries[#entries + 1] = {key = "w:" .. wep, wep = wep, weapon = weapon}
+	end
+
+	for ammo, _ in pairs(items_ammo) do
+		if blackListedAmmo[ammo] then continue end
+
+		entries[#entries + 1] = {key = "a:" .. ammo, ammo = ammo}
+	end
+
+	table.sort(entries, function(a, b) return a.key < b.key end)
+
+	local pending = {}
+	local current
+	local searchStart = 0
 
 	panel.Paint = function(self, w, h)
-		if not IsValid(lootEnt) or not plr:Alive() then return panel:Remove() end
+		if not IsValid(lootEnt) or not plr:Alive() then return self:Remove() end
 
 		local nickname = lootEnt:IsPlayer() and lootEnt:Name() or lootEnt:GetNWString("Nickname") or ""
 
@@ -137,119 +169,154 @@ net.Receive("hg_inventory", function()
 		surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
 		draw.SimpleText(language.GetPhrase("hg.inventory.title"):format(nickname), "DefaultFixedDropShadow", corner, corner, color_white)
 
-		-- Don't show the text if player "remembers" target's inventory
-		if not hg_searched[targetID] then
-			draw.SimpleText(language.GetPhrase("hg.inventory.searching"), "DefaultFixedDropShadow", corner * 30, corner * 30, color_white)
+		if current then
+			draw.SimpleText(language.GetPhrase("hg.inventory.searching"), "DefaultFixedDropShadow", corner, h - corner - 12, color_white)
 		end
 	end
 
-	-- Set timer to 0 if player "remembers" target's inventory
-	if hg_searched[targetID] then lootingTime = 0 end
+	local function nextSlot(button)
+		button:SetPos(x, y)
+		button:SetSize(64, 64)
 
-	if not targetID then return end
-	timer.Create("hg_searching_" .. plr:SteamID64() .. "_" .. targetID, lootingTime, 1, function()
-		if not IsValid(panel) then return end
+		x = x + button:GetWide() + 6
 
-		-- "Remember" this target's inventory
-		hg_searched[targetID] = true
-
-		for wep, weapon in pairs(items) do
-			local button = vgui.Create("DButton", panel)
-			button:SetPos(x, y)
-			button:SetSize(64, 64)
-
-			x = x + button:GetWide() + 6
-
-			if x + button:GetWide() >= panel:GetWide() then
-				x = 40
-				y = y + button:GetTall() + 6
-			end
-
-			button:SetText("")
-
-			local text = weapon.PrintName or wep
-			text = getText(text, button:GetWide() - corner * 2)
-
-			button.Paint = function(self, w, h)
-				draw.RoundedBox(0, 0, 0, w, h, self:IsHovered() and grey or black)
-				surface.SetDrawColor(255, 255, 255, 128)
-				surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
-
-				-- model first
-				local x, y = self:LocalToScreen(0, 0)
-				DrawWeaponSelectionEX(weapon, x, y, w, h)
-
-				-- text after model
-				for i, text in pairs(text) do
-					draw.SimpleText(text, "DefaultFixedDropShadow", corner, corner + (i - 1) * 12, color_white)
-				end
-			end
-
-			function button:OnRemove()
-				if IsValid(model) then model:Remove() end
-			end
-
-			button.DoClick = function()
-				net.Start("ply_take_item")
-					net.WriteEntity(ragdoll or lootEnt)
-					net.WriteString(wep)
-				net.SendToServer()
-			end
-
-			button.DoRightClick = button.DoClick
+		if x + button:GetWide() >= frame:GetWide() then
+			x = 40
+			y = y + button:GetTall() + 6
 		end
 
-		for ammo, _ in pairs(items_ammo) do
-			if blackListedAmmo[ammo] then continue end
+		button:SetText("")
+	end
 
-			local button = vgui.Create("DButton", panel)
-			button:SetPos(x, y)
-			button:SetSize(64, 64)
+	local function paintHidden(entry)
+		return function(self, w, h)
+			draw.RoundedBox(0, 0, 0, w, h, slotEmptyColor)
+			surface.SetDrawColor(255, 255, 255, 48)
+			surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
 
-			x = x + button:GetWide() + 6
+			if entry == current then
+				local frac = lootingTime > 0 and math.Clamp((CurTime() - searchStart) / lootingTime, 0, 1) or 1
+				local fillH = math.floor((h - 4) * frac)
 
-			if x + button:GetWide() >= panel:GetWide() then
-				x = 40
-				y = y + button:GetTall() + 6
+				draw.RoundedBox(0, 2, h - 2 - fillH, w - 4, fillH, slotProgressColor)
+
+				local dots = string.rep(".", math.floor(CurTime() * 3) % 4)
+				draw.SimpleText(dots, "DefaultFixedDropShadow", w / 2, h / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			else
+				draw.SimpleText("?", "DefaultFixedDropShadow", w / 2, h / 2, slotQuestionColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
-
-			button:SetText("")
-
-			local text = game.GetAmmoName(ammo)
-			text = getText(text, button:GetWide() - corner * 2)
-
-			button.Paint = function(self, w, h)
-				draw.RoundedBox(0, 0, 0, w, h, self:IsHovered() and grey or black)
-				surface.SetDrawColor(255, 255, 255, 128)
-				surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
-
-				local round = Material(AmmoTypes[tonumber(ammo)] or "vgui/hud/hmcd_person", "noclamp smooth")
-
-				surface.SetMaterial(round)
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.DrawTexturedRect(2, 2, w - 4, h - 4)
-
-				for i, text in pairs(text) do
-					draw.SimpleText(text, "DefaultFixedDropShadow", corner, corner + (i - 1) * 12, color_white)
-				end
-			end
-
-			button.DoClick = function()
-				net.Start("ply_take_ammo")
-					net.WriteEntity(ragdoll or lootEnt)
-					net.WriteFloat(tonumber(ammo))
-				net.SendToServer()
-			end
-
-			button.DoRightClick = button.DoClick
 		end
-	end)
+	end
 
-	-- "Forget" target's inventory after 1 min
-	timer.Simple(60, function() hg_searched[targetID] = nil end)
+	local function setupWeaponButton(button, wep, weapon)
+		local text = weapon.PrintName or wep
+		text = getText(text, button:GetWide() - corner * 2)
+
+		button.Paint = function(self, w, h)
+			draw.RoundedBox(0, 0, 0, w, h, self:IsHovered() and grey or black)
+			surface.SetDrawColor(255, 255, 255, 128)
+			surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
+
+			local x, y = self:LocalToScreen(0, 0)
+			DrawWeaponSelectionEX(weapon, x, y, w, h)
+
+			for i, text in pairs(text) do
+				draw.SimpleText(text, "DefaultFixedDropShadow", corner, corner + (i - 1) * 12, color_white)
+			end
+		end
+
+		button.DoClick = function()
+			net.Start("ply_take_item")
+				net.WriteEntity(ragdoll or lootEnt)
+				net.WriteString(wep)
+			net.SendToServer()
+		end
+
+		button.DoRightClick = button.DoClick
+	end
+
+	local function setupAmmoButton(button, ammo)
+		local text = game.GetAmmoName(ammo) or tostring(ammo)
+		text = getText(text, button:GetWide() - corner * 2)
+
+		local round = Material(AmmoTypes[tonumber(ammo)] or "vgui/hud/hmcd_person", "noclamp smooth")
+
+		button.Paint = function(self, w, h)
+			draw.RoundedBox(0, 0, 0, w, h, self:IsHovered() and grey or black)
+			surface.SetDrawColor(255, 255, 255, 128)
+			surface.DrawOutlinedRect(1, 1, w - 2, h - 2)
+
+			surface.SetMaterial(round)
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.DrawTexturedRect(2, 2, w - 4, h - 4)
+
+			for i, text in pairs(text) do
+				draw.SimpleText(text, "DefaultFixedDropShadow", corner, corner + (i - 1) * 12, color_white)
+			end
+		end
+
+		button.DoClick = function()
+			net.Start("ply_take_ammo")
+				net.WriteEntity(ragdoll or lootEnt)
+				net.WriteFloat(tonumber(ammo))
+			net.SendToServer()
+		end
+
+		button.DoRightClick = button.DoClick
+	end
+
+	local function reveal(entry)
+		found[entry.key] = true
+
+		if entry.wep then
+			setupWeaponButton(entry.button, entry.wep, entry.weapon)
+		else
+			setupAmmoButton(entry.button, entry.ammo)
+		end
+	end
+
+	local function nextSearch(start)
+		current = table.remove(pending, 1)
+		searchStart = start or CurTime()
+
+		found.__progressKey = current and current.key or nil
+		found.__progressStart = current and searchStart or nil
+	end
+
+	for _, entry in ipairs(entries) do
+		local button = vgui.Create("DButton", frame)
+		nextSlot(button)
+
+		entry.button = button
+
+		if found[entry.key] or lootingTime <= 0 then
+			reveal(entry)
+		else
+			button.Paint = paintHidden(entry)
+			button.DoClick = function() end
+			button.DoRightClick = button.DoClick
+
+			pending[#pending + 1] = entry
+		end
+	end
+
+	if pending[1] and found.__progressKey == pending[1].key then
+		nextSearch(found.__progressStart)
+	else
+		nextSearch()
+	end
+
+	function panel:Think()
+		if not current then return end
+		if CurTime() - searchStart < lootingTime then return end
+
+		reveal(current)
+		nextSearch()
+	end
+
+	timer.Create("hg_forget_inventory_" .. targetID, 60, 1, function() hg_searched[targetID] = nil end)
 end)
 
--- Forget all inventories after cleanup (mode change)
 hook.Add("PostCleanupMap", "hg_ForgetInventories", function()
 	hg_searched = {}
 end)

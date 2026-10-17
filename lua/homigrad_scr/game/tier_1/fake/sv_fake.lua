@@ -111,11 +111,9 @@ function Faking(ply, force)
 			local eyeatt = rag:GetAttachment(rag:LookupAttachment("eyes"))
 
 			bull:SetPos(eyeatt.Pos)
-			-- bull:SetPos(eyeatt.Pos + eyeatt.Ang:Up() * 3.5)
 			bull:SetAngles(rag:GetAngles())
 			bull:SetMoveType(MOVETYPE_OBSERVER)
 			bull:SetKeyValue("targetname", "Bullseye")
-			-- bull:SetParent(rag, rag:LookupAttachment("eyes"))
 			bull:SetKeyValue("health", "9999")
 			bull:SetKeyValue("spawnflags", "256")
 
@@ -247,18 +245,8 @@ function Faking(ply, force)
 	end
 end
 
---[[
-hook.Add("CanExitVehicle", "fakefastcar", function(veh, ply)
-	if veh:GetPhysicsObject():GetVelocity():Length() > 100 then Faking(ply) return false end
-end) --]]
-
 function FakeBullseyeTrigger(rag, owner)
 	if not IsValid(rag.bull) then return end
-
-	--[[
-	for _, ent in pairs(ents.GetAll()) do
-		if ent:IsNPC() and ent:Disposition(owner) == D_HT then ent:AddEntityRelationship(rag.bull, D_HT, 0) end
-	end --]]
 end
 
 hook.Add("OnEntityCreated", "hg_entitycreated", function(ent)
@@ -289,9 +277,6 @@ hook.Add("OnEntityCreated", "hg_entitycreated", function(ent)
 		end
 	end)
 end)
-
--- Shooting in fake (moved)
--- hook.Add("Think", "FakedShoot", function() end)
 
 hook.Add("PlayerSay", "hg_adminentname", function(ply, text)
 	if ply:IsAdmin() and string.lower(text) == "entname" then
@@ -328,8 +313,6 @@ function PlayerMeta:DropWeapon1(wep)
 
 	ply:DropWeapon(wep)
 
-	-- wep:SetPos(ply:EyePos())
-	-- wep:SetAngles(ply:GetAngles())
 	wep.Spawned = true
 
 	if ply.ActiveWeapon == wep and IsValid(ply.wep) then
@@ -402,8 +385,6 @@ hook.Add("PhysgunDrop", "hgDropPlayer", function(ply, ent) ent.isheld = false en
 hook.Add("PlayerDisconnected", "hgSavePlayerInfo", function(ply) if ply:Alive() then ply:Kill() end end)
 
 hook.Add("PhysgunPickup", "hgPickUpPlayer", function(ply, ent)
-	-- if ply:GetUserGroup()=="servermanager" or ply:GetUserGroup()=="superadmin" or ply:GetUserGroup()=="owner" or ply:GetUserGroup()=="admin" or ply:GetUserGroup()=="operator" then
-
 	if GetConVar("hg_ConstructOnly"):GetBool() == true then
 		if ent:IsPlayer() and not IsValid(ent.FakeRagdoll) or ent:IsRagdoll() then
 			return false
@@ -443,9 +424,6 @@ hook.Add("PlayerSpawn", "hg_ResetFakeBody", function(ply)
 			send(plys, lootEnt, true)
 		end
 	end
-
-	-- local ragdoll = ply:GetNWEntity("Ragdoll")
-	-- if IsValid(ragdoll) then ragdoll:Remove() end
 
 	ply:SetNWEntity("Ragdoll", NULL)
 end)
@@ -504,7 +482,6 @@ concommand.Add("fake", function(ply)
 	if ply.brokenspine then return nil end
 	if IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWEntity("Ragdoll"):GetVelocity():Length() > 300 then return nil end
 	if IsValid(ply:GetNWEntity("Ragdoll")) and table.Count(constraint.FindConstraints(ply:GetNWEntity("Ragdoll"), "Rope")) > 0 then return nil end
-	-- if IsValid(ply:GetNWEntity("Ragdoll")) and table.Count(constraint.FindConstraints(ply:GetNWEntity("Ragdoll"), "Weld")) > 0 then return nil end
 	if ply.pain > 250 * ply.Blood / 5000 + ply:GetNWInt("SharpenAMT") * 5 or ply.Blood < 3000 then return end
 
 	timer.Create("faketimer" .. ply:EntIndex(), 2, 1, function() end)
@@ -531,7 +508,16 @@ local function CreateArmor(ragdoll, info)
 	local Index = ragdoll:LookupBone(item.bon)
 	if not Index then return end
 
-	local Pos, Ang = (ply or ragdoll):GetBonePosition(Index)
+	local Pos, Ang
+	local physBone = ragdoll:TranslateBoneToPhysBone(Index)
+	local physObj = physBone and physBone >= 0 and ragdoll:GetPhysicsObjectNum(physBone)
+
+	if IsValid(physObj) then
+		Pos, Ang = physObj:GetPos(), physObj:GetAngles()
+	else
+		Pos, Ang = ragdoll:GetBonePosition(Index)
+	end
+
 	if not Pos then return end
 
 	local ent = ents.Create(item.ent)
@@ -706,11 +692,11 @@ function PlayerMeta:CreateRagdoll(attacker, dmginfo, force)
 	duplicator.DoGeneric(rag, Data)
 
 	rag:SetModel(self:GetModel())
-	rag:SetNWVector("plycolor", self:GetPlayerColor())
 	rag:SetSkin(self:GetSkin())
 	rag:Spawn()
 
-	-- rag:CallOnRemove("hgRemoveFirstRag", function() self.firstrag = false end)
+	rag:SetNWVector("plycolor", self:GetPlayerColor())
+
 	rag:CallOnRemove("hgKillRagOwner", function()
 		if not rag.unfaked and RagdollOwner(rag) then
 			rag.unfaked = false
@@ -726,7 +712,7 @@ function PlayerMeta:CreateRagdoll(attacker, dmginfo, force)
 	rag:SetNWEntity("RagdollOwner", self)
 	rag:SetNWString("EA_Attachments", self:GetNWString("EA_Attachments", nil))
 
-	local vel = self:GetVelocity() -- + (force or vector_origin) * 10
+	local vel = self:GetVelocity()
 	local phys_bone = nil
 
 	if dmginfo then phys_bone = GetPhysicsBoneDamageInfo(self, dmginfo) or 0 end
@@ -828,25 +814,7 @@ hook.Add("JMod Armor Equip", "Fake", function(ply, slot, item, drop)
 	ent:CallOnRemove("Fake", Remove, ent, ply)
 end, 2)
 
---[[
-local oldFakeCollision = CreateConVar("hg_oldcollidefake", "0")
-
-COMMANDS.oldcollidefake = {
-	function(ply, args)
-		if not ply:IsAdmin() then return end
-		if not args[1] then return end
-
-		local value = tonumber(args[1]) == 1
-
-		GetConVar("hg_oldcollidefake"):SetBool(value)
-		ply:ChatPrint("Old fake collision: " .. tostring(oldFakeCollision:GetBool()))
-	end
-} --]]
-
 hook.Add("Player Collide", "hgFaking", function(ply, hitEnt, data)
-	-- if not ply:HasGodMode() and data.Speed >= 250 / hitEnt:GetPhysicsObject():GetMass() * 20 and not IsValid(ply.FakeRagdoll) and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > 80 then
-	-- if oldFakeCollision:GetBool() and not ply:HasGodMode() and data.Speed > 200 or not oldFakeCollision:GetBool() and not ply:HasGodMode() and data.Speed >= 250 / hitEnt:GetPhysicsObject():GetMass() * 20 and not IsValid(ply.FakeRagdoll) and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > 150 then
-
 	if not ply:HasGodMode() and data.Speed >= 250 / hitEnt:GetPhysicsObject():GetMass() * 20 and not IsValid(ply.FakeRagdoll) and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > 150 then
 		timer.Simple(0, function()
 			if not IsValid(ply) or IsValid(ply.FakeRagdoll) then return end
@@ -1170,10 +1138,10 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 				head:ComputeShadowControl(shadowparams)
 			end
 		end
-		
+
 		local fingerL1 = rag:LookupBone("ValveBiped.Bip01_L_Finger1")
 		local fingerL2 = rag:LookupBone("ValveBiped.Bip01_L_Finger2")
-		
+
 		-- Grab with left hand
 		if ply:KeyDown(IN_SPEED) and not ply.unconscious and not timer.Exists("StunTime" .. ply:EntIndex()) then
 			local bone = rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_L_Hand"))
@@ -1229,7 +1197,7 @@ hook.Add("Player Think", "FakeControl", function(ply, time)
 
 		local fingerR1 = rag:LookupBone("ValveBiped.Bip01_R_Finger1")
 		local fingerR2 = rag:LookupBone("ValveBiped.Bip01_R_Finger2")
-		
+
 		-- Grab with right hand
 		if ply:KeyDown(IN_WALK) and not ply.unconscious and not timer.Exists("StunTime" .. ply:EntIndex()) then
 			local bone = rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand"))
