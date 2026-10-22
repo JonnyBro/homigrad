@@ -1,5 +1,3 @@
-COMMANDS = COMMANDS or {}
-
 local explosions = {
 	["models/props_junk/gascan001a.mdl"] = true,
 	["models/props_junk/propane_tank001a.mdl"] = true,
@@ -79,16 +77,6 @@ hook.Add("EntityTakeDamage", "EntityDamageExample", function(target, dmginfo)
 		end
 	end
 end)
-
-COMMANDS.arm = {
-	function(ply, args)
-		if not ply:IsAdmin() then return end
-
-		ply:GetEyeTrace().Entity:Arm()
-		ply:GetEyeTrace().Entity:Activate()
-	end,
-	1
-}
 
 hook.Add("InitPostEntity", "changeperfsettings", function()
 	local phys_settings = physenv.GetPerformanceSettings()

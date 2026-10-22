@@ -42,15 +42,6 @@ hook.Add("Player Death", "PlayerClass", function(ply, inf, att)
 	ply:PlayerClassEvent("Player Death", att)
 end)
 
-COMMANDS.playerclass = {
-	function(ply, args)
-		for _, plr in pairs(player.GetListByName(args[1], ply)) do
-			plr:SetPlayerClass(args[2])
-			ply:ChatPrint(plr:Name() .. " = " .. args[2])
-		end
-	end
-}
-
 hook.Add("Player Start Voice", "PlayerClass", function(ply)
 	ply:PlayerClassEvent("PlayerStartVoice")
 end)

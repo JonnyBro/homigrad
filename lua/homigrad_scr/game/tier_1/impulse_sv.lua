@@ -56,9 +56,7 @@ hook.Add("Player Think", "StoppingImpulse", function(ply, time)
 	ply.dmgimpulse = math.max(ply.dmgimpulse - 3, 0)
 end)
 
-hook.Add("PlayerSpawn", "homgirad-impulse", function(ply)
-	if PLYSPAWN_OVERRIDE then return end
-
+hook.Add("Homigrad Heal", "homgirad-impulse", function(ply)
 	ply.dmgimpulse = 0
 	ply.impulseNext = 0
 

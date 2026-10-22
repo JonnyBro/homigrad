@@ -33,10 +33,3 @@ end
 if GetGlobalVar("Center") == nil then
 	SetGlobalVar("Center", true)
 end
-
-COMMANDS.center = {
-	function(ply, args)
-		SetGlobalVar("Center", tonumber(args[1]) > 0)
-		PrintMessage(3, tostring(GetGlobalVar("Center")))
-	end
-}

@@ -1,5 +1,4 @@
 util.AddNetworkString("info_blood")
-util.AddNetworkString("organism_info")
 
 BleedingEntities = BleedingEntities or {}
 
@@ -113,6 +112,12 @@ end)
 hook.Add("PlayerSpawn", "hgSpawnBlood", function(ply)
 	if PLYSPAWN_OVERRIDE then return end
 
+	ply.Attacker = nil
+
+	hook.Run("Homigrad Heal", ply)
+end)
+
+hook.Add("Homigrad Heal", "hgSpawnBlood", function(ply)
 	ply.IsBleeding = false
 
 	ply.Blood = 5000
@@ -123,8 +128,6 @@ hook.Add("PlayerSpawn", "hgSpawnBlood", function(ply)
 	ply.RightLeg = 1
 	ply.RightArm = 1
 	ply.LeftArm = 1
-
-	ply.Attacker = nil
 
 	ply.nopain = false
 
@@ -173,30 +176,3 @@ hook.Add("Player Death", "deathblood", function(ply)
 end)
 
 hook.Add("EntityTakeDamage", "van", function(ent, dmginfo) if ent:GetClass() == "sim_fphys_van" then dmginfo:ScaleDamage(0.13) end end)
-
-concommand.Add("hg_organisminfo", function(ply, cmd, args)
-	if not ply:IsAdmin() then return end
-
-	local plr = args[1] and player.GetListByName(args[1], ply)[1] or ply
-
-	net.Start("organism_info")
-		net.WriteTable(plr.organs)
-		net.WriteString(
-			"Player" .. plr:Name() .. "\n" ..
-			"Blood (ml): " .. tostring(plr.Blood) .. "\n" ..
-			"Bleeding (ml/pump): " .. tostring(plr.Bloodlosing) .. "\n" ..
-			"CPR: " .. tostring(plr.CPR) .. "\n" ..
-			"Pain: " .. tostring(plr.pain) .. "\n" ..
-			"Cardiac arrest: " .. tostring(plr.heartstop) .. "\n" ..
-			"O2: " .. tostring(plr.o2) .. "\n" ..
-			"Heartbeat: " .. tostring(plr.heartstop and 0 or 1 / plr.nextPulse * 60)
-		)
-	net.Send(ply)
-end)
-
-concommand.Add("hg_organism_setvalue", function(ply, cmd, args)
-	if not ply:IsAdmin() then return end
-	local plr = args[3] and player.GetListByName(args[3], ply)[1] or ply
-
-	plr.organs[args[1]] = args[2]
-end)

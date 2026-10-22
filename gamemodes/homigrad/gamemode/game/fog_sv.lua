@@ -9,26 +9,6 @@ function ReadFogSetting()
 end
 
 -- NOTE: Do we need this?
-COMMANDS.fog = {
-	function(ply, args)
-		if not args[1] or args[1] == "" then
-			file.Delete(getName())
-
-			SetupFogSetting()
-		else
-			local dis = tonumber(args[1])
-			local color
-
-			if args[2] then
-				color = Color(tonumber(args[2]), tonumber(args[3]), tonumber(args[4]))
-			end
-
-			file.Write(getName(), util.TableToJSON({dis, color}))
-		end
-
-		SetupFogSetting()
-	end
-}
 
 function SetupFogSetting()
 	local tbl = ReadFogSetting()

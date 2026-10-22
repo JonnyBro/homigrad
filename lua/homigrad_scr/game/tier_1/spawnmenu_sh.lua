@@ -3,17 +3,6 @@ local validUserGroup = {
 }
 
 if SERVER then
-	COMMANDS.accessspawn = {
-		function(ply, args)
-			local arg = tobool(args[1])
-			if not arg then arg = false end
-
-			SetGlobalBool("AccessSpawn", arg)
-
-			PrintMessage(3, "Spawn Menu Boolean: " .. tostring(GetGlobalBool("AccessSpawn")))
-		end
-	}
-
 	local function CanUseSpawnMenu(ply, class)
 		local func = TableRound().CanUseSpawnMenu
 		func = func and func(ply, class)

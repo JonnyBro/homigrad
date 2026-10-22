@@ -1,6 +1,4 @@
-hook.Add("PlayerSpawn", "Damage", function(ply)
-	if PLYSPAWN_OVERRIDE then return end
-
+hook.Add("Homigrad Heal", "Damage", function(ply)
 	ply.organs = {
 		heart = 20,
 		artery = 1,
@@ -16,13 +14,17 @@ hook.Add("PlayerSpawn", "Damage", function(ply)
 	ply.arterybleeding = false
 	ply.brokenspine = false
 
-	ply.Attacker = nil
-	ply.KillReason = nil
-
 	ply.msgLeftArm = 0
 	ply.msgRightArm = 0
 	ply.msgLeftLeg = 0
 	ply.msgRightLeg = 0
+end)
+
+hook.Add("PlayerSpawn", "Damage", function(ply)
+	if PLYSPAWN_OVERRIDE then return end
+
+	ply.Attacker = nil
+	ply.KillReason = nil
 
 	ply.LastDMGInfo = nil
 	ply.LastHitPhysicsBone = nil

@@ -134,7 +134,12 @@ if SERVER then
         end
 
         local state = self:GetState()
-        if self.Exploded then return end
+
+        if self.CustomThink then
+            self:CustomThink(state, CurTime())
+        end
+
+        if not IsValid(self) or self.Exploded then return end
 
         if state == JMod.EZ_STATE_PRIMED and not self:IsPlayerHolding() then
             self:Arm()

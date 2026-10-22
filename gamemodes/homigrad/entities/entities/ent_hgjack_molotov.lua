@@ -65,7 +65,7 @@ if SERVER then
 			end
 		end
 	end
-	
+
 	function ENT:Detonate()
 		if self.Exploded then return end
 		self.Exploded = true
@@ -92,7 +92,7 @@ if SERVER then
 			Flame:Spawn()
 			Flame:Activate()
 		end
-		
+
 		self:Remove()
 	end
 elseif CLIENT then

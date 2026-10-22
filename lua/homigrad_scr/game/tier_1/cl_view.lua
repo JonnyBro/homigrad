@@ -217,6 +217,10 @@ end) --]]
 
 local oldrag
 
+local function IsDeathCamActive()
+	return deathFadeTimer ~= nil and timer.Exists(deathFadeTimer)
+end
+
 -- TODO: Render deathtexts on death for funnie messages
 hook.Add("Player Death", "hgPlayerDeath2", function(ent)
 	if ent ~= LocalPlayer() then return end
@@ -259,9 +263,9 @@ hook.Add("Player Death", "hgPlayerDeath2", function(ent)
 	end)
 end)
 
-hook.Add("PlayerSpawn", "hgCleanupDeathEffects", function(ply)
+hook.Add("Player Spawn", "hgCleanupDeathEffects", function(ply)
 	if ply ~= LocalPlayer() then return end
-	if deathFadeTimer and timer.Exists(deathFadeTimer) then timer.Remove(deathFadeTimer) end
+	if IsDeathCamActive() then timer.Remove(deathFadeTimer) end
 
 	ply:ScreenFade(SCREENFADE.OUT, Color(0, 0, 0, 0), 0.1, 0)
 
@@ -322,7 +326,7 @@ function CalcView(ply, vec, ang, fov, znear, zfar)
 	local lply = LocalPlayer()
 	fov = CameraSetFOV + ADDFOV
 
-	if not ply:Alive() and timer.Exists("DeathCam") and IsValid(deathrag) then
+	if not ply:Alive() and IsDeathCamActive() and IsValid(deathrag) then
 		local att = deathrag:GetAttachment(deathrag:LookupAttachment("eyes"))
 		LerpEyeRagdoll = LerpAngleFT(0.08, LerpEyeRagdoll, att.Ang)
 		LerpEyeRagdoll[3] = LerpEyeRagdoll[3] + ADDROLL
@@ -799,7 +803,7 @@ hook.Add("RenderScreenspaceEffects", "BloomEffect-homigrad", function()
 		DrawColorModify(tab2)
 	end
 
-	if not LocalPlayer():Alive() and timer.Exists("DeathCam") then
+	if not LocalPlayer():Alive() and IsDeathCamActive() then
 		DrawMotionBlur(0.5, 0.3, 0.02)
 		DrawSharpen(1, 0.2)
 

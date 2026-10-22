@@ -275,38 +275,14 @@ function GM:PlayerCanJoinTeam(ply, teamID)
 	if result ~= nil then return result end
 end
 
-COMMANDS.scared = {
-	function(ply, args)
-		if not args[1] then return end
-
-		local value = (tonumber(args[1]) == 1 and true) or false
-
-		ply:SetNWBool("scared", value)
-		ply:ChatPrint("NoclipScary: " .. tostring(value))
-	end
-}
-
-COMMANDS.nortv = {
-	function(ply, args)
-		if not ply:IsAdmin() or not args[1] then return end
-
-		local value = (tonumber(args[1]) == 1 and true) or false
-
-		HG_DISABLERTV = value
-
-		PrintMessageChat(3, "nortv: " .. tostring(value))
-	end,
-	2
-}
-
 if not ulx.hvotemap then ulx.hvotemap = ulx.votemap end
 if not ulx.hvotemap2 then ulx.hvotemap2 = ulx.votemap2 end
 
-function ulx.votemap(...)
+function ulx.votemap(calling_ply, ...)
 	if HG_DISABLERTV then
-		ULib.tsayError(calling_ply, "no", true)
+		ULib.tsayError(calling_ply, "Map voting is disabled.", true)
 	else
-		ulx.hvotemap(...)
+		ulx.hvotemap(calling_ply, ...)
 	end
 end
 
@@ -320,11 +296,11 @@ votemap:addParam{
 votemap:defaultAccess(ULib.ACCESS_ALL)
 votemap:help("Vote for a map, no args lists available maps.")
 
-function ulx.votemap2(...)
+function ulx.votemap2(calling_ply, ...)
 	if HG_DISABLERTV then
-		ULib.tsayError(calling_ply, "no", true)
+		ULib.tsayError(calling_ply, "Map voting is disabled.", true)
 	else
-		ulx.hvotemap2(...)
+		ulx.hvotemap2(calling_ply, ...)
 	end
 end
 
@@ -343,31 +319,6 @@ votemap2:help("Starts a public map vote.")
 hook.Add("Player Think", "HasGodMode Rep", function(ply)
 	ply:SetNWBool("HasGodMode", ply:HasGodMode())
 end)
-
-COMMANDS.roll = {
-	function(ply, args)
-		if not args[1] then args[1] = 20 end
-
-		local r = math.random(1, tonumber(args[1]))
-
-		for _, ply2 in player.Iterator() do
-			if GAMEMODE:PlayerCanSeePlayersChat("gg", false, ply2, ply) then
-				PrintMessageChat(ply2, r)
-			end
-		end
-	end,
-	nil, nil, true
-}
-
-COMMANDS.fullup = {
-	function(ply, args)
-		ply.stamina = 100
-		ply.pain = 0
-		ply.Blood = 5000
-		ply.Bloodlosing = 0
-		ply.dmgimpulse = 0
-	end
-}
 
 function GM:DoPlayerDeath(ply) end
 

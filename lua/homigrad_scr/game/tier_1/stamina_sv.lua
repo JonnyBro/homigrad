@@ -5,9 +5,7 @@ hook.Add("Move", "move.speed", function(ply, movedata) if ply:Alive() then ply.s
 hook.Add("PlayerPostThink", "homigrad-player-thinker", function(ply) hook.Run("Player Think", ply, CurTime()) end)
 hook.Add("PlayerInitialSpawn", "homigrad-addcallback", function(ply) ply:AddCallback("PhysicsCollide", function(phys, data) hook.Run("Player Collide", ply, data.HitEntity, data) end) end)
 
-hook.Add("PlayerSpawn", "homigrad-stamina", function(ply)
-	if PLYSPAWN_OVERRIDE then return end
-
+hook.Add("Homigrad Heal", "homigrad-stamina", function(ply)
 	ply.stamina = 100
 	ply.staminaNext = 0
 	ply.adrenaline = 0

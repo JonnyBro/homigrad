@@ -54,7 +54,6 @@ local turnTable = {
 	["gun-free-zone"] = 3
 }--]]
 
-CreateConVar("homicide_setmode", "", FCVAR_LUA_SERVER, "")
 CreateClientConVar("homicide_get", 0, true, true, "Show traitors and stuff while you're spectating", 0, 1)
 
 function homicide.IsMapBig()
@@ -75,7 +74,8 @@ function homicide.StartRound(data)
 	team.SetColor(1, homicide.red[2])
 
 	if SERVER then
-		homicide.roundType = math.random(1, 5)
+		homicide.roundType = homicide.nextRoundType or math.random(1, 5)
+		homicide.nextRoundType = nil
 
 		net.Start("roundType")
 			net.WriteInt(homicide.roundType, 5)
