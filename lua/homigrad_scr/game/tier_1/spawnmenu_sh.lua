@@ -44,6 +44,10 @@ else
 		else return false end
 	end
 
-	hook.Add("ContextMenuOpen", "hide_spawnmenu", CanUseSpawnMenu)
+	hook.Add("ContextMenuOpen", "hide_spawnmenu", function()
+		if hg.CanUseAdminMenu() then return true end
+
+		return CanUseSpawnMenu()
+	end)
 	hook.Add("SpawnMenuOpen", "hide_spawnmenu", CanUseSpawnMenu)
 end

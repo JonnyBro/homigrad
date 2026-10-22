@@ -259,14 +259,11 @@ local function ToggleScoreboard(toggle)
 					ply:ShowProfile()
 				end)
 
-				if LocalPlayer():GetUserGroup("moderator") or LocalPlayer():IsAdmin() then
-					playerMenu:AddOption("Go To", function()
-						LocalPlayer():ConCommand("ulx goto $" .. ply:UserID())
-					end)
+				if hg.CanUseAdminMenu() then
+					local adminMenu, adminOption = playerMenu:AddSubMenu("#hg.adminmenu.title")
+					adminOption:SetIcon("icon16/shield.png")
 
-					playerMenu:AddOption("Bring", function()
-						LocalPlayer():ConCommand("ulx bring $" .. ply:UserID())
-					end)
+					hg.BuildAdminMenu(adminMenu, ply)
 				end
 
 				playerMenu:MakePopup()

@@ -14,7 +14,7 @@ It features a somewhat realistic health and movement system and offers several s
 > [!WARNING]
 > Don't forget to delete the `homigrad-main` in the addons folder if you have one.
 
-[Click Here](https://steamcommunity.com/sharedfiles/filedetails/?id=3401451044)
+**[https://steamcommunity.com/sharedfiles/filedetails/?id=3401451044](https://steamcommunity.com/sharedfiles/filedetails/?id=3401451044)**
 
 ## Installation | Manual
 
@@ -30,8 +30,8 @@ On a dedicated server, please use `+tickrate number`. On the client (when you ho
 
 ## TODO
 
-- [ ] Move Homigrad's commands to ULX (i like ulx).
-- [ ] Find and fix existing bugs (there are many to address).
+- [x] Move Homigrad's commands to ULX (i like ulx).
+- [ ] Find and fix existing bugs (more to come).
 
 ## Known Bugs
 
@@ -57,7 +57,7 @@ Yes! Just like the original repo, this project is under the MIT License, so you�
 
 ## Credits
 
-- **Sadsalat, Useless, Mr. Point**: For creating the original Homigrad and making it open source. The original repository is available [here](https://github.com/sadsalat/Orignal-Homigrad).
+- **Sadsalat, Useless, Mr. Point**: For creating the original Homigrad and making it open-source. The original repository is available [here](https://github.com/sadsalat/Orignal-Homigrad).
 - **Harrison's Servers**: For open-sourcing their version (I wasted all of my NY holidays messing with workshop version (╯‵□′)╯︵┻━┻).
 - **ChatGPT**: Rewriting my shitty README.
-- **My friend DeXToR**: Playtesting big time and Ukrainian translation.
+- **My friend DeXToR**: Playtesting with me and doing Ukrainian translation.

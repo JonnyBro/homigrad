@@ -703,15 +703,25 @@ vomit:help("Makes player(s) vomit.")
 
 -- russian_roulette
 function ulx.hg_russian_roulette(ply, targets)
+	local affected = {}
+
 	for _, v in pairs(targets) do
+		if not v:Alive() then continue end
+
 		local wep = v:GetWeapon("weapon_mateba")
 		if not IsValid(wep) then wep = v:Give("weapon_mateba", true) end
+		if not IsValid(wep) then continue end
 
+		v:SetAmmo(0, wep:GetPrimaryAmmoType())
 		wep:SetClip1(1)
 		wep:RollDrum()
+
+		table.insert(affected, v)
 	end
 
-	ulx.fancyLogAdmin(ply, "#A gave #T a revolver with one bullet", targets)
+	if #affected == 0 then return ULib.tsayError(ply, "No alive players among targets.", true) end
+
+	ulx.fancyLogAdmin(ply, "#A gave #T a revolver with one bullet", affected)
 end
 
 local russian_roulette = ulx.command("Homigrad", "ulx russian_roulette", ulx.hg_russian_roulette, "!russian_roulette")
@@ -719,7 +729,7 @@ russian_roulette:addParam({
 	type = ULib.cmds.PlayersArg
 })
 russian_roulette:defaultAccess(ULib.ACCESS_ADMIN)
-russian_roulette:help("Gives player(s) a Mateba with one bullet.")
+russian_roulette:help("Gives player(s) a Mateba with one bullet and no spare .44 ammo.")
 
 -- forcepolice
 function ulx.hg_forcepolice(ply)
