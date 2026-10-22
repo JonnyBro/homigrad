@@ -22,7 +22,7 @@ SWEP.Primary.Sound = "snd_jack_hmcd_snp_close.wav"
 SWEP.Primary.SoundFar = "snd_jack_hmcd_snp_far.wav"
 SWEP.Primary.Force = 65
 SWEP.ReloadTime = 2
-SWEP.ShootWait = 0.5
+SWEP.ShootWait = 1
 SWEP.Sight = true
 SWEP.TwoHands = true
 

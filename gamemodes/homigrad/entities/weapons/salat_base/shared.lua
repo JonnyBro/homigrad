@@ -27,6 +27,8 @@ SWEP.Primary.Damage = 100
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "weapons/fiveseven/fiveseven-1.wav"
 SWEP.Primary.SoundFar = "m9/m9_dist.wav"
+SWEP.Primary.SoundLevel = 80
+SWEP.Primary.SoundPitch = {100, 120}
 SWEP.Primary.Force = 0
 
 SWEP.Secondary.ClipSize = -1
@@ -331,7 +333,9 @@ function SWEP:PrimaryAttack()
 
 	if SERVER then
 		local ent = IsValid(ply.FakeRagdoll) and ply.FakeRagdoll or ply
-		ent:EmitSound(self.Primary.Sound, 80, math.random(100, 120), 1, CHAN_WEAPON)
+		local pitch = self.Primary.SoundPitch
+
+		ent:EmitSound(self.Primary.Sound, self.Primary.SoundLevel, math.random(pitch[1], pitch[2]), 1, CHAN_WEAPON)
 	end
 
 	self:FireBullet()

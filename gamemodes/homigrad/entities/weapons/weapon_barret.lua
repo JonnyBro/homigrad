@@ -18,7 +18,10 @@ SWEP.Primary.Ammo = "12.7x99 mm"
 SWEP.Primary.Damage = 300
 SWEP.Primary.Sound = "snd_jack_hmcd_snp_close.wav"
 SWEP.Primary.SoundFar = "snd_jack_hmcd_snp_far.wav"
+SWEP.Primary.SoundLevel = 95
+SWEP.Primary.SoundPitch = {60, 70}
 SWEP.Primary.Force = 600
+SWEP.ShootWait = 1.5
 
 SWEP.ViewModel = "models/weapons/w_jmod_m107.mdl"
 SWEP.WorldModel = "models/weapons/w_jmod_m107.mdl"
