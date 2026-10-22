@@ -2,20 +2,6 @@ util.AddNetworkString("radio_use")
 util.AddNetworkString("play_snd")
 util.AddNetworkString("radio_set")
 
-COMMANDS.radio = {
-	function(ply, args)
-		local radio = ents.Create("prop_physics")
-		radio:SetModel("models/props/cs_office/radio.mdl")
-		radio:SetPos(ply:GetEyeTrace().HitPos + Vector(0, 0, 10))
-		radio:Spawn()
-		radio:SetUseType(3)
-		radio.radio = true
-		radio.destructible = tobool(args[1]) or false
-		radio.station = {"", false}
-		radio.PlayersUsing = {}
-	end
-}
-
 hook.Add("EntityTakeDamage", "radio_nodmg", function(radio, dmginfo)
 	if radio.radio and not radio.destructible then
 		local att = dmginfo:GetAttacker()
@@ -71,6 +57,21 @@ net.Receive("radio_set", function(len, ply)
 
 	if link ~= nil and play ~= nil then PlayRadio(radio, radio.station) end
 end)
+
+function CreateRadio(pos, destructible)
+	local radio = ents.Create("prop_physics")
+	radio:SetModel("models/props/cs_office/radio.mdl")
+	radio:SetPos(pos)
+	radio:Spawn()
+	radio:SetUseType(SIMPLE_USE)
+
+	radio.radio = true
+	radio.destructible = destructible
+	radio.station = {"", false}
+	radio.PlayersUsing = {}
+
+	return radio
+end
 
 function PlayRadio(radio, station)
 	net.Start("play_snd")

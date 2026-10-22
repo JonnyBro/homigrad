@@ -8,30 +8,6 @@ local function GetTraitorsNames()
 	return tbl
 end
 
-COMMANDS.homicide_get = {
-	function(ply, args)
-		if not ply:IsAdmin() then return end
-		-- if ply:Alive() then return end
-		-- if ply:Team() ~= 1002 then return end
-
-		local role = {{}, {}}
-
-		for _, ply in pairs(team.GetPlayers(1)) do
-			if ply.roleT then
-				table.insert(role[1], ply)
-			end
-
-			if ply.roleCT then
-				table.insert(role[2], ply)
-			end
-		end
-
-		net.Start("homicide_roleget")
-			net.WriteTable(role)
-		net.Send(ply)
-	end
-}
-
 local function makeT(ply)
 	if not IsValid(ply) then return end
 
@@ -122,18 +98,6 @@ local function makeCT(ply)
 		ply:GiveAmmo(wep:GetMaxClip1() * 2, wep:GetPrimaryAmmoType(), true)
 	end
 end
-
-COMMANDS.russian_roulette = {
-	function(ply, args)
-		if not ply:IsAdmin() then return end
-
-		for _, plr in pairs(player.GetListByName(args[1], ply)) do
-			local wep = plr:GetWeapon("weapon_mateba") or plr:Give("weapon_mateba", true)
-			wep:SetClip1(1)
-			wep:RollDrum()
-		end
-	end
-}
 
 function homicide.Spawns()
 	local points = {}
@@ -256,6 +220,7 @@ function homicide.StartRoundSV()
 	local countT = 0
 	local countCT = 0
 	local points = homicide.Spawns()
+	local forced = {}
 
 	tdm.SpawnCommand(PlayersInGame(), points, function(ply)
 		ply.roleT = false
@@ -263,6 +228,7 @@ function homicide.StartRoundSV()
 
 		if ply.forceT then
 			ply.forceT = nil
+			forced[ply] = true
 			countT = countT + 1
 
 			makeT(ply)
@@ -270,9 +236,15 @@ function homicide.StartRoundSV()
 
 		if ply.forceCT then
 			ply.forceCT = nil
+			forced[ply] = true
 			countCT = countCT + 1
 
 			makeCT(ply)
+		end
+
+		if ply.forceInnocent then
+			ply.forceInnocent = nil
+			forced[ply] = true
 		end
 
 		if ply:IsUserGroup("sponsor") or ply:IsUserGroup("supporterplus") or ply:IsAdmin() then
@@ -283,10 +255,18 @@ function homicide.StartRoundSV()
 		end
 	end)
 
-	local players = PlayersInGame()
-	local count = math.max(math.ceil(#players / 10), 1) - countT
+	local allPlayers = PlayersInGame()
+	local players = {}
+
+	for _, ply in pairs(allPlayers) do
+		if not forced[ply] then table.insert(players, ply) end
+	end
+
+	local count = math.max(math.ceil(#allPlayers / 10), 1) - countT
 
 	for _ = 1, count do
+		if #players == 0 then break end
+
 		local ply = players[math.random(#players)]
 
 		table.RemoveByValue(players, ply)
@@ -297,6 +277,8 @@ function homicide.StartRoundSV()
 	local count = math.max(math.ceil(#players / 10), 1) - countCT
 
 	for _ = 1, count do
+		if #players == 0 then break end
+
 		local ply = players[math.random(#players)]
 
 		table.RemoveByValue(players, ply)
@@ -357,15 +339,6 @@ function homicide.PlayerInitialSpawn(ply)
 	ply:SetTeam(1)
 	-- TryAssignPolice(ply)
 end
-
-COMMANDS.forcepolice = {
-	function(ply)
-		if not ply:IsAdmin() then return end
-
-		homicide.police = false
-		roundTime = 0
-	end
-}
 
 function homicide.EndRound(winner)
 	local tbl = TableRound()

@@ -38,29 +38,6 @@ if pointPagesRandom == nil then
 	pointPagesRandom = true
 end
 
-COMMANDS.levelrandom = {
-	function(ply, args)
-		if tonumber(args[1]) > 0 then
-			levelrandom = true
-		else
-			levelrandom = false
-		end
-
-		if GetConVar("hg_HomicideOnly"):GetBool() or GetConVar("hg_ConstructOnly"):GetBool() then
-			levelrandom = false
-		end
-
-		PrintMessage(3, "Randomisation of Levels: " .. tostring(levelrandom))
-	end
-}
-
-COMMANDS.pointpagesrandom = {
-	function(ply, args)
-		pointPagesRandom = tonumber(args[1]) > 0
-		PrintMessage(3, tostring(pointPagesRandom))
-	end
-}
-
 RTV_CountRound = RTV_CountRound or 0
 RTV_CountRoundDefault = 15
 RTV_CountRoundMessage = 5
@@ -304,112 +281,6 @@ hook.Add("Think", "hg-roundcheckthink", function()
 	RoundEndCheck()
 end)
 
-local function donaterVoteLevelEnd(t, argv, calling_ply, args)
-	local results = t.results
-	local winner
-	local winnernum = 0
-
-	for id, numvotes in pairs(results) do
-		if numvotes > winnernum then
-			winner = id
-			winnernum = numvotes
-		end
-	end
-
-	if winner == 1 then
-		net.Start("hg_sendchat_simple")
-			net.WriteString("#hg.rounds.vote.end.success")
-		net.Broadcast()
-
-		EndRound()
-	elseif winner == 2 then
-		net.Start("hg_sendchat_simple")
-			net.WriteString("#hg.rounds.vote.end.fail")
-		net.Broadcast()
-	else
-		net.Start("hg_sendchat_simple")
-			net.WriteString("#hg.rounds.vote.end.error")
-		net.Broadcast()
-	end
-
-	calling_ply.canVoteNext = CurTime() + 300
-end
-
-COMMANDS.levelend = {
-	function(ply, args)
-		if ply:IsAdmin() or ply:GetUserGroup("operator") then
-			EndRound()
-		else
-			local calling_ply = ply
-
-			if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 then
-				ulx.doVote("End Round?", {"#hg.yes", "#hg.no"}, donaterVoteLevelEnd, 15, nil, nil, argv, calling_ply, args)
-			end
-		end
-	end,
-	1
-}
-
-local function donaterVoteLevel(t, argv, calling_ply, args)
-	local results = t.results
-	local winner
-	local winnernum = 0
-
-	for id, numvotes in pairs(results) do
-		if numvotes > winnernum then
-			winner = id
-			winnernum = numvotes
-		end
-	end
-
-	if winner == 1 then
-		net.Start("hg_sendchat_format")
-			net.WriteTable({"#hg.rounds.vote.next.success", tostring(args[1])})
-		net.Broadcast()
-
-		SetActiveNextRound(args[1])
-	elseif winner == 2 then
-		net.Start("hg_sendchat_simple")
-			net.WriteString("#hg.rounds.vote.next.fail")
-		net.Broadcast()
-	else
-		net.Start("hg_sendchat_simple")
-			net.WriteString("#hg.rounds.vote.end.error")
-		net.Broadcast()
-	end
-
-	calling_ply.canVoteNext = CurTime() + 300
-end
-
-COMMANDS.levelnext = {
-	function(ply, args)
-		if not GetConVar("hg_HomicideOnly"):GetBool() then
-			if ply:IsAdmin() then
-				if not SetActiveNextRound(args[1]) then
-					return ply:ChatPrint("Error has occured!")
-				end
-			else
-				local calling_ply = ply
-
-				if (calling_ply.canVoteNext or CurTime()) - CurTime() <= 0 and table.HasValue(LevelList, args[1]) then
-					ulx.doVote("Change next gamemode to '" .. tostring(args[1]) .. "'?", {"#hg.yes", "#hg.no"}, donaterVoteLevel, 15, _, _, argv, calling_ply, args)
-				end
-			end
-		else
-			ply:ChatPrint("Error! Level next is not available in Homicide only servers!")
-		end
-	end,
-	1
-}
-
-COMMANDS.levels = {
-	function(ply, args)
-		local text = "Available gamemodes:\n- " .. table.concat(LevelList, "\n- ")
-		ply:ChatPrint(text)
-	end,
-	0
-}
-
 concommand.Add("hg_roundinfoget", function(ply)
 	RoundStateSync(ply, RoundData)
 end)
@@ -476,15 +347,6 @@ hook.Add("PlayerCanPickupItem", "PlayerManualPickup", function(ply, wep)
 
 	return false
 end)
-
-COMMANDS.levelhelp = {
-	function(ply)
-		local func = TableRound().help
-		if not func then return end
-
-		func(ply)
-	end
-}
 
 hook.Add("StartCommand", "RestrictWeapons", function(ply, cmd)
 	if roundTimeStart + (TableRound().CantFight or 5) - CurTime() > 0 then

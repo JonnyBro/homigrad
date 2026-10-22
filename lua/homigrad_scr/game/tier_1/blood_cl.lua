@@ -39,12 +39,4 @@ concommand.Add("hg_organisminfo", function(ply)
 	print("adrenaline: " .. adrenaline)
 end) --]]
 
-net.Receive("organism_info", function(len)
-	local organs = net.ReadTable()
-	local stringinfo = net.ReadString()
-
-	PrintTable(organs)
-	print(stringinfo)
-end)
-
 hook.Add("ScalePlayerDamage", "no_effects", function(ent, dmginfo) return true end)

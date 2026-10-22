@@ -471,7 +471,6 @@ function SWEP:GetTrace(nomodify)
 	return pos, ang
 end
 
--- entities whose damage goes through homigrad's player damage hook (ragdamage), which compensates bullet.Damage * 4
 function UsesHGDamage(ent)
 	if not IsValid(ent) then return true end
 

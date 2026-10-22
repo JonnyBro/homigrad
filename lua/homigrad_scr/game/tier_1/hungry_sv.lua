@@ -44,9 +44,7 @@ hook.Add("Player Think", "hgHungerThink", function(ply, time)
 	ply:SetHealth(not ply.heartstop and math.min(ply:Health() + math.max(math.ceil(ply.hungryregen), 1), 150) or ply:Health())
 end)
 
-hook.Add("PlayerSpawn", "hgHungerSpawn", function(ply)
-	if PLYSPAWN_OVERRIDE then return end
-
+hook.Add("Homigrad Heal", "hgHungerSpawn", function(ply)
 	ply.hungry = 89
 	ply.hungryregen = 0
 	ply.hungryNext = 0

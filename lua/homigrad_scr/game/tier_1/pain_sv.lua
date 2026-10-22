@@ -1,8 +1,6 @@
 util.AddNetworkString("info_pain")
 
-hook.Add("PlayerSpawn", "homigrad-pain", function(ply)
-	if PLYSPAWN_OVERRIDE then return end
-
+hook.Add("Homigrad Heal", "homigrad-pain", function(ply)
 	ply.painlosing = 1
 	ply.pain = 0
 	ply.painNext = 0

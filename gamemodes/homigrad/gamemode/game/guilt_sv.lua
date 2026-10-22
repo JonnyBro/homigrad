@@ -25,7 +25,7 @@ function GuiltLogic(ply, att, dmgInfo, dontApply)
 			return false, true
 		end
 
-		if not dontApply then
+		if not dontApply and not att.noguilt then
 			local customGuiltAdd = (type(resultGame) == "number" and resultGame or (resultGame == false and 0 or 1)) * (type(resultClass) == "number" and resultClass or (resultClass == false and 0 or 1))
 			hg.GuiltTable[att] = hg.GuiltTable[att] or {}
 			hg.GuiltTable[att][ply] = hg.GuiltTable[att][ply] or 0

@@ -1,7 +1,5 @@
 util.AddNetworkString("info_virus")
 
-COMMANDS = COMMANDS or {}
-
 local zombies = {
 	["npc_zombie"] = true,
 	["npc_zombie_torso"] = true,
@@ -80,9 +78,7 @@ hook.Add("Player Think", "homigrad-virus", function(ply, time)
 	end
 end)
 
-hook.Add("PlayerSpawn", "homigrad-virus", function(ply)
-	if PLYSPAWN_OVERRIDE then return end
-
+hook.Add("Homigrad Heal", "homigrad-virus", function(ply)
 	ply.virus = 0
 
 	net.Start("info_virus")
@@ -98,33 +94,21 @@ hook.Add("PostPlayerDeath", "RefreshPain", function(ply)
 	net.Send(ply)
 end)
 
-COMMANDS.virus = {
-	function(ply, args)
-		if not ply:IsAdmin() then return end
+function Vomit(ply)
+	ply:EmitSound(vomitsfxs[math.random(#vomitsfxs)])
 
-		for _, plr in pairs(player.GetListByName(args[1], ply)) do
-			plr.virus = plr.virus + 15
-			ply:ChatPrint("infected " .. plr)
-		end
-	end,
-	1
-}
+	timer.Create("Blevota" .. ply:EntIndex(), 0.1, 15, function()
+		if not IsValid(ply) or not ply:Alive() then return end
 
---[[ FIXME: hg_blevota
-COMMANDS.blevota = {
-	function(ply, args)
-		if not ply:IsAdmin() then return end
-		for _, fply in pairs(player.GetListByName(args[1], ply)) do
-			local snd = vomitsfxs[math.random(#vomitsfxs)]
-			fply:EmitSound(snd)
-			timer.Create("Blevota" .. fply:EntIndex(), 0.1, 15, function()
-				-- fply.Blood = fply.Blood - 25
-				BloodParticle(fply:EyePos(), fply:EyeAngles():Forward() * 150 + Vector(math.random(-1, 1), math.random(-1, 1), math.random(-1, 1)) * 30)
-			end)
-		end
-	end,
-	1
-} --]]
+		ply.Blood = math.Clamp(ply.Blood - 10, 0, 5000)
+
+		local ent = IsValid(ply.FakeRagdoll) and ply.FakeRagdoll or ply
+		local att = ent:GetAttachment(ent:LookupAttachment("eyes"))
+		if not att then return end
+
+		BloodParticle(att.Pos - att.Ang:Up() * 2, ply:EyeAngles():Forward() * 150 + VectorRand(-15, 15) + ply:GetVelocity())
+	end)
+end
 
 concommand.Add("vomit", function(ply, cmd, args)
 	if not ply:Alive() or ply.unconscious then return end
@@ -133,21 +117,10 @@ concommand.Add("vomit", function(ply, cmd, args)
 	-- r = 26 -- xd
 
 	if r > 25 then
-		local snd = vomitsfxs[math.random(#vomitsfxs)]
-
-		ply:EmitSound(snd)
-
-		timer.Create("Blevota" .. ply:EntIndex(), 0.1, 15, function()
-			ply.Blood = math.Clamp(ply.Blood - 10, 0, 5000)
-
-			local ent = RagdollOwner(ply) or ply
-			local att = ent:GetAttachment(ent:LookupAttachment("eyes"))
-
-			BloodParticle(att.Pos - att.Ang:Up() * 2, ply:EyeAngles():Forward() * 150 + VectorRand(-15, 15) + ply:GetVelocity())
-		end)
+		Vomit(ply)
 	else
 		net.Start("hg_sendchat_simple")
 			net.WriteString("#hg.virus.vomitfail")
-		net.Start(ply)
+		net.Send(ply)
 	end
 end)

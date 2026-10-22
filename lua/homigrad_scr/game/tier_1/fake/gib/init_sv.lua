@@ -50,20 +50,6 @@ function Gib_RemoveBone(rag, bone, phys_bone)
 	end
 end
 
-concommand.Add("removebone", function(ply)
-	if not ply:IsAdmin() then return end
-
-	local trace = ply:GetEyeTrace()
-
-	local ent = trace.Entity
-	if not IsValid(ent) then return end
-
-	local phys_bone = trace.PhysicsBone
-	if not phys_bone or phys_bone == 0 then return end
-
-	Gib_RemoveBone(ent, ent:TranslatePhysBoneToBone(phys_bone), phys_bone)
-end)
-
 gib_ragdols = gib_ragdols or {}
 
 local gib_ragdols = gib_ragdols
