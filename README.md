@@ -59,5 +59,6 @@ Yes! Just like the original repo, this project is under the MIT License, so you�
 
 - **Sadsalat, Useless, Mr. Point**: For creating the original Homigrad and making it open-source. The original repository is available [here](https://github.com/sadsalat/Orignal-Homigrad).
 - **Harrison's Servers**: For open-sourcing their version (I wasted all of my NY holidays messing with workshop version (╯‵□′)╯︵┻━┻).
+- \@mugii.zip on Discord: Idea for the armor attachment not lining up on ragdoll fix.
 - **ChatGPT**: Rewriting my shitty README.
 - **My friend DeXToR**: Playtesting with me and doing Ukrainian translation.
