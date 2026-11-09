@@ -672,6 +672,36 @@ IdealMassPlayer = {
 	["ValveBiped.Bip01_R_Finger42"] = 0.1
 }
 
+local selfCollisionPairs = {}
+
+do
+	for _, part in ipairs({"L_UpperArm", "L_Forearm", "L_Hand", "R_UpperArm", "R_Forearm", "R_Hand"}) do
+		table.insert(selfCollisionPairs, {part, "Head1"})
+	end
+
+	for _, part in ipairs({"L_Forearm", "L_Hand", "R_Forearm", "R_Hand"}) do
+		table.insert(selfCollisionPairs, {part, "Spine2"})
+	end
+
+	for _, left in ipairs({"L_Forearm", "L_Hand"}) do
+		for _, right in ipairs({"R_Forearm", "R_Hand"}) do
+			table.insert(selfCollisionPairs, {left, right})
+		end
+	end
+end
+
+-- Mega jank: models compiled without "collisionrules" in .phy will fly in fake, this disables the collision
+local function DisableArmSelfCollisions(rag)
+	for _, pair in ipairs(selfCollisionPairs) do
+		local bone1 = rag:LookupBone("ValveBiped.Bip01_" .. pair[1])
+		local bone2 = rag:LookupBone("ValveBiped.Bip01_" .. pair[2])
+		if not bone1 or not bone2 then continue end
+
+		local physBone1, physBone2 = rag:TranslateBoneToPhysBone(bone1), rag:TranslateBoneToPhysBone(bone2)
+		if physBone1 >= 0 and physBone2 >= 0 then constraint.NoCollide(rag, rag, physBone1, physBone2) end
+	end
+end
+
 function PlayerMeta:CreateRagdoll(attacker, dmginfo, force)
 	local rag = self:GetNWEntity("Ragdoll")
 	rag.ExplProof = true
@@ -724,10 +754,16 @@ function PlayerMeta:CreateRagdoll(attacker, dmginfo, force)
 
 	if dmginfo then phys_bone = GetPhysicsBoneDamageInfo(self, dmginfo) or 0 end
 
+	-- Same mass on every bone means the model was compiled without $mass, and such models also lack collision rules
+	local firstMass, uniformMass
+
 	for physNum = 0, rag:GetPhysicsObjectCount() - 1 do
 		local phys = rag:GetPhysicsObjectNum(physNum)
 		local bone = rag:TranslatePhysBoneToBone(physNum)
 		if bone < 0 then continue end
+
+		firstMass = firstMass or phys:GetMass()
+		uniformMass = (uniformMass ~= false) and math.abs(phys:GetMass() - firstMass) < 0.01
 
 		local matrix = self:GetBoneMatrix(bone)
 		local boneName = rag:GetBoneName(bone)
@@ -759,6 +795,8 @@ function PlayerMeta:CreateRagdoll(attacker, dmginfo, force)
 		phys:SetDamping(0, 2)
 		phys:Wake()
 	end
+
+	if uniformMass then DisableArmSelfCollisions(rag) end
 
 	rag:SetNWString("Nickname", self:GetNWString("CustomName", false) or self:Name())
 
