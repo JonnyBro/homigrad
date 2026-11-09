@@ -25,7 +25,6 @@ if SERVER then
 		end
 	end
 
-
 	function ENT:Arm()
 		self:SetState(JMod.EZ_STATE_ARMING)
 		self:SetBodygroup(2, 1)
@@ -37,7 +36,6 @@ if SERVER then
 		end)
 		self:EmitSound("ambient/fire/mtov_flame2.wav")
 		self:Ignite(15)
-		--self:SpoonEffect()
 	end
 
 	function ENT:CustomThink(state, tim)
@@ -95,6 +93,4 @@ if SERVER then
 
 		self:Remove()
 	end
-elseif CLIENT then
-	--language.Add("ent_jack_gmod_eznade_impact", "EZminiNade-Impact")
 end

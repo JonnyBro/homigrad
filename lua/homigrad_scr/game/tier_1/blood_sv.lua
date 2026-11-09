@@ -15,15 +15,6 @@ hook.Add("HomigradDamage", "hgBloodLosing", function(ply, hitGroup, dmginfo, rag
 	ply.Bloodlosing = ply.Bloodlosing + dmg
 end)
 
---[[
-hook.Add("EntityTakeDamage", "asdsdads", function(ent, dmginfo)
-	if ent and not ent.IsBleeding and dmginfo:IsDamageType(DMG_BULLET + DMG_SLASH + DMG_BLAST + DMG_ENERGYBEAM + DMG_NEVERGIB + DMG_ALWAYSGIB + DMG_PLASMA + DMG_AIRBOAT + DMG_SNIPER) then
-		table.insert(BleedingEntities, ent)
-		ent.bloodNext = CurTime()
-		ent.Blood = ent.Blood or 5000 --wtf
-	end
-end) --]]
-
 function homigradPulse(ply)
 	local heartstop = ply.Blood + (ply.CPR or 0) + (math.min(ply.adrenaline * 500, 1000) or 0) < 2000
 	heartstop = ply.organs["heart"] == 0 or heartstop
@@ -67,8 +58,6 @@ hook.Add("Player Think", "hgBlood", function(ply, time)
 	if ply.pulseStart + ply.nextPulse > time then return end
 
 	ply.pulseStart = time
-
-	-- ply:EmitSound("snd_jack_hmcd_heartpound.wav", 70, 100, 0.05 / ply.nextPulse, CHAN_AUTO)
 
 	if ply.Bloodlosing > 0 then
 		ply.Bloodlosing = ply.Bloodlosing - 0.5
@@ -175,4 +164,3 @@ hook.Add("Player Death", "deathblood", function(ply)
 	net.Send(ply)
 end)
 
-hook.Add("EntityTakeDamage", "van", function(ent, dmginfo) if ent:GetClass() == "sim_fphys_van" then dmginfo:ScaleDamage(0.13) end end)

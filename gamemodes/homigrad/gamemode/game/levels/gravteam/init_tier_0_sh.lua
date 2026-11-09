@@ -7,16 +7,11 @@ for i = 1,9 do table.insert(models,"models/player/group03/male_0" .. i .. ".mdl"
 
 gravteam.red = {"Resistance",Color(125,95,60),
 	weapons = {"weapon_hands","weapon_physcannon","weapon_hg_shovel","medkit","med_band_big"},
-	--main_weapon = {"weapon_sar2","weapon_spas12","weapon_akm","weapon_mp7"},
-	--secondary_weapon = {"weapon_hk_usp","weapon_p220"},
 	models = models
 }
 
-
 gravteam.blue = {"Combine",Color(75,75,125),
 	weapons = {"weapon_hands","weapon_physcannon","weapon_hg_shovel","medkit","med_band_big"},
-	--main_weapon = {"weapon_sar2","weapon_spas12","weapon_mp7"},
-	--secondary_weapon = {"weapon_hk_usp"},
 	models = {"models/player/combine_soldier.mdl"}
 }
 

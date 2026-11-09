@@ -15,7 +15,6 @@ if SERVER then
 		self:SetState(JMod.EZ_STATE_ARMED)
 		self:SpoonEffect()
 
-
 		local time = 3
 		timer.Simple(time - 1,function()
 			if IsValid(self) then
@@ -70,6 +69,4 @@ elseif CLIENT then
 			end
 		end
 	end
-
-	--language.Add("ent_jack_gmod_ezfragnade", "EZ Frag Grenade")
 end

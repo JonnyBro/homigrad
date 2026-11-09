@@ -39,7 +39,6 @@ function hideandseek.HUDPaint_RoundLeft(white2, time)
 
 	if time > 0 then
 		draw.SimpleText(language.GetPhrase("hg.levels.swatarrive"):format(ftime), "HomigradFont", ScrW() / 2 / 1.1, ScrH() - 25, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		-- draw.SimpleText(ftime, "HomigradFont", ScrW() / 2 + 200, ScrH() - 25, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		green.a = 0
 	else
 		green.a = 255
@@ -54,16 +53,8 @@ function hideandseek.HUDPaint_RoundLeft(white2, time)
 				local pos = point[1]:ToScreen()
 				draw.SimpleText("EXIT", "ChatFont", pos.x, pos.y, green, TEXT_ALIGN_CENTER)
 			end
-
-			-- draw.SimpleText("Click Tab to see it again.", "HomigradFont", ScrW() / 2, ScrH() - 100, white2, TEXT_ALIGN_CENTER)
 		else
 			draw.SimpleText("If you're seeing this, please ask the admins to set exit points '!point exit'!", "HomigradFont", ScrW() / 2, ScrH() - 100, white2, TEXT_ALIGN_CENTER)
 		end
 	end
-end
-
-function hideandseek.PlayerClientSpawn()
-	if LocalPlayer():Team() ~= 3 then return end
-
-	showRoundInfo = CurTime() + 10
 end

@@ -26,7 +26,6 @@ hook.Add("CanUseSpectateHUD", "level", function()
 end)
 
 hook.Add("Think", "level", function()
-	--print(TableRound())
 	local func = TableRound().Think
 	if func then func() end
 end)

@@ -77,27 +77,6 @@ local validUserGroup = {
 	user = false,
 }
 
-net.Receive("round_active", function(len)
-	roundActive = net.ReadBool()
-	roundTimeStart = net.ReadFloat()
-	roundTime = net.ReadFloat()
-end)
-
-net.Receive("hg_sendchat", function(len)
-	local ply = LocalPlayer()
-	local msg = net.ReadTable()
-	if not msg then return end
-
-	local tbl = {}
-	for _, v in ipairs(msg) do
-		tbl[#tbl + 1] = string.StartsWith(v, "#") and language.GetPhrase(v) or v
-	end
-
-	if IsValid(ply) then
-		ply:ChatPrint(table.concat(tbl))
-	end
-end)
-
 net.Receive("hg_sendchat_simple", function(len)
 	local ply = LocalPlayer()
 	local msg = net.ReadString()
@@ -425,7 +404,6 @@ local function ToggleMenu(toggle)
 			if LocalPlayer():GetInfo("hg_usecustommodel") == "true" then
 				local plyModelMenu = plyMenu:AddOption("#hg.cmenu.rmodel", function()
 					LocalPlayer():ChatPrint("<clr:green>Success!<clr:white> Your player model has been reverted to a regular citizen model, and will be applied next round.")
-					-- RunConsoleCommand("cl_playermodel", "none")
 					RunConsoleCommand("hg_usecustommodel", "false")
 					surface.PlaySound("UI/buttonclickrelease.wav")
 				end)

@@ -56,7 +56,6 @@ function hl2dm.PlayerSpawn2(ply, teamID)
 
 		if math.random(1, 2) == 2 then ply:Give("weapon_hg_hl2") end
 
-		-- JMod.EZ_Equip_Armor(ply, "Medium-Helmet", Color(0, 0, 0, 0))
 		JMod.EZ_Equip_Armor(ply, "Light-Vest", Color(0, 0, 0, 0))
 	end
 

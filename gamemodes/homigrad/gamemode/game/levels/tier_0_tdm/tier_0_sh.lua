@@ -57,17 +57,3 @@ function tdm.GetTeamName(ply)
 		return tm[1], tm[2]
 	end
 end
-
-function tdm.ChangeValue(oldName, value)
-	local oldValue = tdm[oldName]
-
-	if oldValue ~= value then
-		oldValue = value
-
-		return true
-	end
-end
-
-function tdm.AccurceTime(time)
-	return string.FormattedTime(time, "%02i:%02i")
-end

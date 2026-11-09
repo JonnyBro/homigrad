@@ -1,43 +1,6 @@
 PickTable = {}
 PickLerp = {}
 
---[[
-hook.Add("HUDWeaponPickedUp", "WeaponPickedUp", function(weapon)
-	table.insert(PickTable, weapon:GetPrintName())
-	--PrintTable(PickTable)
-	timer.Simple(5, function()
-		table.remove(PickTable, 1)
-		table.remove(PickLerp, 1)
-	end)
-end)
-
-hook.Add("HUDItemPickedUp", "ItemPickedUp", function(itemName)
-	table.insert(PickTable, "#" .. itemName)
-	--PrintTable(PickTable)
-	timer.Simple(5, function()
-		table.remove(PickTable, 1)
-		table.remove(PickLerp, 1)
-	end)
-end)
-
-hook.Add("HUDAmmoPickedUp", "AmmoPickedUp", function(ammo, ammout)
-	table.insert(PickTable, ammo .. " - " .. ammout)
-	-- PrintTable(PickTable)
-	timer.Simple(5, function()
-		table.remove(PickTable, 1)
-		table.remove(PickLerp, 1)
-	end)
-end)
-
-function GAMEMODE:HUDDrawPickupHistory()
-	for i = 1, table.Count(PickTable) do
-		if PickTable[i] then
-			PickLerp[i] = Lerp(5 * FrameTime(), PickLerp[i] or 0, (i - 1) * 20)
-			draw.DrawText("+ " .. PickTable[i], "HomigradFontBig", ScrW() - 5, ScrH() / 3 + PickLerp[i], color_white, TEXT_ALIGN_RIGHT)
-		end
-	end
-end --]]
-
 local vecZero, angZero = Vector(0, 0, 0), Angle(0, 0, 0)
 local RifleOffset = Vector(-8, -4, -2)
 local RifleAng = Angle(0, 0, -20)
@@ -57,15 +20,6 @@ end
 for i = 1, 6 do
 	femaleMdl["models/player/group03/female_0" .. i .. ".mdl"] = true
 end
-
---[[
-for count = 0, LocalPlayer():GetBoneCount() - 1 do
-	print(LocalPlayer():GetBoneName(count))
-end --]]
-
-deadBodies = deadBodies or {}
-
-net.Receive("send_deadbodies", function(len) deadBodies = net.ReadTable() end)
 
 -- Original comment stated that this is called 2 times for some reason (and this behavior is not tied to RenderScene)
 hook.Add("PostDrawOpaqueRenderables", "draw_weapons", function()
@@ -106,8 +60,6 @@ hook.Add("PostDrawOpaqueRenderables", "draw_weapons", function()
 		local activeWep = IsValid(ply:GetNWEntity("ActiveWeapon")) and ply:GetNWEntity("ActiveWeapon") or ply.GetActiveWeapon and ply:GetActiveWeapon()
 		if cameraPos:Distance(ent:GetPos()) > dis then continue end
 		if activeWep == wep then continue end
-		-- print(gameVBWHide(ply, wep))
-		-- if gameVBWHide and gameVBWHide(ply, wep) or (GetConVar("hg_ConstructOnly") and GetConVar("hg_ConstructOnly"):GetBool() or true) ~= true then continue end
 		if gameVBWHide and gameVBWHide(ply, wep) then continue end
 
 		local matrix = ent:LookupBone("ValveBiped.Bip01_Spine1")
@@ -142,15 +94,9 @@ hook.Add("PostDrawOpaqueRenderables", "draw_weapons", function()
 		else
 			pistol = not wep.vbwRifle and (wep.vbwPistol or not wep.TwoHands)
 			if pistol then
-				--[[
-				if isFamale then
-					localPos = wep.vbwPosF or wep.vbwPos or PistolOffsetF
-					localAng = wep.vbwAngF or wep.vbwAng or PistolAngF
-				else --]]
 
 				localPos = wep.vbwPos or PistolOffset
 				localAng = wep.vbwAng or PistolAng
-				-- end
 
 				Offset:Set(pelvisPos)
 				Ang:Set(pelvisAng)
@@ -162,15 +108,9 @@ hook.Add("PostDrawOpaqueRenderables", "draw_weapons", function()
 				Ang:RotateAroundAxis(pRight, localAng[2])
 				Ang:RotateAroundAxis(pForward, localAng[3])
 			else
-				--[[
-				if isFamale then
-					localPos = wep.vbwPosF or wep.vbwPos or RifleOffsetF
-					localAng = wep.vbwAngF or wep.vbwAng or RifleAngF
-				else --]]
 
 				localPos = wep.vbwPos or RifleOffset
 				localAng = wep.vbwAng or RifleAng
-				-- end
 
 				Offset:Set(spinePos)
 				Ang:Set(spineAng)
@@ -210,16 +150,12 @@ local function PrintWeaponInfo(self, x, y, alpha)
 		local title_color = "<color=230,230,230,255>"
 		local text_color = "<color=150,150,150,255>"
 		str = "<font=HudSelectionText>"
-		-- if self.Author ~= "" then str = str .. title_color .. "Author:</color>\t" .. text_color .. self.Author .. "</color>\n" end
-		-- if self.Contact ~= "" then str = str .. title_color .. "Contact:</color>\t" .. text_color .. self.Contact .. "</color>\n\n" end
-		-- if self.Purpose ~= "" then str = str .. title_color .. "Purpose:</color>\n" .. text_color .. self.Purpose .. "</color>\n\n" end
 		if self.Instructions ~= "" then str = str .. title_color .. "Description:</color>\t" .. text_color .. self.Instructions .. "</color>\n" end
 
 		str = str .. "</font>"
 		self.InfoMarkup = markup.Parse(str, 250)
 	end
 
-	-- surface.DrawTexturedRect(x, y - 64 - 5, 128, 64)
 	draw.RoundedBox(0, x, y, 260, self.InfoMarkup:GetHeight() + 2, Color(60, 60, 60, alpha))
 	self.InfoMarkup:Draw(x + 5, y, nil, nil, alpha)
 end
@@ -239,7 +175,6 @@ DrawWeaponSelectionEX = function(self, x, y, wide, tall, alpha)
 			DrawModel:SetModel(mdl)
 
 			cam.Start3D(cameraPos, (-cameraPos):Angle() - (self.cameraAng or _cameraAng), 45, x, y, wide, tall)
-				-- cam.IgnoreZ(true)
 
 				render.SuppressEngineLighting(true)
 				render.SetLightingOrigin(vecZero)
@@ -264,7 +199,6 @@ DrawWeaponSelectionEX = function(self, x, y, wide, tall, alpha)
 				render.SetBlend(1)
 				render.SuppressEngineLighting(false)
 
-				-- cam.IgnoreZ(false)
 			cam.End3D()
 		end
 	end

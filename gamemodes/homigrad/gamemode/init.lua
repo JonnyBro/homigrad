@@ -3,7 +3,6 @@ AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 
-util.AddNetworkString("hg_sendchat")
 util.AddNetworkString("hg_sendchat_simple")
 util.AddNetworkString("hg_sendchat_format")
 util.AddNetworkString("lasertgg")
@@ -332,23 +331,3 @@ net.Receive("lasertgg", function(len, ply)
 		net.WriteBool(net.ReadBool())
 	net.Broadcast()
 end)
-
---[[
-function GM:IsSpawnpointSuitable(ply, spawnpointent, bMakeSuitable)
-	local Pos = spawnpointent:GetPos()
-	local Blockers = 0
-	local Ents = ents.FindInBox(Pos + Vector(-64, -64, 0), Pos + Vector(64, 64, 0))
-	-- if ply:Team() == TEAM_SPECTATOR or ply:Team() == TEAM_UNASSIGNED then return true end
-	if ply:Team() == 1 or ply:Team() == 2 or ply:Team() == 3 then return true end
-
-	for _, v in pairs(Ents) do
-		if IsValid(v) and v:IsPlayer() and v:Alive() then
-			Blockers = Blockers + 1
-		end
-	end
-
-	if bMakeSuitable then return true end
-	if Blockers > 0 then return false end
-
-	return true
-end --]]

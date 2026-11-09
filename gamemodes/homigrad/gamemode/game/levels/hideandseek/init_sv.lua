@@ -44,7 +44,6 @@ function hideandseek.StartRoundSV(data)
 
 		if IsValid(firstPlayer) and firstPlayer:IsPlayer() then
 			firstPlayer:Give("weapon_radar")
-			--print("[Server] Gave weapon_radar to player: " .. firstPlayer:Nick())
 		end
 	end
 
@@ -72,15 +71,6 @@ function hideandseek.RoundEndCheck()
 				ply:SetPlayerClass("contr")
 				ply:SetTeam(3)
 				ply:Spawn()
-
-				--[[
-				local points = ReadDataMap("spawnpointsct")
-				local pos, key = RandomFromTable(points)
-				if not pos then continue end
-				if #points > 1 then
-					table.remove(points, key)
-				end
-				ply:SetPos(pos) --]]
 			end
 		end
 	end
@@ -160,8 +150,6 @@ function hideandseek.PlayerSpawn2(ply, teamID)
 	if math.random(1, 8) == 8 then ply:Give("morphine") end
 	if math.random(1, 3) == 3 then ply:Give("food_monster") end
 	if math.random(1, 5) == 5 then ply:Give("weapon_bat") end
-	-- local r = math.random(1, 3)
-	-- ply:Give(r == 1 and "food_fishcan" or r == 2 and "food_spongebob_home" or r == 3 and "food_lays")
 
 	if ply:IsUserGroup("sponsor") or ply:IsUserGroup("supporterplus") or ply:IsAdmin() then
 		if math.random(1, 5) == 5 then ply:Give("weapon_gear_bloxycola") end

@@ -81,8 +81,6 @@ function EasyAppearance.Menu()
 		ent:SetupBones()
 		ent:SetSubMaterial(Models[ent:GetModel()][2], Appearance.strColthesStyle and EasyAppearance.Appearances[sex][Appearance.strColthesStyle] or "")
 
-		-- EasyAppearance.DrawAttachment(ent, Appearance.strAttachmets)
-
 		return
 	end
 
@@ -140,11 +138,6 @@ function EasyAppearance.Menu()
 		CombAttBox:AddChoice(k, k)
 	end
 
-	--[[
-	function CombAttBox:OnSelect(index, text, data)
-		Appearance.strAttachmets = text
-	end --]]
-
 	DPanel.ApplyButton = vgui.Create("DButton", DPanel)
 
 	local AplyBtn = DPanel.ApplyButton
@@ -201,24 +194,7 @@ net.Receive("EasyAppearance_SendReqData", function()
 	EasyAppearance.SendNet(bRandom, tAppearanceData or {})
 end)
 
--- PrintTable(tAppearanceData)
--- self:SetNWEntity("Ragdoll", rag)
-
 CreateClientConVar("hg_appearance_dis", "6000", true, false)
-
---[[
-	["HatExample"] = {
-		strModel = strModel,
-		strMaterial = strMaterial,
-		strBone = strBone,
-		vPos = vPos or Vector( 0, 0, 0 ),
-		vFPos = vFPos or Vector( 0, 0, 0 ),
-		aAng = aAng or Angle( 0, 0, 0 ),
-		aFAng = aFAng or Angle( 0, 0, 0 ),
-		iSkin = iSkin or 0,
-		strBodyGroups = strBodyGroups or "0000000"
-	}
---]]
 
 function EasyAppearance.DrawAttachment(eEnt, strAtt, ply)
 	local att = EasyAppearance.Attachmets[strAtt]
@@ -247,15 +223,12 @@ function EasyAppearance.DrawAttachment(eEnt, strAtt, ply)
 		if att.iSkin then eEnt.AttachModel:SetSkin(att.iSkin) end
 
 		eEnt.AttachModel:AddEffects(EF_BONEMERGE)
-		-- eEnt.AttachModel:AddEffects(EF_FOLLOWBONE)
 	elseif IsValid(eEnt.AttachModel) then
-		-- if not IsValid(eEnt.AttachModel) then eEnt.AttachModel = nil return end
 
 		if IsValid(eEnt.AttachModel) and eEnt.AttachModel:GetModel() ~= att.strModel then eEnt.AttachModel:SetModel(att.strModel) end
 		if att.bDrawOnLocal or GetViewEntity() ~= ply then
 			local lPos, lAng = LocalToWorld(modelSex > 1 and att.vFPos or att.vPos, modelSex > 1 and att.aFAng or att.aAng, pos, ang)
 
-			-- eEnt.AttachModel:SetPos(lPos)
 			eEnt.AttachModel:SetParent(eEnt, iBone)
 			eEnt.AttachModel:SetRenderOrigin(lPos)
 			eEnt.AttachModel:SetRenderAngles(lAng)

@@ -40,7 +40,6 @@ SWEP.dwsPos = Vector(20, 20, 15)
 SWEP.dwsItemPos = Vector(0, 0, 5)
 
 if SERVER then
-	-- print(roundTime - (roundTime - 15) + roundTimeStart - CurTime())
 	local BigFireModels = {
 		["models/props_c17/oildrum001_explosive.mdl"] = true,
 		["models/props_c17/canister_propane01a.mdl"] = true
@@ -127,7 +126,6 @@ if SERVER then
 
 			if IsValid(ent) then
 				ent:RemoveCallOnRemove("hg_hidebombremove")
-				-- if RagdollOwner(ent) then RagdollOwner(ent):KillSilent() end
 				ent:Remove()
 			end
 
@@ -136,7 +134,6 @@ if SERVER then
 				local Infl, Att = (IsValid(ent) and ent) or ZaWarudo, (IsValid(ent) and IsValid(ent.owner) and ent.owner) or (IsValid(ent) and ent) or ZaWarudo
 
 				util.BlastDamage(Infl, Att, SelfPos, 60 * PowerMult, 240 * PowerMult)
-				-- util.BlastDamage(Infl, Att, SelfPos, 20 * PowerMult, 1000 * PowerMult)
 			end)
 		end)
 
@@ -145,10 +142,7 @@ if SERVER then
 
 	function SWEP:Initialize()
 		self:SetHoldType("normal")
-		-- self:SetNWBool("hasbomb", false)
 	end
-
-	-- local tbl = {}
 
 	function SWEP:PrimaryAttack()
 		local timePassed = roundTime - (roundTime - 22) + roundTimeStart - CurTime()
@@ -197,21 +191,18 @@ if SERVER then
 	end
 
 	function SWEP:SecondaryAttack()
-		-- local bomb = tbl[self:GetOwner()]
 		if not IsValid(self:GetOwner().bomb) then return end
 
 		Bomb(self:GetOwner().bomb)
 
 		self:GetOwner().bomb = nil
 		self:Remove()
-		-- tbl[self:GetOwner()] = nil
 	end
 else
 	function SWEP:DrawWorldModel()
 		local owner = self:GetOwner()
 		if not IsValid(owner) then return self:DrawModel() end
 
-		-- if self:GetNWBool("hasbomb") then return end
 		self.mdl = self.mdl or false
 
 		if not IsValid(self.mdl) then

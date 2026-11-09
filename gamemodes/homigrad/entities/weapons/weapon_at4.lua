@@ -8,8 +8,6 @@ if CLIENT then
 	SWEP.IconOverride = "materials/items_icons/at4icon.png"
 end
 
--- SWEP.WepSelectIcon = "pwb/sprites/m134"
-
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
 

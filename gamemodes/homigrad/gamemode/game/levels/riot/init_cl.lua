@@ -5,7 +5,6 @@ local bhop
 function riot.StartRoundCL()
 end
 
-
 function riot.HUDPaint_RoundLeft(white)
     local lply = LocalPlayer()
 	local name,color = riot.GetTeamName(lply)
@@ -24,6 +23,4 @@ function riot.HUDPaint_RoundLeft(white)
         end
         return
     end
-
-    --draw.SimpleText(ftime,"HomigradFont",ScrW()/2,ScrH()-25,white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
 end

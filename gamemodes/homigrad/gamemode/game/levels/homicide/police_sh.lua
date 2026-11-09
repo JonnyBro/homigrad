@@ -25,14 +25,6 @@ CLASS.color = Color(75, 75, 75)
 function CLASS:Off()
 	if CLIENT then return CLASS.CloseMenu() end
 
-	--[[
-	local guilt = self.contrGuilt or 0
-
-	if guilt >= 40 then
-		self.Guilt = self.Guilt + guilt
-		GuiltCheck(ply)
-	end --]]
-
 	self.isContr = nil
 end
 
@@ -72,23 +64,6 @@ function CLASS:On()
 	JMod.EZ_Equip_Armor(self, "Light-Vest", color)
 
 	self.isContr = true
-
-	--[[
-	local r = math.random(1, 3)
-	if r == 1 then
-		EmitSound(self, "radio/moveout.wav")
-	elseif r == 2 then
-		EmitSound(self, "radio/com_go.wav")
-	elseif r == 3 then
-		EmitSound(self, "radio/go.wav")
-	end --]]
-end
-
-function CLASS:EndRound(winner)
-	--[[
-	if roundActiveName == "homicide" and winner == 2 then
-		EmitSound(self, "radio/ctwin.wav")
-	end --]]
 end
 
 local function tracerSee(self, endpos, dis)
@@ -101,21 +76,13 @@ local function tracerSee(self, endpos, dis)
 	if util.TraceLine(trace).HitPos:Distance(endpos) <= dis then return true end
 end
 
--- local soundDeaths = {"bot/pain10.wav", "bot/pain2.wav", "bot/pain4.wav", "bot/pain5.wav", "bot/pain8.wav", "bot/pain9.wav"}
-
 function CLASS:PlayerDeath()
-	--[[
-	if not self.unconscious then
-		local name = RandomFromTable(soundDeaths)
-		EmitSound(self, name)
-	end --]]
 
 	self:SetPlayerClass()
 end
 
 function CLASS:PlayerKill(ply)
 	if ply == self then return end
-	-- EmitSound(self, "bot/hes_down.wav")
 end
 
 local function CanMessage(self, name)
@@ -157,7 +124,6 @@ function CLASS:EventPoint(name, pos, radius, a1, a2)
 	if self.unconscious then return end
 
 	if self:GetMoveType() ~= MOVETYPE_NOCLIP and name == "fragnade pre detonate" and tracerSee(self, pos, 52) then
-		-- EmitSound(self, "bot/noo.wav")
 		local hp = self:Health()
 
 		timer.Simple(2, function()
@@ -182,27 +148,8 @@ function CLASS:Event(name, a1)
 
 		timer.Simple(math.Rand(0.5, 1.25), function()
 			if not live(self, hp, self:Health()) then return end
-
-			--[[
-			if math.random(1, 2) == 1 then
-				EmitSound(self,"bot/im_blind.wav")
-			else
-				EmitSound(self, "bot/my_eyes.wav")
-			end --]]
 		end)
 	end
-	--[[ Not used
-	if name == "inventory close" then
-		if a1.roleT then
-			local r = math.random(1, 3)
-			if r == 1 then EmitSound(self, "bot/aah.wav")
-			elseif r == 2 then EmitSound(self, "bot/aw_hell.wav")
-			else EmitSound(self, "bot/aww_man.wav") end
-		else
-			if math.random(1, 2) == 2 then EmitSound(self, "snd_jack_hmcd_cop2.wav")
-			else EmitSound(self, "snd_jack_hmcd_cop1.wav") end
-		end
-	end --]]
 end
 
 local sounds = {
@@ -228,13 +175,6 @@ if SERVER then
 			EmitSound(ply, sound)
 		end
 	end)
-
-	--[[
-	for _, ply in pairs(getList(ply)) do
-		net.Start("homicide contr")
-			net.WriteString(sound)
-		net.Send()
-	end --]]
 
 	return
 end

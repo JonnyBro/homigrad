@@ -142,29 +142,3 @@ function hg.includeDir(path, includes)
 		hg.includeDir(path .. dirs[i], includes)
 	end
 end
-
-local trace
-
-function hg.GetPath(levelUp)
-	trace = debug.traceback()
-
-	if levelUp then
-		levelUp = 3 + levelUp
-	end
-
-	trace = string.Split(trace, "\n")
-	trace = trace[levelUp or #trace]
-	trace = string.Split(trace, ":")[1]
-	trace = string.gsub(trace, "	", "")
-
-	if string.sub(trace, 1, 7) == "addons/" then
-		trace = string.sub(trace, 8, #trace)
-		s = string.find(trace, "/")
-
-		return string.sub(trace, s + 5, #trace)
-	elseif string.sub(trace, 1, 4) == "lua/" then
-		return string.sub(trace, 5, #trace)
-	end
-
-	return trace
-end

@@ -290,8 +290,6 @@ function SWEP:SecondaryAttack()
 			if Dist < self.ReachDistance then
 				sound.Play("Flesh.ImpactSoft", self:GetOwner():GetShootPos(), 65, math.random(90, 110))
 
-				-- self:GetOwner():SetVelocity(self:GetOwner():GetAimVector() * 20) -- Why exactly?
-
 				tr.Entity:SetVelocity(self:GetOwner():GetAimVector() * 50)
 
 				self:SetNextSecondaryFire(CurTime() + .5)
@@ -363,10 +361,6 @@ function SWEP:ApplyForce()
 						ply.o2 = math.min(ply.o2 + 0.5, 1)
 						ply.Blood = math.min(ply.Blood + 8, 5000) -- Stupid shit
 						ply.pain = math.max(ply.pain - 3, 0)
-						-- self:GetOwner():ChatPrint(ply.pain)
-						-- self:GetOwner():ChatPrint(ply.Blood)
-						-- self:GetOwner():ChatPrint(ply.o2)
-						-- self.CarryEnt:EmitSound("physics/body/body_medium_impact_soft" .. tostring(math.random(7)) .. ".wav")
 
 						phys:ApplyForceCenter(-vector_up * 15000)
 					end
@@ -387,8 +381,6 @@ function SWEP:ApplyForce()
 
 		if ForceMagnitude > 6000 * 1 then
 			ForceMagnitude = 6000
-
-			-- self:SetCarrying()
 
 			return
 		end
@@ -429,19 +421,6 @@ end
 function SWEP:GetCarrying()
 	return self.CarryEnt
 end
-
---[[
-hook.Add("ShouldCollide", "hjuyhhy", function(ent1, ent2)
-	if not ent1:IsPlayer() then return end
-	if not ent2:IsRagdoll() then return end
-
-	local wep = ent1:GetActiveWeapon()
-
-	if wep:GetClass() == "weapon_hands" then
-		print(wep.CarryEnt, ent2)
-		if wep.CarryEnt == ent2 then return false end
-	end
-end) --]]
 
 function SWEP:SetCarrying(ent, bone, pos, dist)
 	if IsValid(ent) then
@@ -639,12 +618,9 @@ function SWEP:Reload()
 		end
 
 		if IsValid(ent) then
-			-- if heldents[ent:EntIndex()] then heldents[ent:EntIndex()] = nil end
 			heldents[ent:EntIndex()] = {self.CarryEnt, self:GetOwner(), self.CarryDist, target, self.CarryBone, self.CarryPos}
 		end
 	end
-
-	-- self:SetCarrying()
 end
 
 if SERVER then
@@ -693,8 +669,6 @@ end
 
 -- no, do nothing
 function SWEP:DoBFSAnimation(anim)
-	-- local vm = self:GetOwner():GetViewModel()
-	-- vm:SendViewModelMatchingSequence(vm:LookupSequence(anim))
 end
 
 function SWEP:UpdateNextIdle()

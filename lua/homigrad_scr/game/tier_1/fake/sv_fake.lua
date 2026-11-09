@@ -1,5 +1,4 @@
 util.AddNetworkString("hgOverrideSpawn")
-util.AddNetworkString("send_deadbodies")
 util.AddNetworkString("Unload")
 util.AddNetworkString("nodraw_helmet")
 util.AddNetworkString("custom name")
@@ -162,14 +161,14 @@ function Faking(ply, force)
 	else
 		local rag = ply:GetNWEntity("Ragdoll")
 
+		if IsValid(rag) and hook.Run("Fake Up", ply, rag) ~= nil then return end
+
 		DespawnWeapon(ply)
 
 		if IsValid(rag) then
 			if IsValid(rag.bull) then rag.bull:Remove() end
 
 			ply.GotUp = CurTime()
-
-			if hook.Run("Fake Up", ply, rag) ~= nil then return end
 
 			ply:SetNWBool("fake", IsValid(ply.FakeRagdoll))
 
@@ -213,7 +212,6 @@ function Faking(ply, force)
 
 			local tracea = util.TraceLine(trace)
 			if tracea.Hit then
-				-- ply:ChatPrint(tostring(tracea.Fraction) .. " 1")
 				pos:Add(Vector(0, 0, 64) * tracea.Fraction)
 			end
 
@@ -886,8 +884,6 @@ hook.Add("OnPlayerHitGround", "hgFakeOnHitGround", function(ply, a, b, speed)
 	end
 end)
 
-deadBodies = deadBodies or {}
-
 hook.Add("Think", "hgVelocityFakeHitPlyCheck", function()
 	-- Speed check when faking (to knock over other players)
 	for _, rag in ipairs(ents.FindByClass("prop_ragdoll")) do
@@ -897,16 +893,6 @@ hook.Add("Think", "hgVelocityFakeHitPlyCheck", function()
 			else
 				rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 			end
-		end
-	end
-
-	for i = 1, #deadBodies do
-		local ent = deadBodies[i]
-
-		if not IsValid(ent) or not ent:IsPlayer() or not ent:IsRagdoll() then
-			deadBodies[i] = nil
-
-			continue
 		end
 	end
 end)
@@ -1473,7 +1459,6 @@ hook.Add("PlayerUse", "hgCanUseWhileFaking", function(ply, ent)
 	end
 
 	if IsValid(ply.FakeRagdoll) then return false end
-	-- if ent.IsJModArmor then return false end
 end)
 
 hook.Add("PlayerSay", "hgCantTalkWhileUncon", function(ply, text)
@@ -1489,4 +1474,3 @@ hook.Add("PlayerSay", "hgDropWeaponsCommand", function(ply, text)
 end)
 
 hook.Add("UpdateAnimation", "hgUpdateAnims", function(ply, event, data) ply:RemoveGesture(ACT_GMOD_NOCLIP_LAYER) end)
--- hook.Add("Player Think", "hgHoldEntity", function(ply, time) if IsValid(ply.holdEntity) then end end)

@@ -214,7 +214,6 @@ function SWEP:PrimaryAttack()
 
 			tr.Entity:TakeDamageInfo(dmginfo)
 		end
-		-- self:GetOwner():EmitSound(Sound(self.HitSound), 60)
 	end
 
 	if SERVER and Tr.Hit and self.ShouldDecal then

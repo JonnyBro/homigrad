@@ -30,34 +30,6 @@ DEFAULT_STEP_SIZE = 18
 DEFAULT_MASS = 80
 DEFAULT_MODELSCALE = 1
 
---[[
-local empty = {}
-hook.Add("Think", "PlayerClass", function()
-	local list = {}
-	for _, ply in player.Iterator() do
-		local class = ply:GetPlayerClass()
-		if not class then continue end
-		list[class] = list[class] or {}
-		list[class][ply] = true
-	end
-
-	for _, class in pairs(classList) do
-		local func = class.GlobalThink
-		if func then func(list) end
-		local func = class.Think
-		if not func then continue end
-		for ply in pairs(list[class] or empty) do
-			class.Think(ply, list)
-		end
-	end
-
-	for _, ply in player.Iterator() do
-		local selectedModel = ply:GetInfo("cl_playermodel") -- Retrieve the model selected by the player
-		print(selectedModel)
-		print(player_manager.TranslatePlayerModel(selectedModel))
-	end
-end) --]]
-
 hook.Add("PlayerFootstep", "PlayerClass", function(ply, ...)
 	return ply:PlayerClassEvent("PlayerFootstep", ...)
 end)

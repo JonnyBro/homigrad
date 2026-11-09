@@ -24,8 +24,6 @@ SWEP.SlotPos = 2
 
 SWEP.UseHands = true
 
--- SWEP.HoldType = "knife"
-
 SWEP.FiresUnderwater = false
 
 SWEP.DrawCrosshair = false

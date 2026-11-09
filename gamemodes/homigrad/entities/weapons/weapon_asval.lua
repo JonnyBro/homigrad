@@ -21,7 +21,6 @@ SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 45
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "pwb2/weapons/asval/ak47-1.wav"
--- SWEP.Primary.SoundFar = "mp5k/mp5k_suppressed_tp.wav"
 SWEP.Primary.Force = 200 / 3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.065

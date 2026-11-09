@@ -188,7 +188,6 @@ net.Receive("ply_take_item", function(len, ply)
 
 		weapon:SetRenderMode(RENDERMODE_NORMAL)
 		weapon:DrawShadow(true)
-		-- weapon:RemoveSolidFlags(FSOLID_NOT_SOLID)
 		weapon:SetMaterial("")
 
 		lootInfo.Weapons[wep] = nil

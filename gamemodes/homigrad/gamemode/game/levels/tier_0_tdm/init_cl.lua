@@ -1,9 +1,5 @@
 local playsound = false
 
-function tdm.StartRoundCL()
-	playsound = true
-end
-
 function tdm.HUDPaint_RoundLeft(white)
 	local ply = LocalPlayer()
 	local name, color = tdm.GetTeamName(ply)

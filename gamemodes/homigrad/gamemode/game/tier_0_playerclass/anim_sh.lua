@@ -68,7 +68,6 @@ end)
 
 function GM:GrabEarAnimation(pl)
 	if pl:IsTyping() or (pl:GetNWBool("DynamicFlashlight") and IsValid(pl:GetActiveWeapon()) and pl:GetActiveWeapon():GetClass() == "weapon_hands") then
-	--if pl:IsTyping() then
 		pl.ChatGestureWeight = math.Approach(pl.ChatGestureWeight or 0, 1, FrameTime() * 5)
 	elseif pl.ChatGestureWeight and pl.ChatGestureWeight > 0 then
 		pl.ChatGestureWeight = math.Approach(pl.ChatGestureWeight, 0, FrameTime() * 5)

@@ -105,7 +105,6 @@ net.Receive("play_snd", function(len)
 			g_station[radio:EntIndex()] = nil
 		end
 	end)
-	-- PrintTable(g_station)
 end)
 
 local stationThink, CurTime = CurTime(), CurTime

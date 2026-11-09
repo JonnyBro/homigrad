@@ -196,7 +196,7 @@ local roundThink = 0
 function RoundEndCheck()
 	if SolidMapVote.isOpen or roundThink > CurTime() or #player.GetAll() < 2 then return end
 
-	roundThink = roundThink + 1
+	roundThink = CurTime() + 1
 
 	if not roundActive then return end
 
@@ -287,7 +287,6 @@ end)
 
 hook.Add("WeaponEquip", "PlayerManualPickup", function(wep, ply)
 	timer.Simple(0, function()
-		--if WEAPON_PICKUP_OVERIDE then return end
 
 		if isHGWeapon(wep) then
 			local isbig = isHGWeapon(wep) and not wep:IsPistolHoldType()

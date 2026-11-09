@@ -79,7 +79,7 @@ function ulx.hg_roll(ply, max)
 
 	for _, ply2 in player.Iterator() do
 		if not IsValid(ply) or GAMEMODE:PlayerCanSeePlayersChat("gg", false, ply2, ply) then
-			PrintMessageChat(ply2, text)
+			ply2:ChatPrint(text)
 		end
 	end
 end

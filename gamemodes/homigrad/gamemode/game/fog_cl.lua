@@ -1,4 +1,3 @@
---local diffDis = list2[game.GetMap()]
 local fogMode = render.FogMode
 local fogStart = render.FogStart
 local fogEnd = render.FogEnd
@@ -8,7 +7,6 @@ local fogColor = render.FogColor
 local fogdefault = {165, 165, 165}
 
 file.CreateDir("homigrad")
---file.Write("homigrad/fog_maps_color.txt","")
 
 dataFog = util.JSONToTable(file.Read("homigrad/fog_maps_color.txt") or "") or {}
 
@@ -44,7 +42,6 @@ hook.Add("SetupWorldFog", "shlib", function()
 		return
 	end
 
-	--adddis = math_sin(CurTime() / 100) * diffDis
 	local custom = upper > 0
 
 	if distance and upper > distance then

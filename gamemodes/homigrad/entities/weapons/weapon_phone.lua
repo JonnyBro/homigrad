@@ -150,7 +150,6 @@ if SERVER then
 	end
 
 	function SWEP:Think()
-		-- if true then return end
 
 		local State, Time = self:GetState(), CurTime()
 
@@ -252,7 +251,6 @@ if SERVER then
 
 			if Name == "help" then
 				if State == 2 then
-					-- local Msg, Num = "stand near radio\nsay in chat: \"status\", or \"supply radio: [package]\"\navailable packages are:\n", 1
 					local Msg, Num = "stand near radio and say in chat \"supply radio: status\", or \"supply radio: [package]\". available packages are:", 1
 					self:Speak(Msg, ParrotPhrase)
 

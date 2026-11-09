@@ -116,8 +116,6 @@ function EyeTrace(ply)
 	tr.start = ply:GetAttachment(ply:LookupAttachment("eyes")).Pos
 	tr.endpos = tr.start + ply:GetAngles():Forward() * 80
 	tr.filter = ply
-	-- tr.mins = -vecHull
-	-- tr.maxs = vecHull
 
 	return util.TraceLine(tr)
 end

@@ -72,8 +72,6 @@ net.Receive("blood particle explode", function()
 	explode(net.ReadVector(), net.ReadVector())
 end)
 
--- local vecR = Vector(10, 10, 10)
-
 net.Receive("blood particle headshoot", function()
 	local pos, vel = net.ReadVector(), net.ReadVector()
 
@@ -93,50 +91,3 @@ net.Receive("blood particle headshoot", function()
 	end
 end)
 
---[[
-concommand.Add("testpart", function()
-	local pos = Vector(1200.543579, 699.216309, 300.834564)
-	local vel = Vector(1024, 0, 0)
-	local dir = Vector()
-	dir:Set(vel)
-	dir:Normalize()
-	dir:Mul(25)
-
-	local l1, l2 = pos - dir / 2, pos + dir / 2
-	local r = random(10, 15)
-
-	for i = 1, r do
-		local vel = Vector(vel[1], vel[2], vel[3])
-		vel:Rotate(Angle(Rand(-15, 15) * Rand(0.9, 1.1), Rand(-15, 15) * Rand(0.9, 1.1)))
-
-		addBloodPart(Lerp(i / r * Rand(0.9, 1.1), l1, l2), vel, mats[random(1, #mats)], random(10, 15), random(10, 15))
-	end
-
-	for _ = 1, 8 do
-		addBloodPart2(pos + VectorRand(-vecR, vecR), VectorRand(-vecR, vecR), mats[random(1, #mats)], random(30, 45), random(30, 45), Rand(1, 2))
-	end
-end) --]]
-
-concommand.Add("freecamera", function(ply)
-	if not ply:IsAdmin() then return end
-
-	freecameraPos = ply:EyePos()
-	freecameraAng = ply:EyeAngles()
-
-	freecamera = not freecamera
-end)
-
-hook.Add("Move", "FreeCamera", function(mv) if not freecamera then return end end)
-
-local view = {}
-
-hook.Add("PreCalcView", "hg_particles_precalcview", function(ply, pos, ang)
-	if not freecamera then return end
-
-	view.origin = freecameraPos
-	view.angles = freecameraAng
-	view.fov = CameraLerpFOV
-	view.drawviewer = true
-
-	return view
-end)

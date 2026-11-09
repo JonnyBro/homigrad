@@ -46,8 +46,6 @@ function ENT:UpdateArmor(taker)
 	self:SetAngles(ang)
 	self:FollowBone(ply, ply:LookupBone("ValveBiped.Bip01_Spine2"))
 
-	-- self:SetParent(ply)
-
 	taker.ChestArmor = self
 
 	taker:SetNWEntity("Armor", taker.ChestArmor)

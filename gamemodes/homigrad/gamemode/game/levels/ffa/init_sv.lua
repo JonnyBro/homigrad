@@ -131,54 +131,7 @@ function ffa.EndRound(winner)
     for i, ply in ipairs(player.GetAll()) do
         ply:SetNWInt("KillCount", 0)
     end
-
-    damageTracking = {}
 end
-
-
-function ffa.TrackPlayerDamage(target, dmgInfo)
-    if target:IsPlayer() and dmgInfo:GetAttacker():IsPlayer() then
-        local attacker = dmgInfo:GetAttacker()
-
-        if not damageTracking[target] then
-            damageTracking[target] = {}
-        end
-
-        if not damageTracking[target][attacker] then
-            damageTracking[target][attacker] = 0
-        end
-
-        damageTracking[target][attacker] = damageTracking[target][attacker] + dmgInfo:GetDamage()
-    end
-end
-
-
-function ffa.HandlePlayerDeath(victim)
-    if damageTracking[victim] then
-        local highestDamage = 0
-        local killer = nil
-
-        for attackerPlayer, damage in pairs(damageTracking[victim]) do
-            if damage > highestDamage then
-                highestDamage = damage
-                killer = attackerPlayer
-            end
-        end
-
-        if killer and IsValid(killer) then
-            killer:SetNWInt("KillCount", killer:GetNWInt("KillCount") + 1)
-        end
-
-        damageTracking[victim] = nil
-    end
-
-    timer.Simple(10, function()
-        if IsValid(victim) then
-            ffa.PlayerSpawn2(victim)
-        end
-    end)
-end
-
 
 function ffa.PlayerInitialSpawn(ply)
     ply:SetTeam(1)
@@ -191,6 +144,3 @@ function ffa.PlayerCanJoinTeam(ply, teamID)
     end
     return true
 end
-
-
-damageTracking = {}

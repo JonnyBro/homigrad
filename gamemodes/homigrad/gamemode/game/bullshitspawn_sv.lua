@@ -128,10 +128,6 @@ local function cacheSpawns()
 	table.Add(spawns, tbladd)
 end
 
-function hg.CacheRandomSpawns()
-	cacheSpawns()
-end
-
 function hg.RandomSpawns()
 	return spawns
 end

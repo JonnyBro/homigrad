@@ -38,9 +38,6 @@ if CLIENT then
 	SWEP.sang = Angle(0, 0, 0)
 
 	SWEP.zoomfov = 5
-	-- SWEP.scope_mat = Material("")
-	-- SWEP.opticmodel = "models/weapons/arccw/atts/magnus.mdl"
-	-- SWEP.opticmodel2 = "models/weapons/arccw/atts/magnus_hsp.mdl"
 	SWEP.addfov = 60
 end
 

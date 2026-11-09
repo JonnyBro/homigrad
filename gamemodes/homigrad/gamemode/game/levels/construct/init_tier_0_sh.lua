@@ -15,8 +15,6 @@ end
 
 function construct.StartRound(data)
 	team.SetColor(1, red)
-	-- team.SetColor(2, blue)
-	-- team.SetColor(1, green)
 
 	game.CleanUpMap(false)
 

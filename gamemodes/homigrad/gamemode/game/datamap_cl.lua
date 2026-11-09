@@ -2,9 +2,6 @@ SpawnPointsList = SpawnPointsList or {}
 
 net.Receive("points", function()
 	SpawnPointsList = net.ReadTable()
-
-	--local func = TableRound().SpawnPointsListChange
-	--if func then func(SpawnPointsList) end
 end)
 
 local hg_drawspawn = CreateClientConVar("hg_drawspawn", "0", false, false)

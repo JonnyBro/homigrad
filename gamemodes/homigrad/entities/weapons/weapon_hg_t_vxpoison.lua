@@ -91,7 +91,6 @@ if SERVER then
 			timer.Create("Cyanid" .. ply:EntIndex() .. "32", 15, 1, function()
 				if ply:Alive() and ply.poisoned2 then
 					ply.KillReason = "poison"
-					--ent:Kill()
 					ply.nohook = true
 					ply:TakeDamage(math.huge, ent.poisonbro)
 					ply.nohook = nil

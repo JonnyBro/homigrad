@@ -137,17 +137,6 @@ hook.Add("Player Death", "SetHull", function(ply, attacker)
 	end)
 end)
 
---[[
-if CLIENT then
-	hook.Add("EntityNetworkedVarChanged", "newfakeentity", function(ply, name, oldval, rag)
-		-- print(ply,name,oldval,rag)
-		if name == "Ragdoll" then
-			ply.FakeRagdoll = rag
-			if IsValid(rag) then hook.Run("Fake", "faked", ply, rag) end
-		end
-	end)
-end --]]
-
 if CLIENT then
 	hook.Add("NetworkEntityCreated", "hgSyncRagdollsIDK", function(ent)
 		if not ent:IsRagdoll() then return end
@@ -235,10 +224,6 @@ function hg.eyeTrace(ply, dist, ent, aim_vector)
 	local headm = ent:GetBoneMatrix(bon)
 	if CLIENT and ply.headmat then headm = ply.headmat end
 
-	-- local att_ang = ply:GetAttachment(ply:LookupAttachment("eyes")).Ang
-	-- ply.lerp_angle = LerpFT(0.1, ply.lerp_angle or Angle(0, 0, 0), ply:GetNWBool("TauntStopMoving", false) and att_ang or aim_vector:Angle())
-	-- aim_vector = ply.lerp_angle:Forward()
-
 	local eyeAng = aim_vector:Angle()
 	eyeAng:Normalize()
 
@@ -246,13 +231,6 @@ function hg.eyeTrace(ply, dist, ent, aim_vector)
 	eyeang2.p = 0
 
 	local trace = hg.hullCheck(ply:EyePos() + select(2, ply:GetHull())[2] * eyeAng:Forward(), headm:GetTranslation() + (fakeCam and headm:GetAngles():Forward() * 2 + headm:GetAngles():Up() * -2 + headm:GetAngles():Right() * 3 or eyeAng:Up() * 1 + eyeang2:Forward() * (math.max(eyeAng[1], 0) / 90 + 0.5) * 4 + eyeang2:Right() * 0.5), ply)
-
-	--[[
-	if CLIENT then
-		cam.Start3D()
-			render.DrawWireframeBox(trace.HitPos, angle_zero, traceBuilder.mins, traceBuilder.maxs, color_white)
-		cam.End3D()
-	end --]]
 
 	local tr = {}
 	if not ply:IsPlayer() then return false end

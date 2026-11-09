@@ -19,8 +19,6 @@ function gravdm.StartRoundSV()
 
     roundTimeRespawn = CurTime() + 15
 
-    --roundDmType = math.random(1,4)
-
     return {roundTimeStart,roundTime}
 end
 
@@ -57,13 +55,11 @@ function gravdm.PlayerSpawn2(ply,teamID)
 	ply:SetModel(tdm.models[math.random(#tdm.models)])
     ply:SetPlayerColor(Vector(0,0,0.6))
 
-
     ply:Give("weapon_hands")
     ply:Give("weapon_physcannon")
     ply:Give("weapon_crowbar")
     ply:Give("medkit")
     ply:Give("med_band_big")
-    --ply:Give("weapon_radio")
 
     ply:SetLadderClimbSpeed(100)
 

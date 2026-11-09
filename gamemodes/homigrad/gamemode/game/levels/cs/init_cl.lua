@@ -36,7 +36,6 @@ end
 
 local upvector = Vector(0, 0, 128) --в отдельную переменную ибо создание векторов в пэинт хуке так себе дело...
 
-
 function css.HUDPaint_RoundLeft(white2) --позиции точек и счёт
     local lply = LocalPlayer()
 	local name,color = css.GetTeamName(lply)
@@ -71,12 +70,8 @@ function css.HUDPaint_RoundLeft(white2) --позиции точек и счёт
     surface.DrawRect(ScrW() * 0.39, ScrH() * 0.97, ScrW() * 0.1, ScrH() * 0.01)
     surface.DrawRect(ScrW() * 0.51, ScrH() * 0.97, ScrW() * 0.1, ScrH() * 0.01)
 
-
     surface.SetDrawColor(red)
     surface.DrawRect(ScrW() * 0.39 + ((1000 - css.WinPoints[1]) / 1000 * ScrW() * 0.1), ScrH() * 0.97, css.WinPoints[1] / 1000 * ScrW() * 0.1, ScrH() * 0.01)
-    --print(css.WinPoints[1])
-    --print("gega")
-    --print(css.WinPoints[2])
     surface.SetDrawColor(blue)
     surface.DrawRect(ScrW() * 0.51, ScrH() * 0.97, css.WinPoints[2] / 1000 * ScrW() * 0.1, ScrH() * 0.01)
 

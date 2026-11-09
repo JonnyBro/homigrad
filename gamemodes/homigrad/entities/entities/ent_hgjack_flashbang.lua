@@ -84,9 +84,6 @@ if SERVER then
 			local plyPos = ply:GetPos()
 			local dis = Pos:Distance(plyPos)
 
-			-- self:EmitSound("hmgd/ear_ringing.wav", nil, nil, .5)
-			-- sound.Play("hmgd/ear_ringing.wav", plyPos, nil, nil, .5)
-
 			if dis < 1000 then
 				if not util.TraceLine({
 					start = Pos,
@@ -104,6 +101,4 @@ elseif CLIENT then
 	function ENT:Draw()
 		self:DrawModel()
 	end
-
-	--language.Add("ent_jack_gmod_ezflashbang", "EZ Flashbang Grenade")
 end

@@ -1,26 +1,8 @@
-local queue = {}
-hg.prechachesound = hg.prechachesound or {}
-
-function hg.PrecahceSound(name)
-	if hg.prechachesound[name] then return end
-
-	if not hg.initents then
-		queue[#queue + 1] = name
-	else
-		game.GetWorld():EmitSound(name, 75, 100, 1, CHAN_AUTO, SND_STOP)
-	end
-
-	-- hg.prechachesound[name] = true
-end
-
-hook.Add("Initialize", "homigrad-prechache", function()
-	for _, name in pairs(queue) do
-		game.GetWorld():EmitSound(name)
-	end
-end)
-
-FrameTimeClamped = 1 / 66
 ftlerped = 1 / 66
+
+hook.Add("Think", "Mul lerp", function()
+	ftlerped = math.Clamp(FrameTime(), 0.001, 0.1)
+end)
 
 function hg.FrameTimeClamped(ft)
 	return math.Clamp(1 - math.exp(-0.5 * (ft or ftlerped)), 0.001, 0.01)
@@ -28,79 +10,16 @@ end
 
 local FrameTimeClamped_ = hg.FrameTimeClamped
 
-local function lerpFrameTime(lerp, frameTime)
-	return math.Clamp(1 - lerp ^ (frameTime or FrameTime()), 0, 1)
-end
-
 local function lerpFrameTime2(lerp, frameTime)
 	return math.Clamp(lerp * FrameTimeClamped_(frameTime) * 150, 0, 1)
 end
-
-hg.lerpFrameTime2 = lerpFrameTime2
-hg.lerpFrameTime = lerpFrameTime
 
 function LerpFT(lerp, source, set)
 	return Lerp(lerpFrameTime2(lerp), source, set)
 end
 
-function LerpVectorFT(lerp, source, set)
-	return LerpVector(lerpFrameTime2(lerp), source, set)
-end
-
 function LerpAngleFT(lerp, source, set)
 	return LerpAngle(lerpFrameTime2(lerp), source, set)
-end
-
-local result, r1, r2, r3, r4, r5, r6, _error, errorH
-
-function util.pcall(func, ...)
-	_error = true
-	result, r1, r2, r3, r4, r5, r6 = xpcall(func, func_error, ...)
-	errorH = _error
-	_error = nil
-
-	if result then
-		if type(errorH) == "string" then
-			ErrorNoHaltWithStack(errorH)
-			return false, errorH
-		end
-
-		return true, r1, r2, r3, r4, r5, r6
-	end
-end
-
-function util.error(text)
-	if _error then
-		_error = text
-	else
-		ErrorNoHaltWithStack(text)
-	end
-end
-
-function util.FindInClassList(class, list)
-	local value = list[class]
-
-	if not value then
-		for class2, value2 in pairs(list) do
-			local star = string.sub(class2, #class2, #class2) == "*"
-			local no = string.sub(class2, 1, 1) == "!"
-			local thisClass = class
-
-			if no then class2 = string.sub(class2, 2, #class2) end
-
-			if star then
-				class2 = string.sub(class2, 1, #class2 - 1)
-				thisClass = string.sub(thisClass, 1, #class2)
-			end
-
-			if thisClass == class2 then
-				if no then return end
-				value = value2
-			end
-		end
-	end
-
-	return value
 end
 
 local file_Find = file.Find
@@ -129,21 +48,4 @@ function file.Exists(path, gamePath)
 	end
 
 	return false
-end
-
-local max, min = math.max, math.min
-
-function util.halfValue(value, maxvalue, k)
-	k = maxvalue * k
-	return max(value - k, 0) / k
-end
-
-function util.halfValue2(value, maxvalue, k)
-	k = maxvalue * k
-	return min(value / k, 1)
-end
-
-function util.safeDiv(a, b)
-	if a == 0 and b == 0 then return 0
-	else return a / b end
 end

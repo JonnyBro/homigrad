@@ -153,7 +153,6 @@ if SERVER then
 			timer.Create("Cyanid" .. ent:EntIndex() .. "3", 15, 1, function()
 				if ent:Alive() and ent.poisoned then
 					ent.KillReason = "poison"
-					-- ent:Kill()
 					ent.nohook = true
 					ent:TakeDamage(math.huge, ent.poisonbro)
 					ent.nohook = nil
@@ -211,13 +210,6 @@ if CLIENT then
 		local raycast2 = util.IntersectRayWithOBB(tracePos, traceDir, pos2, ang2, Vector(-8, -3, -1), Vector(2, -2, 1))
 
 		local frac = traceResult.Fraction
-
-		--[[ Debugging stuff
-		if raycast2 then
-			debugoverlay.BoxAngles(pos, Vector(-8, -1, -1), Vector(2, 0, 1), ang, 0.01, Color(125, 255, 0)) -- Green color for intersection
-		else
-			debugoverlay.BoxAngles(pos, Vector(-8, -1, -1), Vector(2, 0, 1), ang, 0.01, Color(255, 125, 0)) -- Red color for no intersection
-		end --]]
 
 		if raycast1 or raycast2 then
 			surface.SetDrawColor(color_white)

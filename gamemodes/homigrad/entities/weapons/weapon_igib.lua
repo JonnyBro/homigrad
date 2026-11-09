@@ -71,8 +71,6 @@ function SWEP:PrimaryAttack()
 			cmm2:ApplyForceCenter(ang:Forward() * self.ThrowVel + self:GetOwner():GetVelocity() * 1)
 		end
 	end
-
-	-- self:TakePrimaryAmmo(1)
 end
 
 -- models/weapons/insurgency/w_rpg7.mdl

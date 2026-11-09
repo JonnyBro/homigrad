@@ -75,9 +75,6 @@ function ctp.StartRoundSV()
 
 	ctp.SpawnGred()
 
-	bahmut.SelectRandomPlayers(team.GetPlayers(1), 4, bahmut.GiveAidPhone)
-	bahmut.SelectRandomPlayers(team.GetPlayers(2), 4, bahmut.GiveAidPhone)
-
 	tdm.CenterInit()
 
 	ctp.ragdolls = {}
@@ -92,7 +89,6 @@ function ctp.Think()
 		ctp.SpawnVehicle()
 
 		for _, v in player.Iterator() do
-			local players = {}
 
 			if not v:Alive() and v:Team() ~= 1002 then
 				v:Spawn()
@@ -103,14 +99,6 @@ function ctp.Think()
 				if not point then continue end
 
 				v:SetPos(point[1])
-
-				players[v:Team()] = players[v:Team()] or {}
-				players[v:Team()][v] = true
-			end
-
-			for _, teams in pairs(players) do
-				bahmut.SelectRandomPlayers(teams[1], 6, bahmut.GiveAidPhone)
-				bahmut.SelectRandomPlayers(teams[2], 6, bahmut.GiveAidPhone)
 			end
 		end
 
@@ -146,8 +134,6 @@ function ctp.PlayerSpawn2(ply, teamID)
 	if math.random(1, 4) == 4 then ply:Give("morphine") end
 	if math.random(1, 2) == 2 then ply:Give("megamedkit") end
 	if math.random(1, 3) == 3 then ply:Give("weapon_hg_f1") end
-	-- local r = math.random(1, 3)
-	-- ply:Give(r == 1 and "food_fishcan" or r == 2 and "food_spongebob_home" or r == 3 and "food_lays")
 
 	local r = math.random(1, 2)
 	JMod.EZ_Equip_Armor(ply, "Medium-Helmet", color)

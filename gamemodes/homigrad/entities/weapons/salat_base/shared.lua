@@ -57,14 +57,6 @@ SWEP.Sight = false
 SWEP.ReloadSound = ""
 SWEP.TwoHands = false
 
-FrameTimeClamped = 1 / 66
-ftlerped = 1 / 66
-
-hook.Add("Think", "Mul lerp", function()
-	local ft = FrameTime()
-	ftlerped = math.Clamp(ft, 0.001, 0.1)
-end)
-
 SWEP.DrawWeaponSelection = function(...) DrawWeaponSelection(...) end
 
 local hg_skins = CreateClientConVar("hg_skins", "1", true, false, "", 0, 1)
@@ -270,17 +262,8 @@ homigrad_weapons = homigrad_weapons or {}
 
 local skins = {"sal/acc/armor01_2", "sal/acc/armor01_3", "sal/acc/armor01_4", "sal/acc/armor01_5", "models/foodnhouseholditems/cj_b_plastic", "models/jacky_camouflage/digi", "models/jacky_camouflage/digi2"}
 
--- util.AddNetworkString("SendHomigradWeapons")
-
 function AddHomigradWeapon(ent)
 	table.insert(homigrad_weapons, ent)
-
-	--[[
-	if SERVER then
-		net.Start("SendHomigradWeapons", true)
-			net.WriteEntity(homigrad_weapons)
-		net.Broadcast()
-	end --]]
 end
 
 function SWEP:InitAdd()
@@ -506,8 +489,6 @@ function SWEP:FireBullet()
 	local shootOrigin, shootAngles = self:GetTrace()
 	local cone = self.Primary.Cone
 
-	-- if not ply:IsNPC() and not IsValid(ply.FakeRagdoll) then _, shootOrigin, _ = util.DistanceToLine(shootOrigin - shootAngles:Forward(), shootOrigin, ply:EyePos()) end
-
 	if IsValid(ply.wep) then
 		local phys = ply.wep:GetPhysicsObject()
 		if IsValid(phys) then phys:ApplyForceCenter(phys:GetAngles():Forward() * -250) end
@@ -534,8 +515,6 @@ function SWEP:FireBullet()
 
 	bullet.Callback = function(ply, tr, dmgInfo)
 		wep:BulletCallbackFunc(self.Primary.Damage, ply, tr, self.Primary.Damage, false, true, false)
-
-		-- dmgInfo:SetDamageForce(dmgInfo:GetDamageForce())
 
 		if self.Primary.Ammo == "buckshot" then
 			local k = math.max(1 - tr.StartPos:Distance(tr.HitPos) / 750, 0)
@@ -564,8 +543,6 @@ function SWEP:FireBullet()
 		if SERVER then
 			ply.KillReason = "killyourself"
 
-			-- self:GetOwner():FireBullets(bullet)
-
 			local dmgInfo = DamageInfo()
 			dmgInfo:SetAttacker(ply)
 			dmgInfo:SetInflictor(self)
@@ -577,27 +554,16 @@ function SWEP:FireBullet()
 
 			ply.LastDMGInfo = dmgInfo
 			ply.LastHitBoneName = "ValveBiped.Bip01_Head1"
-
-			-- if ply:Alive() then ply:Kill() end
 		end
 	elseif not self:GetOwner():IsNPC() then
 		if SERVER then self:GetOwner():FireBullets(bullet) end
 
 		self:SetLastShootTime()
 	else
-		-- if SERVER then
 		self:FireBullets(bullet)
-		-- end
 	end
 
 	ply:LagCompensation(false)
-
-	-- local effectdata = EffectData()
-	-- effectdata:SetOrigin(shootOrigin)
-	-- effectdata:SetAngles(shootAngles)
-	-- effectdata:SetScale(self:IsSighted() and 0.1 or 1)
-	-- effectdata:SetNormal(shootDir)
-	-- util.Effect(self.Effect or "MuzzleEffect", effectdata, true, true)
 
 	if self:GetOwner():IsNPC() then self:SendWeaponAnim(ACT_VM_PRIMARYATTACK) end
 end
@@ -721,18 +687,6 @@ function SWEP:Step()
 	end
 
 	if SERVER then self:WorldModelTransform() end
-
-	--[[
-	if SERVER then
-		local pos, ang = self:GetTrace()
-		local tr = {}
-		tr.start = pos
-		tr.endpos = pos + ang:Forward() * 9999
-		tr.filter = {ply}
-		local trace = util.TraceLine(tr)
-
-		debugoverlay.Sphere(trace.HitPos, 2, 0.1, color_white)
-	end --]]
 end
 
 SWEP.localAngle = Angle(10, 0, -90)
@@ -757,7 +711,6 @@ function SWEP:ApplyAnim(ply)
 		if SERVER then self:SetNWBool("IsSighted", scope) end
 
 		if isLocal and ply:GetNWInt("LeftArm") < 1 or ply:GetNWInt("RightArm") < 1 then
-			-- self.eyeSpray = self.eyeSpray + Angle(math.Rand(-0.03, 0.03), math.Rand(-0.03, 0.03), math.Rand(-0.03, 0.03))
 			local p = 0.3 - math.min(painlosing or 0, 0.3)
 			self.eyeSpray = (self.eyeSpray or Angle()) + Angle(math.Rand(-p, p), math.Rand(-p, p), math.Rand(-p, p))
 		end
@@ -769,9 +722,6 @@ function SWEP:ApplyAnim(ply)
 				local pos, ang = ply:GetBonePosition(head)
 				pos[3] = pos[3] + 5
 				ang:RotateAroundAxis(ang:Up(), -90)
-				-- local dir = ang:Forward() * 1000
-				-- local tr = util.QuickTrace(pos, dir, ply)
-				-- local dist = pos:DistToSqr(tr.HitPos)
 
 				self.isClose = self.dist <= 35 and not self:IsReloaded()
 
@@ -804,10 +754,6 @@ function SWEP:ApplyAnim(ply)
 		end
 	else
 		self.isClose = true
-
-		--[[
-		if not self.TwoHands then self:SetWeaponHoldType("normal")
-		else self:SetWeaponHoldType("passive") end --]]
 	end
 
 	self.lerpClose = LerpFT(0.1, self.lerpClose, self.isClose and 1 or 0)
@@ -833,9 +779,7 @@ function SWEP:ApplyAnim(ply)
 
 	local _, newAng = LocalToWorld(vector_origin, self.localAngle or angle_zero, vector_origin, plyang)
 	local ang = newAng
-	-- attAng[3] = attAng[3] + (ply:KeyDown(IN_ALT1) and -30 or ply:KeyDown(IN_ALT2) and 30 or 0) / 3
 	ang:RotateAroundAxis(ang:Forward(), -90)
-	-- ang:RotateAroundAxis(ang:Right(), 8)
 
 	matrix:SetAngles(ang)
 
@@ -856,7 +800,6 @@ function SWEP:ApplyAnim(ply)
 
 	if not ply:GetNWBool("Suiciding") and not self:IsSprinting() and not self.isClose then
 		self.localAngle = LerpFT(0.1, self.localAngle or angle_zero, localAng)
-		-- print(self.localAngle)
 	end
 
 	ply:ManipulateBoneAngles(forearm_index, forearm, false)
@@ -884,7 +827,6 @@ hook.Add("UpdateAnimation", "weapon_animations", function(ply, vel, maxseqground
 end)
 
 function SWEP:Holster(wep)
-	-- if not IsFirstTimePredicted() then return end
 	local ply = self:GetOwner()
 	if not IsValid(ply) or not ply:LookupBone("ValveBiped.Bip01_R_Forearm") then return end -- :shrug:
 
@@ -967,10 +909,6 @@ function SWEP:WorldModelTransform()
 	end
 
 	local Pos, Ang = self:GetTransform(model)
-	-- local _, ang = self:GetTrace()
-	-- local _, localang = WorldToLocal(vector_origin, owner:EyeAngles(), vector_origin, ang)
-	-- Ang:RotateAroundAxis(ang:Up(), localang[2])
-	-- Ang:RotateAroundAxis(ang:Right(), localang[1])
 
 	model:SetPos(Pos)
 	model:SetAngles(Ang)
@@ -981,14 +919,12 @@ function SWEP:WorldModelTransform()
 	end
 
 	if CLIENT then model:SetupBones() end
-	-- model:DrawModel()
 end
 
 function SWEP:DrawWorldModelAdd()
 end
 
 function SWEP:DrawWorldModel()
-	-- self:DrawModel()
 	self:WorldModelTransform()
 
 	if IsValid(self.worldModel) then self.worldModel:DrawModel() end

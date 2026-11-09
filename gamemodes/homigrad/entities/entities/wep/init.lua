@@ -13,7 +13,6 @@ function ENT:Initialize()
 	local phys = self:GetPhysicsObject()
 	if IsValid(phys) then
 		phys:Wake()
-		-- phys:SetMass(150)
 	end
 
 	self:GetOwner().wep = self

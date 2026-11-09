@@ -26,9 +26,6 @@ hook.Add("Think", "ShouldDrawNoclipe", function()
 	end
 end)
 
---[[ I dont like this
-hook.Add("DrawPhysgunBeam", "gg", function(ply) if nodraw_players[ply] then return false end end) --]]
-
 local red = Color(125, 0, 0)
 
 local hg_customname = CreateClientConVar("hg_customname", "", true)

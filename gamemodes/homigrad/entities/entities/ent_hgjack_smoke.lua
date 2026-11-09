@@ -57,6 +57,4 @@ elseif CLIENT then
 	function ENT:Draw()
 		self:DrawModel()
 	end
-
-	--language.Add("ent_jack_gmod_ezsmokenade", "EZ Smokescreen Grenade")
 end

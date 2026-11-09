@@ -38,7 +38,6 @@ function SpawnWeapon(ply)
 
 			local cons = constraint.Weld(wep, rag, 0, rag:TranslateBoneToPhysBone(rag:LookupBone("ValveBiped.Bip01_R_Hand")), 0, true)
 			if IsValid(cons) then ply.WepCons = cons end
-			-- rh:EnableMotion(false)
 
 			-- Use both hands on two-handed weapons
 			if not weapon:IsPistolHoldType() and IsValid(lh) then

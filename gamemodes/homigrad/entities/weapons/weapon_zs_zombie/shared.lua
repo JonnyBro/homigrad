@@ -150,7 +150,6 @@ function SWEP:Swung()
 			self:MeleeHit(ent, trace, damage)
 		end
 
-		-- if IsFirstTimePredicted() then
 		effectdata:SetOrigin(trace.HitPos)
 		effectdata:SetStart(trace.StartPos)
 		effectdata:SetNormal(trace.HitNormal)
@@ -163,16 +162,13 @@ function SWEP:Swung()
 			effectdata:SetEntity(ent)
 			util.Effect("Impact", effectdata)
 		end
-		-- end
 	end
 
-	-- if IsFirstTimePredicted() then
 	if hit then
 		self:PlayHitSound()
 	else
 		self:PlayMissSound()
 	end
-	-- end
 
 	if self.FrozenWhileSwinging then owner:ResetSpeed() end
 end
@@ -249,19 +245,6 @@ function SWEP:ApplyMeleeDamage(hitent, tr, damage)
 
 	-- No knockback vs. players
 	if vel then hitent:SetLocalVelocity(vel) end
-
-	--[[
-	if hitent:IsPlayer() then
-		local vel = hitent:GetVelocity()
-		hitent:TakeSpecialDamage(damage, self.MeleeDamageType, self:GetOwner(), self, tr.HitPos)
-		hitent:SetLocalVelocity(vel)
-	else
-		local dmgtype, owner, hitpos = self.MeleeDamageType, self:GetOwner(), tr.HitPos
-		timer.Simple(0, function()
-			-- Avoid prediction errors.
-			if hitent:IsValid() and self:IsValid() and owner:IsValid() then hitent:TakeSpecialDamage(damage, dmgtype, owner, self, hitpos) end
-		end)
-	end --]]
 end
 
 function SWEP:PrimaryAttack()

@@ -18,7 +18,6 @@ function CLASS.On(self)
 	self:SetHealth(150)
 	self:SetMaxHealth(150)
 
-	--tdm.GiveSwep(self,CLASS.main_weapons,8)
 	self:Give("weapon_hands")
 	self:Give("weapon_hg_hl2")
 
@@ -65,7 +64,6 @@ end
 function CLASS.PlayerDeath(self)
 	sound.Play(Sound("npc/overwatch/radiovoice/die" .. math.random(1, 3) .. ".wav"), self:GetPos())
 
-	--self:EmitSound("npc/combine_soldier/die" .. math.random(1,3) .. ".wav")
 	for _, ply in RandomPairs(getList(self)) do
 		ply:EmitSound(Sound("npc/combine_soldier/vo/ripcordripcord.wav"))
 

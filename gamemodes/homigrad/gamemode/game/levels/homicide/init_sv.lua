@@ -1,8 +1,8 @@
 local function GetTraitorsNames()
 	local tbl = {}
 
-	for _, plr in pairs(homicide.t) do
-		table.insert(tbl, plr:Name())
+	for _, plr in pairs(homicide.t or {}) do
+		if IsValid(plr) then table.insert(tbl, plr:Name()) end
 	end
 
 	return tbl
@@ -60,11 +60,6 @@ local function makeT(ply)
 		ply:Give("weapon_kabar")
 		ply:Give("weapon_radar")
 	end
-
-	--[[
-	timer.Simple(1, function()
-		ply.allowFlashlight = true
-	end) --]]
 end
 
 local function makeCT(ply)
@@ -174,11 +169,11 @@ function SpawnPolicePlayers()
 			if homicide.roundType == 1 then ply:SetPlayerClass("contr")
 			else ply:SetPlayerClass("police") end
 
+			local names = GetTraitorsNames()
+			if #names == 0 then return end
+
 			net.Start("hg_sendchat_format")
-				net.WriteTable({
-					"#hg.homicide.traitors",
-					#homicide.t > 1 and table.concat(GetTraitorsNames(), ", ") or homicide.t[1]:Name()
-				})
+				net.WriteTable({"#hg.homicide.traitors", table.concat(names, ", ")})
 			net.Send(ply)
 		end)
 	end)
@@ -337,7 +332,6 @@ end
 
 function homicide.PlayerInitialSpawn(ply)
 	ply:SetTeam(1)
-	-- TryAssignPolice(ply)
 end
 
 function homicide.EndRound(winner)
@@ -350,12 +344,11 @@ function homicide.EndRound(winner)
 		})
 	net.Broadcast()
 
-	if homicide.t and #homicide.t > 0 then
+	local names = GetTraitorsNames()
+
+	if #names > 0 then
 		net.Start("hg_sendchat_format")
-			net.WriteTable({
-				"#hg.homicide.traitors",
-				#homicide.t > 1 and table.concat(GetTraitorsNames(), ", ") or homicide.t[1]:Name()
-			})
+			net.WriteTable({"#hg.homicide.traitors", table.concat(names, ", ")})
 		net.Broadcast()
 	end
 end
@@ -371,7 +364,6 @@ function homicide.PlayerSpawn2(ply, teamID)
 		ply:SetModel(customModel)
 	else
 		EasyAppearance.SetAppearance(ply)
-		-- ply:SetModel(teamTbl.models[math.random(#teamTbl.models)])
 	end
 
 	ply:SetPlayerColor(color:ToVector())
@@ -424,7 +416,6 @@ function homicide.SyncRole(ply, teamID)
 end
 
 function homicide.PlayerDeath(ply, inf, att)
-	-- TryAssignPolice(ply)
 
 	if (ply:IsAdmin() or (ply:GetUserGroup() == "operator") or (ply:GetUserGroup() == "tmod")) and ply:GetInfoNum("homicide_get", 0) then
 		local role = {{}, {}}
@@ -465,14 +456,6 @@ function homicide.ShouldSpawnLoot()
 	else
 		return false
 	end
-end
-
-function homicide.ShouldDiscordOutput(ply, text)
-	if ply:Team() ~= 1002 and ply:Alive() then return false end
-end
-
-function homicide.ShouldDiscordInput(ply, text)
-	if not ply:IsAdmin() then return false end
 end
 
 function homicide.GuiltLogic(ply, att, dmgInfo)

@@ -1,10 +1,7 @@
 local vecZero = Vector(0, 0, 0)
--- local vecInf = Vector(1, 1, 1) / 0
 
 local function removeBone(rag, bone, phys_bone)
 	rag:ManipulateBoneScale(bone, vecZero)
-
-	-- rag:ManipulateBonePosition(bone, vecInf) -- Thanks Rama (only works on certain graphics cards!)
 
 	if rag.gibRemove[phys_bone] then return end
 
@@ -13,8 +10,6 @@ local function removeBone(rag, bone, phys_bone)
 
 	phys_obj:EnableCollisions(false)
 	phys_obj:SetMass(0.1)
-
-	-- rag:RemoveInternalConstraint(phys_bone)
 
 	if rag.constraints and IsValid(rag.constraints[rag:GetBoneName(bone)]) then
 		rag.constraints[rag:GetBoneName(bone)]:Remove()
@@ -154,11 +149,9 @@ function Gib_Input(rag, bone, dmgInfo)
 		gibRemove = rag.gibRemove
 		gib_ragdols[rag] = true
 
-		-- if not dmgInfo:IsDamageType(DMG_CRUSH) then
 		rag.Blood = rag.Blood or 5000
 		rag.BloodNext = 0
 		rag.BloodGibs = {}
-		-- end
 	end
 
 	local phys_bone = rag:TranslateBoneToPhysBone(bone)
@@ -260,7 +253,6 @@ hook.Add("Player Death", "Gib", function(ply, inflictor, attacker)
 		if not IsValid(rag) then return end
 
 		local bone = rag:LookupBone(ply.LastHitBoneName)
-		-- bone = bone ~= 0 and bone or 1
 		if not IsValid(rag) or not bone then return end
 
 		Gib_Input(rag, bone, dmgInfo)
@@ -320,7 +312,6 @@ hook.Add("HomigradGib", "Gib", function(ent, dmgInfo, phys_bone)
 	ent.dmgstack[phys_bone] = (ent.dmgstack[phys_bone] or 0) + dmg * (dmgInfo:IsDamageType(DMG_CRUSH) and 0.15 or 0.75)
 
 	-- Commenting out for now
-	-- print(ent.dmgstack[phys_bone], dmgInfo:IsDamageType(DMG_CRUSH))
 
 	timer.Create("removedmgstack" .. ent:EntIndex() .. phys_bone, 0.3, 1, function() if IsValid(ent) then ent.dmgstack[phys_bone] = 0 end end)
 
@@ -338,9 +329,6 @@ hook.Add("Fake Up", "gib", function(ply, rag)
 end)
 
 local max = math.max
--- local util_TraceLine = util.TraceLine
--- local util_Decal = util.Decal
--- local tr = {}
 
 hook.Add("Think", "Gib", function()
 	local time = CurTime()
@@ -359,21 +347,6 @@ hook.Add("Think", "Gib", function()
 
 		if ent.BloodGibs and ply.Blood > 0 then
 			local k = ply.Blood / 5000
-			--[[
-			if (ent.BloodNext or 0) < time then
-				ent.BloodNext = time + Rand(0.25, 0.5) / max(k, 0.25)
-				ent.Blood = max(ent.Blood - 25, 0)
-				tr.start = ent:GetPos()
-				tr.endpos = tr.start + Vector(Rand(-1, 1), Rand(-1, 1), -Rand(0.25, 0.4)) * 125 * Rand(0.8, 1.2)
-				tr.filter = ent
-				local traceResult = util_TraceLine(tr)
-				if traceResult.Hit then
-					ent:EmitSound("ambient/water/drip" .. math.random(1, 4) .. ".wav", 60, math.random(230, 240), 0.1, CHAN_AUTO)
-					util_Decal("Blood", traceResult.HitPos + traceResult.HitNormal, traceResult.HitPos - traceResult.HitNormal, ply)
-				else
-					BloodParticle(ent:GetPos() + ent:OBBCenter(), ent:GetVelocity() + Vector(math.Rand(-5, 5), math.Rand(-5, 5), 0))
-				end
-			end --]]
 
 			local BloodGibs = ent.BloodGibs
 

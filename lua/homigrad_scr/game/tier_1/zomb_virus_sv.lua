@@ -23,7 +23,6 @@ local function ZsVirusCough(ply)
 	local r = math.random(0, 25)
 
 	if r > 15 and not ply.unconscious then
-		-- ply:EmitSound("ambient/voices/cough" .. math.random(1, 4) .. ".wav", 75, math.random(90, 110))
 		if r > 22 then
 			local snd = vomitsfxs[math.random(#vomitsfxs)]
 
@@ -70,7 +69,6 @@ hook.Add("Player Think", "homigrad-virus", function(ply, time)
 	if ply.virus > 90 then ply.pain = 1000 end
 
 	if ply.virus > 100 then
-		-- ply:Kill()
 		ply.KillReason = "virus"
 		ply.nohook = true
 		ply:TakeDamage(math.huge, ply.LastAttacker)
@@ -114,7 +112,6 @@ concommand.Add("vomit", function(ply, cmd, args)
 	if not ply:Alive() or ply.unconscious then return end
 
 	local r = math.random(1, 30)
-	-- r = 26 -- xd
 
 	if r > 25 then
 		Vomit(ply)

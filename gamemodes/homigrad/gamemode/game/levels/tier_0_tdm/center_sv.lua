@@ -25,7 +25,6 @@ function tdm.Center()
 			end
 		elseif ply.delayKill then
 			ply.delayKill = nil
-			-- ply:ChatPrint("Харош.")
 		end
 	end
 end

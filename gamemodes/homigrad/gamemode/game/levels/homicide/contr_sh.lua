@@ -9,14 +9,6 @@ CLASS.color = Color(75, 75, 75)
 function CLASS:Off()
 	if CLIENT then return CLASS.CloseMenu() end
 
-	--[[
-	local guilt = self.contrGuilt or 0
-
-	if guilt >= 40 then
-		self.Guilt = self.Guilt + guilt
-		GuiltCheck(ply)
-	end --]]
-
 	self.isContr = nil
 end
 
@@ -66,13 +58,6 @@ function CLASS:On()
 	if r == 1 then EmitSound(self, "radio/moveout.wav")
 	elseif r == 2 then EmitSound(self, "radio/com_go.wav")
 	elseif r == 3 then EmitSound(self, "radio/go.wav") end
-end
-
-function CLASS:EndRound(winner)
-	--[[
-	if roundActiveName == "homicide" and winner == 2 then
-		EmitSound(self,"radio/ctwin.wav")
-	end --]]
 end
 
 local function tracerSee(self, endpos, dis)
@@ -202,13 +187,6 @@ if SERVER then
 			EmitSound(ply, sound)
 		end
 	end)
-
-	--[[
-	for _, ply in pairs(getList(ply)) do
-		net.Start("homicide contr")
-			net.WriteString(sound)
-		net.Send()
-	end --]]
 
 	return
 end

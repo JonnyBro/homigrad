@@ -17,8 +17,6 @@ SETFOV()
 cvars.AddChangeCallback("hg_fov", function(cmd, _, value)
 	timer.Simple(0, function()
 		SETFOV()
-
-		-- print("[HG] Changed FOV: " .. value)
 	end)
 end)
 
@@ -47,18 +45,6 @@ local view = {
 	drawmonitors = true
 }
 
--- local hg_disable_stoprenderunfocus = CreateClientConVar("hg_disable_stoprenderunfocus", "0", true)
--- local funnyText = {"afk?", "no", "hg_disable_stoprenderunfocus 1", "stop it", "kys", "а ну вернись", "не понял..."}
--- local currentText = funnyText[1]
--- local lastTextChange = 0
--- local nextTextIndex = 2
--- local wasFocused = true
-
--- local cam_End2D = cam.End2D
--- local cam_Start2D = cam.Start2D
--- local draw_SimpleText = draw.SimpleText
--- local system_HasFocus = system.HasFocus
-
 local color_white = color_white
 local CurTime = CurTime
 local RealFrameTime = RealFrameTime
@@ -71,38 +57,6 @@ local TEXT_ALIGN_CENTER = TEXT_ALIGN_CENTER
 hook.Add("RenderScene", "homigrad_mainrenderscene", function(pos, angle, fov)
 	if g_VR and g_VR.active then return end
 	if RealFrameTime() > 0.02 then return end
-
-	--[[
-	local now = CurTime()
-	local isFocused = system_HasFocus()
-
-	if isFocused ~= wasFocused then
-		wasFocused = isFocused
-
-		if not isFocused then
-			lastTextChange = now
-			currentText = funnyText[1]
-			nextTextIndex = 2
-		end
-	end
-
-	if not isFocused and not hg_disable_stoprenderunfocus:GetBool() then
-		if now - lastTextChange > 1 then
-			currentText = funnyText[nextTextIndex] or funnyText[1]
-
-			nextTextIndex = nextTextIndex + 1
-
-			if nextTextIndex > #funnyText then nextTextIndex = 1 end
-
-			lastTextChange = now
-		end
-
-		cam_Start2D()
-			draw_SimpleText(currentText, "DebugFixedSmall", ScrW() / 2, ScrH() / 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		cam_End2D()
-
-		return true
-	end --]]
 
 	RENDERSCENE = true
 
@@ -205,15 +159,6 @@ local deathtexts = {
 	"якого біса",
 	"срака репнула"
 }
-
---[[
-gameevent.Listen("entity_killed")
-hook.Add("entity_killed", "killedplayer", function(data)
-	local ent = Entity(data.entindex_killed)
-	if ent:IsPlayer() then
-		hook.Run("Player Death",ent)
-	end
-end) --]]
 
 local oldrag
 
@@ -531,32 +476,6 @@ hide = {
 
 hook.Add("HUDShouldDraw", "HideHUD", function(name) if hide[name] then return false end end)
 
---[[
-hook.Add("InputMouseApply", "asdasd2", function(cmd, x, y, angle)
-	if not IsValid(LocalPlayer()) or not LocalPlayer():Alive() then return end
-	if not IsValid(follow) then return end
-
-	local att = follow:GetAttachment(follow:LookupAttachment("eyes"))
-	if not att or not istable(att) then return end
-
-	local angRad = math.rad(angle[3])
-	local newX = x * math.cos(angRad) - y * math.sin(angRad)
-	local newY = x * math.sin(angRad) + y * math.cos(angRad)
-
-	angle.pitch = math.Clamp(angle.pitch + newY / 50, -180, 180)
-	angle.yaw = angle.yaw - newX / 50
-
-	if math.abs(angle.pitch) > 89 then
-		angle.roll = angle.roll + 180
-		angle.yaw = angle.yaw + 180
-		angle.pitch = 89 * angle.pitch / math.abs(angle.pitch)
-	end
-
-	cmd:SetViewAngles(angle)
-
-	return true
-end) --]]
-
 local HullVec = Vector(4, 4, 4)
 local hand_material = Material("vgui/hud/hmcd_hand")
 local hand_material_on = Material("vgui/hud/hmcd_closedhand")
@@ -591,26 +510,11 @@ hook.Add("HUDPaint", "fakethings", function()
 				local vec1 = vec + mat:GetAngles():Up() * 2
 				local vec2 = vec + mat:GetAngles():Forward() * -2 + mat:GetAngles():Up() * 2 + mat:GetAngles():Right() * 0.5
 				local vec3 = vec + mat:GetAngles():Forward() * -2 + mat:GetAngles():Right() * 0.5
-				-- local pos = vec:ToScreen()
 
 				last_hold_rh = LocalPlayer():GetNWBool("rhon", false) and 255 or LerpFT(0.01, last_hold_rh, 0)
 
-				--[[ uncomment if needed
-				surface.SetFont("HomigradFont")
-				local txt = "You're " .. (ply:GetNWBool("rhon", false) and "currently holding " or "about to hold ") .. (tr.Entity:IsWorld() and "a solid object" or tr.Entity:IsPlayer() and "player " .. tr.Entity:Name() or tr.Entity.PrintName or string.find(tr.Entity:GetClass(), "prop") and "a prop" or tr.Entity:GetClass()) .. " with your right hand."
-				local x, y = surface.GetTextSize(txt)
-				local posx = math.Clamp(Lerp(0.1, ScrW() * 2 / 3, pos.x), x / 2, ScrW() - x / 2)
-				local posy = math.Clamp(Lerp(0.1, ScrH() * 9 / 10, pos.y), y, ScrH() - y)
-				surface.SetTextPos(posx - x / 2, posy - y)
-				surface.SetTextColor(255, 255, 255, last_hold_rh)
-				surface.DrawText(txt) --]]
-
 				cam.Start3D()
 					render.SetMaterial(LocalPlayer():GetNWBool("rhon", false) and hand_material_on or hand_material)
-					-- render.DrawSprite(vec, 1, 1, color_black)
-					-- render.DrawSprite(vec1, 1, 1, Color(255, 0, 0))
-					-- render.DrawSprite(vec2, 1, 1, color_white)
-					-- render.DrawSprite(vec3, 1, 1, color_white)
 					render.DrawQuad(vec, vec1, vec2, vec3, color_white)
 				cam.End3D()
 			end
@@ -636,44 +540,17 @@ hook.Add("HUDPaint", "fakethings", function()
 				local vec1 = vec + mat:GetAngles():Up() * 2
 				local vec2 = vec + mat:GetAngles():Forward() * -2 + mat:GetAngles():Up() * 2 + mat:GetAngles():Right() * 0.5
 				local vec3 = vec + mat:GetAngles():Forward() * -2 + mat:GetAngles():Right() * 0.5
-				-- local pos = vec:ToScreen()
 
 				last_hold_lh = LocalPlayer():GetNWBool("lhon", false) and 255 or LerpFT(0.01, last_hold_lh, 0)
 
-				--[[ uncomment if needed
-				surface.SetFont("HomigradFont")
-				local txt = "You're " .. (ply:GetNWBool("rhon", false) and "currently holding " or "about to hold ") .. (tr.Entity:IsWorld() and "a solid object" or tr.Entity:IsPlayer() and "player " .. tr.Entity:Name() or tr.Entity.PrintName or string.find(tr.Entity:GetClass(), "prop") and "a prop" or tr.Entity:GetClass()) .. " with your left hand."
-				local x, y = surface.GetTextSize(txt)
-				local posx = math.Clamp(Lerp(0.1, ScrW() / 3, pos.x), x / 2, ScrW() - x / 2)
-				local posy = math.Clamp(Lerp(0.1, ScrH() * 9 / 10, pos.y), y, ScrH() - y)
-				surface.SetTextPos(posx - x / 2, posy - y)
-				surface.SetTextColor(255, 255, 255, last_hold_lh)
-				surface.DrawText(txt) --]]
-
 				cam.Start3D()
 					render.SetMaterial(LocalPlayer():GetNWBool("lhon", false) and hand_material_on or hand_material)
-					-- render.DrawSprite(vec, 1, 1, color_black)
-					-- render.DrawSprite(vec1, 1, 1, Color(255, 0, 0))
-					-- render.DrawSprite(vec2, 1, 1, color_white)
-					-- render.DrawSprite(vec3, 1, 1, color_white)
 					render.DrawQuad(vec, vec1, vec2, vec3, color_white)
 				cam.End3D()
 			end
 		end
 	end
 end)
-
---[[
-hook.Add("Think", "mouthanim", function()
-	for _, ply in player.Iterator() do
-		local ent = IsValid(ply:GetNWEntity("Ragdoll")) and ply:GetNWEntity("Ragdoll") or ply
-		local flexes = {ent:GetFlexIDByName("jaw_drop"), ent:GetFlexIDByName("left_part"), ent:GetFlexIDByName("right_part"), ent:GetFlexIDByName("left_mouth_drop"), ent:GetFlexIDByName("right_mouth_drop")}
-		local weight = ply:IsSpeaking() and math.Clamp(ply:VoiceVolume() * 6, 0, 6) or 0
-		for _, v in ipairs(flexes) do
-			ent:SetFlexWeight(v, weight * 4)
-		end
-	end
-end) --]]
 
 local tab = {
 	["$pp_colour_addr"] = 0,
@@ -783,13 +660,11 @@ hook.Add("RenderScreenspaceEffects", "BloomEffect-homigrad", function()
 		draw.NoTexture()
 		surface.DrawPoly(triangle)
 		DrawBloom(0.5, 1, 9, 9, 1, 1.2, 0.8, 0.8, 1.2)
-		-- DrawTexturize(1, mat)
 		DrawSharpen(1, 1.2)
 		DrawColorModify(tab)
 		BlurScreen(0.3, 55)
 		LocalPlayer():SetDSP(55, true)
 		DrawMotionBlur(0.2, 0.3, 0.001)
-		--DrawToyTown(1, ScrH() / 2)
 
 		local k3 = 6
 		DrawCA(4 * k3, 2 * k3, 0, 2 * k3, 1 * k3, 0)
@@ -872,21 +747,3 @@ hook.Add("HUDPaint", "ShowSpeakingIconWithSpin", function()
 	end
 end)
 
---[[
-local colred = Color(255,0,0)
-hook.Add("PostDrawTranslucentRenderables", "fuck_off", function()
-	local lply = LocalPlayer()
-	if lply == Entity(1) then
-		local ent = lply:GetEyeTrace().Entity
-		ent = ent:IsPlayer() and ent
-		if ent then
-			local pos, ang = ent:GetBonePosition(ent:LookupBone("ValveBiped.Bip01_Head1"))
-			local vec1 = Vector(3, -4, -2.5)
-			local vec2 = Vector(7, 3, 2.5)
-			local dmgpos = ply:GetEyeTrace().HitPos
-			local penetration = ply:GetAimVector() * 100
-			local raycast = util.IntersectRayWithOBB(dmgpos, penetration, pos, ang, vec1, vec2)
-			render.DrawBox(pos, ang, vec1, vec2, raycast and colred or color_white)
-		end
-	end
-end) --]]

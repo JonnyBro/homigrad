@@ -112,7 +112,6 @@ function OpenHomigradMenu()
 	HomigradMenu:SetTitle("")
 	HomigradMenu:SetSize(400, 400)
 	HomigradMenu:Center()
-	--frame:ShowCloseButton(false)
 	HomigradMenu:SetDraggable(false)
 	HomigradMenu:MakePopup()
 	ToggleScoreboard_Override = true

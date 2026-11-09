@@ -86,9 +86,6 @@ function SWEP:Think()
 			ent.bloodtype = ent.bloodtype or math.random(1, 8)
 
 			owner:ChatPrint(self.bloodinside and "#hg.bloodbag.empty" or "#hg.bloodbag.fill")
-
-			-- local compatible = bloodtypes[bloodtranslate[self.bloodtype]][bloodtranslate[ent.bloodtype]]
-			-- owner:ChatPrint(not self.bloodinside and tostring(blood_compatibility))
 		end
 
 		if ent and self.zabortime and self.zabortime + 2 <= CurTime() then
@@ -115,9 +112,6 @@ function SWEP:Think()
 			ent.bloodtype = ent.bloodtype or math.random(1, 8)
 
 			owner:ChatPrint(self.bloodinside and "#hg.bloodbag.emptyp" or "#hg.bloodbag.fillp")
-
-			-- local compatible = bloodtypes[bloodtranslate[self.bloodtype]][bloodtranslate[ent.bloodtype]]
-			-- owner:ChatPrint(not self.bloodinside and tostring(blood_compatibility))
 		end
 
 		if ent and self.zabortime and self.zabortime + 2 <= CurTime() then

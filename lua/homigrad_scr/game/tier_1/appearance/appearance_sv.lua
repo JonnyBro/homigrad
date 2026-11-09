@@ -11,15 +11,7 @@ EasyAppearance = EasyAppearance or {}
 net.Receive("EasyAppearance_SendData", function(len, ply)
 	ply.bRandomAppearance = net.ReadBool()
 	ply.tAppearance = net.ReadTable()
-	-- PrintTable(ply.tAppearance)
-	-- print(ply.bRandomAppearance)
 end)
-
---[[
-local tDefaultAppearance = {
-	strModel = "Male 01",
-	strColthesStyle = "Casual 1"
-} --]]
 
 function EasyAppearance.GetRandomAppearance()
 	local tRandomAppearance = {}

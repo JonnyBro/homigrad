@@ -192,7 +192,6 @@ local ammoents = {
 print("[HG} AmmoTypes loaded!")
 
 for k, v in pairs(ammotypes) do
-	-- PrintTable(v)
 
 	game.AddAmmoType(v)
 

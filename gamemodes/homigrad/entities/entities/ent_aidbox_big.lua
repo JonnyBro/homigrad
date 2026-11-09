@@ -135,7 +135,6 @@ if SERVER then
 	end
 
 	function ENT:Use(activator, caller)
-		-- if true then return end
 
 		local Pos = self:LocalToWorld(self:OBBCenter() + Vector(0, 0, 10))
 		local Up = self:GetUp()
@@ -167,8 +166,6 @@ if SERVER then
 		self:EmitSound("snd_jack_aidboxopen.wav", 75, 100)
 
 		SpawnContents(self.Contents or {{"item_ammo_pistol", 40}}, Pos, activator)
-
-		-- JackaGenericUseEffect(activator)
 
 		if activator:IsPlayer() then
 			local Wep = activator:GetActiveWeapon()

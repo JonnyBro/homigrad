@@ -46,27 +46,7 @@ else
 	end)
 end
 
---[[
-local turnTable = {
-	["standard"] = 2,
-	["soe"] = 1,
-	["wild-west"] = 4,
-	["gun-free-zone"] = 3
-}--]]
-
 CreateClientConVar("homicide_get", 0, true, true, "Show traitors and stuff while you're spectating", 0, 1)
-
-function homicide.IsMapBig()
-	local mins, maxs = game.GetWorld():GetModelBounds()
-	local skybox = 0
-
-	--[[ huh?
-	for _, ent in pairs(ents.FindByClass("sky_camera")) do
-		skybox = 0
-	end --]]
-
-	return (mins:Distance(maxs) - skybox) > 5000
-end
 
 function homicide.StartRound(data)
 	game.CleanUpMap(false)
@@ -128,11 +108,6 @@ net.Receive("homicide_roleget", function()
 		ply.roleCT = true
 	end
 end)
-
-function homicide.HUDPaint_Spectate(spec)
-	-- local name, color = homicide.GetTeamName(spec)
-	-- draw.SimpleText(name, "HomigradFontBig", ScrW() / 2, ScrH() - 150, color, TEXT_ALIGN_CENTER)
-end
 
 function homicide.Scoreboard_Status(ply)
 	local lply = LocalPlayer()

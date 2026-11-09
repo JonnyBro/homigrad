@@ -34,10 +34,6 @@ function bahmut.GiveMimomet(ply)
 	ply:Give("weapon_gredammo")
 end
 
-function bahmut.GiveAidPhone(ply)
-end
-
---ply:Give("weapon_phone")
 function bahmut.SpawnSimfphys(list, name, func)
 	for _, point in pairs(list) do
 		local ent = simfphys.SpawnVehicleSimple(name, point[1], point[2])
@@ -51,16 +47,12 @@ end
 function bahmut.SpawnVehicle()
 	bahmut.SpawnSimfphys(ReadDataMap("car_red"), "sim_fphys_pwvolga")
 	bahmut.SpawnSimfphys(ReadDataMap("car_blue"), "sim_fphys_pwhatchback")
-	--bahmut.SpawnEnt(ReadDataMap("sim_fphys_tank3"),"sim_fphys_tank3")
-	--bahmut.SpawnEnt(ReadDataMap("sim_fphys_tank4"),"sim_fphys_tank4")
 	bahmut.SpawnEnt(ReadDataMap("car_red_btr"), "lvs_wheeldrive_dodwillyjeep") -- later
 	bahmut.SpawnEnt(ReadDataMap("car_blue_btr"), "lvs_wheeldrive_dodwillyjeep")
 	bahmut.SpawnEnt(ReadDataMap("wac_hc_ah1z_viper"), "wac_hc_ah1z_viper")
 	bahmut.SpawnEnt(ReadDataMap("wac_hc_littlebird_ah6"), "wac_hc_littlebird_ah6")
 	bahmut.SpawnEnt(ReadDataMap("wac_hc_mi28_havoc"), "wac_hc_mi28_havoc")
 	bahmut.SpawnEnt(ReadDataMap("wac_hc_blackhawk_uh60"), "wac_hc_blackhawk_uh60")
-	--bahmut.SpawnEnt(ReadDataMap("car_red_btr"),"lvs_wheeldrive_dodwillyjeep") -- later
-	--bahmut.SpawnEnt(ReadDataMap("car_blue_btr"),"lvs_wheeldrive_dodwillyjeep")
 	bahmut.SpawnEnt(ReadDataMap("car_red_tank"), "lvs_wheeldrive_t34_57")
 	bahmut.SpawnEnt(ReadDataMap("car_blue_tank"), "lvs_wheeldrive_dodsherman")
 end
@@ -85,22 +77,15 @@ end
 function bahmut.StartRoundSV()
 	tdm.RemoveItems()
 	roundTimeStart = CurTime()
-	-- roundTime = 60 * (2 + math.min(#player.GetAll() / 4,2))
 	roundTime = 900
 	tdm.DirectOtherTeam(3, 1, 2)
 	OpposingAllTeam()
 	AutoBalanceTwoTeam()
-	-- local spawnsT,spawnsCT = bahmut.SpawnsTwoCommand()
-	-- bahmut.SpawnCommand(team.GetPlayers(1),spawnsT)
-	-- bahmut.SpawnCommand(team.GetPlayers(2),spawnsCT)
 	bahmut.SpawnVehicle()
 	bahmut.SpawnGred()
 	bahmut.oi = false
-	-- tdm.CenterInit()
 	bahmut.SelectRandomPlayers(team.GetPlayers(1), 2, bahmut.GiveMimomet)
-	bahmut.SelectRandomPlayers(team.GetPlayers(1), 2, bahmut.GiveAidPhone)
 	bahmut.SelectRandomPlayers(team.GetPlayers(2), 2, bahmut.GiveMimomet)
-	bahmut.SelectRandomPlayers(team.GetPlayers(2), 2, bahmut.GiveAidPhone)
 end
 
 function bahmut.Think()
@@ -110,8 +95,6 @@ function bahmut.Think()
 		SetGlobalInt("Bahmut_respawntime", CurTime())
 
 		for _, v in player.Iterator() do
-			local players = {}
-
 			if not v:Alive() and v:Team() ~= 1002 then
 				v:Spawn()
 				local teamspawn = GetTeamSpawns(v)
@@ -119,8 +102,6 @@ function bahmut.Think()
 				point = ReadPoint(point)
 				if not point then continue end
 				v:SetPos(point[1])
-				players[v:Team()] = players[v:Team()] or {}
-				players[v:Team()][v] = true
 			end
 		end
 
@@ -134,29 +115,6 @@ function bahmut.Think()
 
 		bahmut.LastWave = CurTime() + 60
 	end
-end
-
-function bahmut.GetCountAlive(list, func)
-	local count = 0
-	local result
-
-	for _, ply in pairs(list) do
-		if not IsValid(ply) then continue end
-		result = func and func(ply)
-
-		if result == true then
-			count = count + 1
-			continue
-		elseif result == false then
-			continue
-		end
-
-		if not IsCuffed(ply) and ply:Alive() then
-			count = count + 1
-		end
-	end
-
-	return count
 end
 
 function bahmut.PointsThink()
@@ -210,32 +168,6 @@ function bahmut.PointsThink()
 		SetGlobalInt("Bahmut_Winpoints" .. i, bahmut.WinPoints[i])
 	end
 end
-
---[[
-function bahmut.RoundEndCheck()
-	local TAlive = tdm.GetCountAlive(team.GetPlayers(1))
-	local CTAlive = tdm.GetCountAlive(team.GetPlayers(2))
-
-	if roundTimeStart + roundTime - CurTime() <= 0 then
-		EndRound()
-	end
-
-	if TAlive == 0 and CTAlive == 0 then
-		EndRound()
-
-		return
-	end
-
-	if TAlive == 0 then
-		EndRound(2)
-	end
-
-	if CTAlive == 0 then
-		EndRound(1)
-	end
-
-	tdm.Center()
-end --]]
 
 function bahmut.RoundEndCheck()
 	for i = 1, 2 do
@@ -318,7 +250,6 @@ function bahmut.PlayerSpawn2(ply, teamID)
 	if roundStarter then
 		ply:Give("weapon_gredmimomet")
 		ply:Give("weapon_gredammo")
-		-- ply:Give("weapon_phone")
 		ply.allowFlashlight = true
 	end
 end

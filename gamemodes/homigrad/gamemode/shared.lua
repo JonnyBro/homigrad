@@ -12,7 +12,7 @@ print("Loading Homigrad.")
 
 local start = SysTime()
 
-GM.includeDir("homigrad/gamemode/game/")
+hg.includeDir("homigrad/gamemode/game/")
 
 hg.LoadModes()
 
@@ -26,10 +26,6 @@ function GM:CreateTeams()
 	team.SetUp(3, "#######", Color(0, 255, 0))
 
 	team.MaxTeams = 3
-end
-
-function OpposingTeam(team)
-	return (team == 1 and 2) or 1
 end
 
 function ReadPoint(point)

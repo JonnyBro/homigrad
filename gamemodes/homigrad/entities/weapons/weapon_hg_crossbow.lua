@@ -17,7 +17,6 @@ SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "XBowBolt"
 SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 255
--- SWEP.Primary.Recoil = 25-- This doesn't work. It removes the recoil entirely.
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "weapons/crossbow/bolt_fly4.wav"
 SWEP.ReloadSound = "weapons/crossbow/reload1.wav"

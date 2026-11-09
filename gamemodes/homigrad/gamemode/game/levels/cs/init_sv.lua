@@ -31,33 +31,6 @@ function css.SpawnCommand(tbl,aviable,func,funcShould)
 	end
 end
 
-function css.DirectOtherTeam(start,min,max)
-	if not max then max = min end
-
-	for i = start,team.MaxTeams do
-		for i,ply in pairs(team.GetPlayers(i)) do
-			ply:SetTeam(math.random(min,max))
-		end
-	end
-end
-
-function css.GetListMul(list,mul,func,max)
-	local newList = {}
-	mul = math.Round(#list * mul)
-	if max then mul = math.max(mul,max) end
-
-	for i = 1,mul do
-		local ply,key = RandomFromTable(list)
-		list[key] = nil
-
-		if func and func(ply) ~= true then continue end
-
-		newList[#newList + 1] = ply
-	end
-
-	return newList
-end
-
 changeClass = {
 	["prop_vehicle_jeep"]="vehicle_van",
 	["prop_vehcle_jeep_old"]="vehicle_van",
@@ -137,7 +110,6 @@ function css.Think()
     if CurTime() >= css.LastWave then
         SetGlobalInt("CSS_respawntime", CurTime())
         for _, v in player.Iterator() do
-            local players = {}
             if !v:Alive() and v:Team() != 1002 then
                 v:Spawn()
                 local teamspawn = GetTeamSpawns(v)
@@ -145,13 +117,6 @@ function css.Think()
                 point = ReadPoint(point)
                 if not point then continue end
                 v:SetPos(point[1])
-                players[v:Team()] = players[v:Team()] or {}
-                players[v:Team()][v] = true
-            end
-
-            for i,list in pairs(players) do
-                bahmut.SelectRandomPlayers(list[1],6,bahmut.GiveAidPhone)
-                bahmut.SelectRandomPlayers(list[2],6,bahmut.GiveAidPhone)
             end
         end
         for ent in pairs(css.ragdolls) do
@@ -277,7 +242,6 @@ function css.GiveSwep(ply,list,mulClip1)
 	if not list then return end
 
 	local wep = ply:Give(type(list) == "table" and list[math.random(#list)] or list)
-	--wep.Spawned = true
 
 	mulClip1 = mulClip1 or 3
 
@@ -317,5 +281,3 @@ function css.PlayerDeath(ply,inf,att)
     css.ragdolls[ply:GetNWEntity("Ragdoll")] = true
     return false
 end
-
---function css.PlayerDeath(ply,inf,att) return false end

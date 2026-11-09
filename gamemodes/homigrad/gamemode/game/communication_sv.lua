@@ -19,18 +19,6 @@ local function logic(output, input, isChat, teamonly)
 			if input:GetPos():DistToSqr(output:GetPos()) < 800000 and not teamonly then
 				return true, true
 			end
-			--[[ Uncomment and adjust if additional logic is needed for team-only communication
-			else
-				if teamonly then
-					if roundActiveName == "homicide" then
-						return false
-					else
-						return true
-					end
-				else
-					return false
-				end
-			end --]]
 		elseif not output:Alive() and not input:Alive() then
 			return true
 		else

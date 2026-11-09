@@ -53,12 +53,6 @@ if CLIENT then
 	local rtsize = 512
 	local rtmat = GetRenderTarget("hg-glass", rtsize, rtsize, false)
 
-	function SWEP:InitAdd()
-		-- self.scope_mat = Material("models/weapons/v_models/snip_awp/v_awp_scope")
-		-- self.lpos = Vector(-14, 0, 0)
-		-- self.lang = Angle(0, 180, 0)
-	end
-
 	SWEP.lpos = Vector(-14, 0, 0)
 	SWEP.lang = Angle(0, 180, 0)
 	SWEP.scope_mat = Material("models/weapons/v_models/snip_awp/v_awp_scope")
@@ -77,8 +71,6 @@ if CLIENT then
 
 		if not IsValid(self.optic_scope) then
 			self.optic_scope = ClientsideModel(self.opticmodel2)
-			-- self.optic_scope:SetSubMaterial(0, "null")
-			-- self.optic_scope:SetSubMaterial(1, "!scope_mat1")
 		end
 
 		local mdl = self.optic

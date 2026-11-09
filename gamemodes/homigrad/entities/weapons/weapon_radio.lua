@@ -55,15 +55,6 @@ if SERVER then
 		self.lisens = {}
 	end
 
-	--[[
-	function SWEP:Bipp(output, pitch, isChat)
-		for _, input in player.Iterator() do
-			if input == output then input:EmitSound("buttons/button16.wav", 45, pitch) continue end
-			if not self:CanLisen(output, input, isChat) then continue end
-			self:BippSound(input, pitch)
-		end
-	end --]]
-
 	function SWEP:BippSound(ent, pitch)
 		ent:EmitSound("buttons/button16.wav", 75, pitch)
 	end
@@ -102,7 +93,6 @@ if SERVER then
 					end
 				elseif not lisens[input] then
 					lisens[input] = true
-					-- input:ChatPrint("Speaking: " .. output:Nick())
 					self:BippSound(input, 100)
 				end
 			end

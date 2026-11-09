@@ -61,9 +61,6 @@ function SWEP:DrawWorldModel()
 	Ang:RotateAroundAxis(Ang:Right(), self.dwmARight)
 	Ang:RotateAroundAxis(Ang:Forward(), self.dwmAForward)
 
-	-- self:SetPos(Pos)
-	-- self:SetAngles(Ang)
-
 	self:SetRenderOrigin(Pos)
 	self:SetRenderAngles(Ang)
 	self:SetupBones()
@@ -126,7 +123,6 @@ function SWEP:Reload()
 	if self:GetOwner():IsSprinting() then return nil end
 
 	self:GetOwner():SetAnimation(PLAYER_RELOAD)
-	-- self:EmitSound(self.ReloadSound, 60, 100, 0.8, CHAN_AUTO)
 
 	timer.Create("reload" .. self:EntIndex(), 1.5, 1, function()
 		if IsValid(self) and IsValid(self:GetOwner()) and self:GetOwner():GetActiveWeapon() == self then

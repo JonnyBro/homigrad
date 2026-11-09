@@ -1,10 +1,3 @@
---[[
-hook.Add("EntityTakeDamage", "GainImpulse", function(ply, dmginfo)
-	local ply = RagdollOwner(ply) or ply
-	local dmg = dmginfo:GetDamage()
-	ply.dmgimpulse = ply.dmgimpulse or 0
-	ply.dmgimpulse = ply.dmgimpulse + dmg
-end) --]]
 
 hook.Add("HomigradDamage", "ImpulseShock", function(ply, hitGroup, dmginfo)
 	local dmg = dmginfo:GetDamage()
@@ -33,10 +26,6 @@ hook.Add("HomigradDamage", "ImpulseShock", function(ply, hitGroup, dmginfo)
 	net.Send(ply)
 
 	local force = dmginfo:GetDamageForce() / 5
-	--[[
-	if hitGroup == HITGROUP_RIGHTLEG or hitGroup == HITGROUP_LEFTLEG and ply.dmgimpulse > 12 then -- shotguns imbalanced shit
-		timer.Simple(0, function() if not IsValid(ply.FakeRagdoll) then Faking(ply, force) end end)
-	end--]]
 
 	if hitGroup == HITGROUP_CHEST and ply.dmgimpulse > 24 then timer.Simple(0, function() if not IsValid(ply.FakeRagdoll) then Faking(ply, force) end end) end
 	if hitGroup == HITGROUP_STOMACH and ply.dmgimpulse > 48 then timer.Simple(0, function() if not IsValid(ply.FakeRagdoll) then Faking(ply, force) end end) end

@@ -1,7 +1,6 @@
 hg.GuiltTable = hg.GuiltTable or {}
 
 function GuiltLogic(ply, att, dmgInfo, dontApply)
-	-- if ply.RoundGuilt > 10 then return end
 	if att == ply then return end
 	if not roundActive then return end
 
@@ -17,10 +16,6 @@ function GuiltLogic(ply, att, dmgInfo, dontApply)
 
 	if resultGame or resultClass or plyTeam == attTeam then
 		if ply.DontGuiltProtect then
-			--[[
-			if not dontApply then
-				att.Guilt = math.max(att.Guilt - dmgInfo:GetDamage(), 0)
-			end --]]
 
 			return false, true
 		end
@@ -65,8 +60,6 @@ function GuiltCheck(att, ply)
 		att.Guilt = 0
 
 		if not att:HasGodMode() and att:Alive() then
-			-- RunConsoleCommand("ulx", "asay", "[AUTOMATED] " .. att:Name() .. " has exceeded their guilt of 100%. They are on team " .. tostring(att:Team()))
-			-- print("[GUILT CHECK] " .. att:Name() .. " has exceeded their guilt of 100%. They are on team " .. tostring(att:Team()))
 			if not validUserGroup[att:GetUserGroup()] then
 				att:Kill()
 
@@ -117,37 +110,12 @@ hook.Add("PlayerInitialSpawn", "lololo", function(ply)
 	ply.Guilt = ply:GetPData("Guilt") or 0
 end)
 
---[[
-local function Seizure(ply)
-	ply.Seizure = true
-
-	ply:ChatPrint("You are experiencing a seizure.")
-
-	if not IsValid(ply.FakeRagdoll) then
-		Faking(ply)
-	end
-
-	timer.Create("seizure" .. ply:EntIndex(), math.random(7, 15), 1, function()
-		if ply:IsValid() and ply:Alive() then
-			ply:Kill()
-		end
-	end)
-end --]]
-
 hook.Add("PlayerSpawn", "guilt", function(ply)
 	if PLYSPAWN_OVERRIDE then return end
 
 	ply.DontGuiltProtect = nil
 	ply.Seizure = false
 	ply.Guilt = ply.Guilt or 0
-
-	-- ply:ChatPrint("Your guilt is currently at " .. tostring(math.floor(ply.Guilt + 0.5)) .. "% out of 100%")
-	--[[
-	if ply.Guilt > 30 then
-		timer.Create("seizure" .. ply:EntIndex(), math.random(30, 50), 1, function()
-			Seizure(ply)
-		end)
-	end --]]
 end)
 
 hook.Add("PlayerDisconnected", "guiltasd", function(ply)
@@ -161,14 +129,4 @@ hook.Add("Player Think", "guilt reduction", function(ply, time)
 		ply.GuiltReductionCooldown = time + 5
 		ply.Guilt = math.max((ply.Guilt or 0) - 1, 0)
 	end
-end)
-
-concommand.Add("hg_getguilt", function(ply)
-	local text = "Guilt information\n"
-
-	for _, ply in player.Iterator() do
-		text = text .. ply:Name() .. ": " .. ply.Guilt .. "\n"
-	end
-
-	ply:ChatPrint(text)
 end)

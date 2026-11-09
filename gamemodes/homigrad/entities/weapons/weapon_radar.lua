@@ -123,7 +123,6 @@ hook.Add("HUDPaint", "DrawPlayerSprites", function()
 end)
 
 function SWEP:OnRemove()
-	-- self.PlayerLocations = {}
 
 	return
 end

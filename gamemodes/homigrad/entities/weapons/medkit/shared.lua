@@ -95,9 +95,6 @@ function SWEP:DrawWorldModel()
 	Ang:RotateAroundAxis(Ang:Right(), self.dwmARight)
 	Ang:RotateAroundAxis(Ang:Forward(), self.dwmAForward)
 
-	-- self:SetPos(Pos)
-	-- self:SetAngles(Ang)
-
 	self:SetRenderOrigin(Pos)
 	self:SetRenderAngles(Ang)
 
