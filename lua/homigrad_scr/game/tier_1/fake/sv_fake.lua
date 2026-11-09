@@ -119,8 +119,11 @@ function Faking(ply, force)
 			bull:Spawn()
 			bull:Activate()
 
-			-- NPC attack traces must hit the bullseye itself, otherwise they hit the ragdoll and NPCs refuse to attack
+			-- NPC attack traces must hit the bullseye itself, otherwise they hit the ragdoll and NPCs refuse to attack.
+			-- Everything else ignores it (see "FakeBullseye" ShouldCollide), its physics shadow sits inside the ragdoll
 			bull:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+			bull:SetCustomCollisionCheck(true)
+			bull.hgFakeBullseye = true
 
 			for _, ent in ipairs(ents.FindByClass("npc_*")) do
 				if not IsValid(ent) or not ent.AddEntityRelationship then continue end
@@ -247,6 +250,11 @@ function Faking(ply, force)
 		end
 	end
 end
+
+hook.Add("ShouldCollide", "FakeBullseye", function(ent1, ent2)
+	if ent1.hgFakeBullseye then return ent2:IsNPC() end
+	if ent2.hgFakeBullseye then return ent1:IsNPC() end
+end)
 
 function FakeBullseyeTrigger(rag, owner)
 	if not IsValid(rag.bull) then return end

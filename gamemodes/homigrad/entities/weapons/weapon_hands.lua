@@ -268,7 +268,7 @@ function SWEP:SecondaryAttack()
 		self:SetCarrying()
 
 		local ply = self:GetOwner()
-		local tr = util.QuickTrace(ply:GetAttachment(ply:LookupAttachment("eyes")).Pos - vector_up * 2, self:GetOwner():GetAimVector() * self.ReachDistance, {self:GetOwner()})
+		local tr = util.QuickTrace(ply:GetAttachment(ply:LookupAttachment("eyes")).Pos - vector_up * 2, self:GetOwner():GetAimVector() * self.ReachDistance, function(ent) return ent ~= ply and not ent.hgFakeBullseye end)
 
 		if IsValid(tr.Entity) and self:CanPickup(tr.Entity) and not tr.Entity:IsPlayer() then
 			local Dist = (self:GetOwner():GetShootPos() - tr.HitPos):Length()
