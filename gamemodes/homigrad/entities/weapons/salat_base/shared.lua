@@ -26,7 +26,6 @@ SWEP.Primary.Cone = 0
 SWEP.Primary.Damage = 100
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "weapons/fiveseven/fiveseven-1.wav"
-SWEP.Primary.SoundFar = "m9/m9_dist.wav"
 SWEP.Primary.SoundLevel = 80
 SWEP.Primary.SoundPitch = {100, 120}
 SWEP.Primary.Force = 0
@@ -305,6 +304,8 @@ end
 
 SWEP.ShootingSpray = 0
 
+local FAR_SOUND_DIST_SQR = 1500 ^ 2
+
 function SWEP:PrimaryAttack()
 	self.ShootNext = self.NextShot or NextShot
 
@@ -336,6 +337,19 @@ function SWEP:PrimaryAttack()
 		local pitch = self.Primary.SoundPitch
 
 		ent:EmitSound(self.Primary.Sound, self.Primary.SoundLevel, math.random(pitch[1], pitch[2]), 1, CHAN_WEAPON)
+
+		if self.Primary.SoundFar then
+			local pos = ent:GetPos()
+			local filter = RecipientFilter()
+
+			for _, listener in player.Iterator() do
+				if listener:EyePos():DistToSqr(pos) > FAR_SOUND_DIST_SQR then filter:AddPlayer(listener) end
+			end
+
+			if filter:GetCount() > 0 then
+				ent:EmitSound(self.Primary.SoundFar, 140, math.random(95, 105), 1, CHAN_STATIC, 0, 0, filter)
+			end
+		end
 	end
 
 	self:FireBullet()

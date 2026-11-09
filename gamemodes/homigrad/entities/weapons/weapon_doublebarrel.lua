@@ -21,6 +21,7 @@ SWEP.Primary.Cone = 0.02
 SWEP.Primary.Damage = 30
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "weapons/tfa_ins2/doublebarrel_sawnoff/doublebarrelsawn_fire.wav"
+SWEP.Primary.SoundFar = "zcitysnd/sound/weapons/toz_shotgun/toz_dist.wav"
 SWEP.Primary.Force = 35
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.1

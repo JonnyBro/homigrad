@@ -19,6 +19,7 @@ SWEP.Primary.Cone = 0.006
 SWEP.Primary.Damage = 40
 SWEP.Primary.Spread = 0
 SWEP.Primary.Sound = "pwb/weapons/vz61/shoot.wav"
+SWEP.Primary.SoundFar = "zcitysnd/sound/weapons/m9/m9_dist.wav"
 SWEP.Primary.Force = 70 / 3
 SWEP.ReloadTime = 2
 SWEP.ShootWait = 0.05
