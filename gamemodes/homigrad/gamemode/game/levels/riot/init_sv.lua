@@ -50,13 +50,13 @@ function riot.PlayerSpawn2(ply,teamID)
 	tdm.GiveSwep(ply,teamTbl.secondary_weapon)
 
 	if teamID == 1 then
-		JMod.EZ_Equip_Armor(ply,"Riot-Helmet",Color(65,65,65))
+		hg.EquipArmor(ply,"Riot-Helmet",Color(65,65,65))
 		local r = math.random(1,2)
-		JMod.EZ_Equip_Armor(ply,(r == 1 and "Medium-Light-Vest") or (r == 2 and "Light-Vest"),Color(65,65,65))
+		hg.EquipArmor(ply,(r == 1 and "Medium-Light-Vest") or (r == 2 and "Light-Vest"),Color(65,65,65))
 	else
 		local r = math.random(1,10)
 		if r == 10 then
-			JMod.EZ_Equip_Armor(ply,"Metal Pot",Color(255,255,255))
+			hg.EquipArmor(ply,"Metal Pot",Color(255,255,255))
 		end
 	end
 

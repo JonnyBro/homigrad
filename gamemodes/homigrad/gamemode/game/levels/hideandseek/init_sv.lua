@@ -159,8 +159,8 @@ function hideandseek.PlayerSpawn2(ply, teamID)
 	end
 
 	if teamID == 1 then
-		JMod.EZ_Equip_Armor(ply, "Medium-Helmet", color)
-		JMod.EZ_Equip_Armor(ply, "Light-Vest", color)
+		hg.EquipArmor(ply, "Medium-Helmet", color)
+		hg.EquipArmor(ply, "Light-Vest", color)
 	elseif teamID == 2 then
 		ply:SetPlayerColor(Color(math.random(160), math.random(160), math.random(160)):ToVector())
 	end

@@ -136,8 +136,8 @@ function ctp.PlayerSpawn2(ply, teamID)
 	if math.random(1, 3) == 3 then ply:Give("weapon_hg_f1") end
 
 	local r = math.random(1, 2)
-	JMod.EZ_Equip_Armor(ply, "Medium-Helmet", color)
-	JMod.EZ_Equip_Armor(ply, (r == 1 and "Medium-Vest") or (r == 2 and "Light-Vest"), color)
+	hg.EquipArmor(ply, "Medium-Helmet", color)
+	hg.EquipArmor(ply, (r == 1 and "Medium-Vest") or (r == 2 and "Light-Vest"), color)
 end
 
 function ctp.PointsThink()

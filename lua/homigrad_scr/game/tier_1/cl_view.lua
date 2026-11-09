@@ -236,10 +236,6 @@ local oldview, view = {}, {}
 ADDFOV, ADDROLL = 0, 0
 follow = follow or NULL
 
-local helmEnt
-
-net.Receive("nodraw_helmet", function() helmEnt = net.ReadEntity() end)
-
 local oldangles = Angle(0, 0, 0)
 local diffpos, diffang, diffang2 = Vector(0, 0, 0), Vector(0, 0, 0), Angle(0, 0, 0)
 local vel, playerFPS = 0, 0
@@ -355,7 +351,6 @@ function CalcView(ply, vec, ang, fov, znear, zfar)
 		view.fov = fov
 		view.drawviewer = true
 
-		if IsValid(helmEnt) then helmEnt:SetNoDraw(true) end
 		return view
 	end
 

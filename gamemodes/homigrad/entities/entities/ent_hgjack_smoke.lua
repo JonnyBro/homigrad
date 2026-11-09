@@ -1,11 +1,10 @@
-﻿-- Jackarunda 2021
+-- Jackarunda 2021
 AddCSLuaFile()
-ENT.Base = "ent_jack_gmod_ezgrenade"
+ENT.Base = "ent_hg_grenade_base"
 ENT.Author = "Jackarunda, TheOnly8Z"
 ENT.PrintName = "EZHG Smokenade"
-ENT.Category = "JModHomigrad"
+ENT.Category = "Homigrad"
 ENT.Spawnable = true
-ENT.JModPreferredCarryAngles = Angle(0, 140, 0)
 ENT.Model = "models/jmod/explosives/grenades/firenade/incendiary_grenade.mdl"
 ENT.Material = "models/mats_jack_nades/smokescreen"
 ENT.ModelScale = 0.8
@@ -13,14 +12,14 @@ ENT.SpoonScale = 2
 
 if SERVER then
 	function ENT:Prime()
-		self:SetState(JMod.EZ_STATE_PRIMED)
+		self:SetState(self.STATE_PRIMED)
 		self:EmitSound("weapons/pinpull.wav", 60, 100)
 		self:SetBodygroup(3, 1)
 	end
 
 	function ENT:Arm()
 		self:SetBodygroup(2, 1)
-		self:SetState(JMod.EZ_STATE_ARMED)
+		self:SetState(self.STATE_ARMED)
 		self:SpoonEffect()
 
 		timer.Simple(2, function()
@@ -44,7 +43,7 @@ if SERVER then
 			Foof:SetNormal(self:GetUp())
 			Foof:SetScale(self.FuelLeft / 100)
 			Foof:SetStart(self:GetPhysicsObject():GetVelocity())
-			util.Effect("eff_jack_gmod_ezsmokescreen", Foof, true, true)
+			util.Effect("hg_smokescreen", Foof, true, true)
 			self:EmitSound("snd_jack_sss.wav", 55, 80)
 			self.FuelLeft = self.FuelLeft - .5
 

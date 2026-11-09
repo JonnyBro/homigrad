@@ -1,11 +1,10 @@
 -- Jackarunda 2021
 AddCSLuaFile()
-ENT.Base = "ent_jack_gmod_ezgrenade"
+ENT.Base = "ent_hg_grenade_base"
 ENT.Author = "Jackarunda, TheOnly8Z"
 ENT.PrintName = "EZHG Flashbang"
-ENT.Category = "JModHomigrad"
+ENT.Category = "Homigrad"
 ENT.Spawnable = true
-ENT.JModPreferredCarryAngles = Angle(0, 140, 0)
 ENT.Model = "models/jmod/explosives/grenades/flashbang/flashbang.mdl"
 ENT.ModelScale = 0.8
 ENT.SpoonScale = 2
@@ -13,7 +12,7 @@ ENT.SpoonScale = 2
 if SERVER then
 	function ENT:Arm()
 		self:SetBodygroup(2, 1)
-		self:SetState(JMod.EZ_STATE_ARMED)
+		self:SetState(self.STATE_ARMED)
 		self:SpoonEffect()
 
 		local time = 2.5
@@ -49,9 +48,9 @@ if SERVER then
 
 		self.Exploded = true
 
-		local SelfPos, Time = self:GetPos() + Vector(0, 0, 10), CurTime()
+		local SelfPos = self:GetPos() + Vector(0, 0, 10)
 
-		JMod.Sploom(self:GetOwner(), self:GetPos(), 20)
+		hg.Sploom(self:GetOwner(), self:GetPos(), 20)
 
 		self:EmitSound("snd_jack_fragsplodeclose.wav", 511, 140)
 		self:EmitSound("snd_jack_fragsplodeclose.wav", 511, 140)
@@ -59,15 +58,9 @@ if SERVER then
 		local plooie = EffectData()
 		plooie:SetOrigin(SelfPos)
 
-		util.Effect("eff_jack_gmod_flashbang", plooie, true, true)
+		util.Effect("hg_flashbang", plooie, true, true)
 
 		util.ScreenShake(SelfPos, 20, 20, .2, 1000)
-
-		for _, v in pairs(ents.FindInSphere(SelfPos, 200)) do
-			if v:IsNPC() then
-				v.EZNPCincapacitate = Time + math.Rand(3, 5)
-			end
-		end
 
 		self:SetColor(Color(0, 0, 0))
 

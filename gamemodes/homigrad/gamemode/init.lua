@@ -6,7 +6,7 @@ include("shared.lua")
 util.AddNetworkString("hg_sendchat_simple")
 util.AddNetworkString("hg_sendchat_format")
 util.AddNetworkString("lasertgg")
-util.AddNetworkString("remove_jmod_effects")
+util.AddNetworkString("hg_reset_screen_effects")
 
 local specColor = Vector(0.25, 0.25, 0.25)
 
@@ -20,8 +20,8 @@ function GM:PlayerSpawn(ply)
 	ply:RemoveFlags(FL_ONGROUND)
 	ply:SetMaterial("")
 
-	net.Start("remove_jmod_effects")
-	net.Broadcast()
+	net.Start("hg_reset_screen_effects")
+	net.Send(ply)
 
 	ply.firstTimeNotifiedLeftLeg = true
 	ply.firstTimeNotifiedRightLeg = true

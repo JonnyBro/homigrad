@@ -180,8 +180,8 @@ function zombie.PlayerCanJoinTeam(ply,teamID)
 	end
 end
 
-local common = {  "weapon_tomahawk", "weapon_hg_molotov", "*ammo*", "weapon_hg_sledgehammer", "weapon_hg_fireaxe", "ent_jack_gmod_ezarmor_gasmask", "ent_jack_gmod_ezarmor_mltorso" }
-local uncommon = { "weapon_m4super", "weapon_ar15", "weapon_beretta", "ent_jack_gmod_ezarmor_mtorso", "ent_jack_gmod_ezarmor_mhead" }
+local common = {  "weapon_tomahawk", "weapon_hg_molotov", "*ammo*", "weapon_hg_sledgehammer", "weapon_hg_fireaxe", "ent_hg_armor_gasmask", "ent_hg_armor_mltorso" }
+local uncommon = { "weapon_m4super", "weapon_ar15", "weapon_beretta", "ent_hg_armor_mtorso", "ent_hg_armor_mhead" }
 local rare = { "weapon_xm1014", "weapon_m4a1", "weapon_xm8_lmg", "weapon_hk416", "weapon_civil_famas", "weapon_glock", "weapon_remington870", "weapon_akm", "weapon_rpk", "weapon_p90", "weapon_asval"}
 
 function zombie.ShouldSpawnLoot()

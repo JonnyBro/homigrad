@@ -61,7 +61,7 @@ function CLASS:On()
 
 	tdm.GiveSwep(self, CLASS.secondary_weapon)
 
-	JMod.EZ_Equip_Armor(self, "Light-Vest", color)
+	hg.EquipArmor(self, "Light-Vest", color)
 
 	self.isContr = true
 end
