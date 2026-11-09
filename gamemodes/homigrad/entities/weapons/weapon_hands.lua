@@ -47,7 +47,6 @@ else
 		local Tr = util.TraceLine(t)
 
 		if not self:GetFists() then
-			-- local Tr = util.QuickTrace(ply:GetAttachment(ply:LookupAttachment("eyes")).Pos, self:GetOwner():GetAimVector() * self.ReachDistance, {self:GetOwner()})
 			if Tr.Hit then
 				if self:CanPickup(Tr.Entity) then
 					local Size = math.max(1 - Tr.Fraction, 0.25)
@@ -87,7 +86,7 @@ else
 
 					if Tr.Entity:IsPlayer() then
 						col = Tr.Entity:GetPlayerColor():ToColor()
-					elseif Tr.Entity.GetPlayerColor ~= nil then
+					elseif Tr.Entity.playerColor then
 						col = Tr.Entity.playerColor:ToColor()
 					else
 						col = Color(255, 255, 255, 255)
@@ -100,7 +99,6 @@ else
 				end
 			end
 		else
-			-- local Tr = util.QuickTrace(ply:GetAttachment(ply:LookupAttachment("eyes")).Pos, self:GetOwner():GetAimVector() * self.ReachDistance, {self:GetOwner()})
 			if Tr.Hit then
 				local Size = math.max(1 - Tr.Fraction, 0.25)
 
@@ -115,7 +113,7 @@ else
 
 				if Tr.Entity:IsPlayer() then
 					col = Tr.Entity:GetPlayerColor():ToColor()
-				elseif Tr.Entity.GetPlayerColor ~= nil then
+				elseif Tr.Entity.playerColor then
 					col = Tr.Entity.playerColor:ToColor()
 				else
 					col = Color(255, 255, 255, 255)

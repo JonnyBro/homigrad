@@ -119,7 +119,9 @@ function Faking(ply, force)
 
 			bull:Spawn()
 			bull:Activate()
-			bull:SetNotSolid(true)
+
+			-- NPC attack traces must hit the bullseye itself, otherwise they hit the ragdoll and NPCs refuse to attack
+			bull:SetCollisionGroup(COLLISION_GROUP_WEAPON)
 
 			for _, ent in ipairs(ents.FindByClass("npc_*")) do
 				if not IsValid(ent) or not ent.AddEntityRelationship then continue end
@@ -128,6 +130,7 @@ function Faking(ply, force)
 			end
 
 			rag:AddFlags(FL_NOTARGET)
+			ply:AddFlags(FL_NOTARGET)
 
 			bull.rag = rag
 			bull.ply = ply
@@ -185,6 +188,8 @@ function Faking(ply, force)
 			JMod.hgFaking = true
 			ply:Spawn()
 			JMod.hgFaking = nil
+
+			ply:RemoveFlags(FL_NOTARGET)
 
 			ply:DrawShadow(true)
 			ply:SetRenderMode(RENDERMODE_NORMAL)
@@ -252,14 +257,15 @@ end
 hook.Add("OnEntityCreated", "hg_entitycreated", function(ent)
 	ent:SetShouldPlayPickupSound(false)
 
-	if ent:IsNPC() then
-		for _, rag in pairs(ents.FindByClass("prop_ragdoll")) do
-			if IsValid(rag.bull) then ent:AddEntityRelationship(rag.bull, D_HT, 0) end
-		end
-	end
-
 	timer.Simple(0, function()
 		if not IsValid(ent) then return end
+
+		if ent:IsNPC() and ent.AddEntityRelationship then
+			for _, rag in ipairs(ents.FindByClass("prop_ragdoll")) do
+				local bull = rag.bull
+				if IsValid(bull) and IsValid(bull.ply) then ent:AddEntityRelationship(bull, ent:Disposition(bull.ply), 0) end
+			end
+		end
 
 		local pos, ang = ent:GetPos(), ent:GetAngles()
 		local exchangeEnt = changeClass[ent:GetClass()]
@@ -376,6 +382,7 @@ hook.Add("DoPlayerDeath", "hgPlayerDeath", function(ply, att, dmginfo)
 	if IsValid(ent) then ent:SetNWEntity("RagdollOwner", nil) end
 
 	ply:SetDSP(0)
+	ply:RemoveFlags(FL_NOTARGET)
 
 	ply.FakeRagdoll = nil
 end)

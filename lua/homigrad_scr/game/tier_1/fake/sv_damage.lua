@@ -110,9 +110,9 @@ hook.Add("EntityTakeDamage", "ragdamage", function(ent, dmginfo)
 
 	if ent:GetClass() == "npc_bullseye" then
 		local rag = ent.rag
-		rag:TakeDamageInfo(dmginfo)
+		if IsValid(rag) and dmginfo:GetAttacker() ~= ent.ply then rag:TakeDamageInfo(dmginfo) end
 
-		return false
+		return true
 	end
 
 	if ent:IsPlayer() and IsValid(ent.FakeRagdoll) then return end
