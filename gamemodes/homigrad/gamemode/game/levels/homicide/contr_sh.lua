@@ -46,11 +46,11 @@ function CLASS:On()
 	tdm.GiveSwep(self, CLASS.main_weapon)
 	tdm.GiveSwep(self, CLASS.secondary_weapon)
 
-	JMod.EZ_Equip_Armor(self, "Medium-Helmet", color)
-	JMod.EZ_Equip_Armor(self, "Medium-Vest", color)
-	JMod.EZ_Equip_Armor(self, "Light-Right-Shoulder", color)
-	JMod.EZ_Equip_Armor(self, "Light-Left-Shoulder", color)
-	JMod.EZ_Equip_Armor(self, "BallisticMask", color)
+	hg.EquipArmor(self, "Medium-Helmet", color)
+	hg.EquipArmor(self, "Medium-Vest", color)
+	hg.EquipArmor(self, "Light-Right-Shoulder", color)
+	hg.EquipArmor(self, "Light-Left-Shoulder", color)
+	hg.EquipArmor(self, "BallisticMask", color)
 
 	self.isContr = true
 

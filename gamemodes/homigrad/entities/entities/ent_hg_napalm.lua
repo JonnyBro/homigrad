@@ -1,4 +1,4 @@
-﻿AddCSLuaFile()
+AddCSLuaFile()
 ENT.Type = "anim"
 ENT.Base = "base_anim"
 ENT.PrintName = "Projectile"
@@ -15,7 +15,7 @@ if SERVER then
 
 		self.TypeInfo = {
 			"NAPALM", "Napalm", Model("models/weapons/ar2_grenade.mdl"), {""},
-			"models/mat_jack_gmod_brightwhite", Color(255, 255, 255), Angle(0, 0, 0), 600, .5, .5, .5, 5, "eff_jack_gmod_fire", false, true, false
+			"models/mat_jack_gmod_brightwhite", Color(255, 255, 255), Angle(0, 0, 0), 600, .5, .5, .5, 5, "hg_fire", false, true, false
 		}
 
 		-----
@@ -212,7 +212,7 @@ if SERVER then
 			tr.Entity:TakeDamageInfo(Dam)
 
 			timer.Create("gascreate"..self:EntIndex(),1,2,function()
-				local Gas = ents.Create("ent_jack_gmod_ezfiregas")
+				local Gas = ents.Create("ent_hg_firegas")
 				if IsValid(Gas) then
 					Gas:SetPos(tr.HitPos + tr.HitNormal * 2)
 					Gas:Spawn()
@@ -221,13 +221,13 @@ if SERVER then
 			end)
 
 			timer.Simple(.01, function()
-				local Haz = ents.Create("ent_jack_gmod_ezfirehazard")
+				local Haz = ents.Create("ent_hg_firehazard")
 
 				if IsValid(Haz) then
 					Haz:SetDTInt(0, 1)
 					Haz:SetPos(tr.HitPos + tr.HitNormal * 2)
 					Haz:SetAngles(tr.HitNormal:Angle())
-					JMod.SetOwner(Haz, self:GetOwner())
+					Haz.Owner = self:GetOwner()
 					Haz:SetDTEntity(0, self:GetDTEntity(0))
 					Haz.HighVisuals = self.HighVisuals
 					Haz:Spawn()
@@ -250,7 +250,7 @@ elseif CLIENT then
 
 		self.TypeInfo = {
 			"NAPALM", "Napalm", Model("models/weapons/ar2_grenade.mdl"), {""},
-			"models/mat_jack_gmod_brightwhite", Color(255, 255, 255), Angle(0, 0, 0), 1200, .5, .5, .5, 2, "eff_jack_gmod_fire", false, true, false
+			"models/mat_jack_gmod_brightwhite", Color(255, 255, 255), Angle(0, 0, 0), 1200, .5, .5, .5, 2, "hg_fire", false, true, false
 		}
 
 		self.RenderPos = self:GetPos() + self:GetForward() * 20

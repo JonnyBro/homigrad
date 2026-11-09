@@ -243,9 +243,9 @@ function bahmut.PlayerSpawn2(ply, teamID)
 		ply:Give("weapon_hg_sledgehammer")
 	end
 
-	JMod.EZ_Equip_Armor(ply, "Medium-Helmet", color)
+	hg.EquipArmor(ply, "Medium-Helmet", color)
 	local r = math.random(1, 2)
-	JMod.EZ_Equip_Armor(ply, (r == 1 and "Medium-Vest") or (r == 2 and "Light-Vest"), color)
+	hg.EquipArmor(ply, (r == 1 and "Medium-Vest") or (r == 2 and "Light-Vest"), color)
 
 	if roundStarter then
 		ply:Give("weapon_gredmimomet")

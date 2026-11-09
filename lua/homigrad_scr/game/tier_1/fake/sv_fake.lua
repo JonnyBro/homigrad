@@ -1,6 +1,5 @@
 util.AddNetworkString("hgOverrideSpawn")
 util.AddNetworkString("Unload")
-util.AddNetworkString("nodraw_helmet")
 util.AddNetworkString("custom name")
 
 net.Receive("Unload", function(len, ply)
@@ -118,12 +117,7 @@ function Faking(ply, force)
 
 			bull:Spawn()
 			bull:Activate()
-
-			-- NPC attack traces must hit the bullseye itself, otherwise they hit the ragdoll and NPCs refuse to attack.
-			-- Everything else ignores it (see "FakeBullseye" ShouldCollide), its physics shadow sits inside the ragdoll
-			bull:SetCollisionGroup(COLLISION_GROUP_WEAPON)
-			bull:SetCustomCollisionCheck(true)
-			bull.hgFakeBullseye = true
+			bull:SetNotSolid(true)
 
 			for _, ent in ipairs(ents.FindByClass("npc_*")) do
 				if not IsValid(ent) or not ent.AddEntityRelationship then continue end
@@ -132,7 +126,6 @@ function Faking(ply, force)
 			end
 
 			rag:AddFlags(FL_NOTARGET)
-			ply:AddFlags(FL_NOTARGET)
 
 			bull.rag = rag
 			bull.ply = ply
@@ -187,11 +180,9 @@ function Faking(ply, force)
 			local eyepos = ply:EyeAngles()
 			local health = ply:Health()
 
-			JMod.hgFaking = true
+			hg.FakeRespawning = true
 			ply:Spawn()
-			JMod.hgFaking = nil
-
-			ply:RemoveFlags(FL_NOTARGET)
+			hg.FakeRespawning = nil
 
 			ply:DrawShadow(true)
 			ply:SetRenderMode(RENDERMODE_NORMAL)
@@ -251,11 +242,6 @@ function Faking(ply, force)
 	end
 end
 
-hook.Add("ShouldCollide", "FakeBullseye", function(ent1, ent2)
-	if ent1.hgFakeBullseye then return ent2:IsNPC() end
-	if ent2.hgFakeBullseye then return ent1:IsNPC() end
-end)
-
 function FakeBullseyeTrigger(rag, owner)
 	if not IsValid(rag.bull) then return end
 end
@@ -263,15 +249,14 @@ end
 hook.Add("OnEntityCreated", "hg_entitycreated", function(ent)
 	ent:SetShouldPlayPickupSound(false)
 
+	if ent:IsNPC() then
+		for _, rag in pairs(ents.FindByClass("prop_ragdoll")) do
+			if IsValid(rag.bull) then ent:AddEntityRelationship(rag.bull, D_HT, 0) end
+		end
+	end
+
 	timer.Simple(0, function()
 		if not IsValid(ent) then return end
-
-		if ent:IsNPC() and ent.AddEntityRelationship then
-			for _, rag in ipairs(ents.FindByClass("prop_ragdoll")) do
-				local bull = rag.bull
-				if IsValid(bull) and IsValid(bull.ply) then ent:AddEntityRelationship(bull, ent:Disposition(bull.ply), 0) end
-			end
-		end
 
 		local pos, ang = ent:GetPos(), ent:GetAngles()
 		local exchangeEnt = changeClass[ent:GetClass()]
@@ -388,7 +373,6 @@ hook.Add("DoPlayerDeath", "hgPlayerDeath", function(ply, att, dmginfo)
 	if IsValid(ent) then ent:SetNWEntity("RagdollOwner", nil) end
 
 	ply:SetDSP(0)
-	ply:RemoveFlags(FL_NOTARGET)
 
 	ply.FakeRagdoll = nil
 end)
@@ -514,8 +498,8 @@ hook.Add("PreCleanupMap", "hgUnFakeEveryone", function()
 	BleedingEntities = {}
 end)
 
-local function CreateArmor(ragdoll, info)
-	local item = JMod.ArmorTable[info.name]
+local function CreateArmor(ragdoll, info, owner)
+	local item = hg.ArmorTable[info.name]
 	if not item then return end
 
 	local Index = ragdoll:LookupBone(item.bon)
@@ -543,6 +527,8 @@ local function CreateArmor(ragdoll, info)
 	Ang:RotateAroundAxis(Forward, item.ang.r)
 
 	ent.IsArmor = true
+	ent.ArmorDurability = info.dur
+	ent.ArmorColor = info.col
 
 	ent:SetPos(Pos)
 	ent:SetAngles(Ang)
@@ -554,15 +540,9 @@ local function CreateArmor(ragdoll, info)
 
 	if IsValid(ent:GetPhysicsObject()) then ent:GetPhysicsObject():SetMaterial("plastic") end
 
-	timer.Simple(0.1, function()
-		local ply = RagdollOwner(ragdoll)
-
-		if item.bon == "ValveBiped.Bip01_Head1" and ply and IsValid(ply) and ply:IsPlayer() then
-			net.Start("nodraw_helmet")
-				net.WriteEntity(ent)
-			net.Send(ply)
-		end
-	end)
+	ent.Owner = owner
+	ent:SetNWEntity("hgArmorOwner", owner)
+	ent:SetNWBool("hgHeadArmor", item.bon == "ValveBiped.Bip01_Head1")
 
 	ragdoll.constraints = ragdoll.constraints or {}
 	ragdoll.constraints[item.bon] = constraint.Weld(ent, ragdoll, 0, ragdoll:TranslateBoneToPhysBone(Index), 0, true, false)
@@ -577,7 +557,7 @@ local function Remove(self, ply)
 
 	self.ragdoll.armors[self.armorID] = nil
 
-	JMod.RemoveArmorByID(ply, self.armorID, true)
+	hg.RemoveArmor(ply, self.armorID, true)
 end
 
 local function RemoveRag(self)
@@ -808,11 +788,12 @@ function PlayerMeta:CreateRagdoll(attacker, dmginfo, force)
 
 	local armors = {}
 
-	for id, info in pairs(self.EZarmor.items) do
-		local ent = CreateArmor(rag, info)
+	for id, info in pairs(self.hgArmor and self.hgArmor.items or {}) do
+		local ent = CreateArmor(rag, info, self)
+		if not ent then continue end
+
 		ent.armorID = id
 		ent.ragdoll = rag
-		ent.Owner = self
 
 		armors[id] = ent
 
@@ -842,28 +823,30 @@ function PlayerMeta:CreateRagdoll(attacker, dmginfo, force)
 	return rag
 end
 
-hook.Add("JMod Armor Remove", "Fake", function(ply, slot, item, drop)
+hook.Add("HG_ArmorRemove", "Fake", function(ply, item)
 	local fake = ply:GetNWEntity("Ragdoll")
-	if not IsValid(fake) then return end
+	if not IsValid(fake) or not fake.armors then return end
 
-	local ent = fake.armors[slot.id]
+	local ent = fake.armors[item.id]
 	if not IsValid(ent) then return end
 
 	ent:Remove()
 end)
 
-hook.Add("JMod Armor Equip", "Fake", function(ply, slot, item, drop)
+hook.Add("HG_ArmorEquip", "Fake", function(ply, item)
 	local fake = ply:GetNWEntity("Ragdoll")
-	if not IsValid(fake) then return end
+	if not IsValid(fake) or not fake.armors then return end
 
-	local ent = CreateArmor(fake, item)
-	ent.armorID = slot.id
-	ent.Owner = ply
+	local ent = CreateArmor(fake, item, ply)
+	if not ent then return end
 
-	fake.armors[slot.id] = ent
+	ent.armorID = item.id
+	ent.ragdoll = fake
 
-	ent:CallOnRemove("Fake", Remove, ent, ply)
-end, 2)
+	fake.armors[item.id] = ent
+
+	ent:CallOnRemove("Fake", Remove, ply)
+end)
 
 hook.Add("Player Collide", "hgFaking", function(ply, hitEnt, data)
 	if not ply:HasGodMode() and data.Speed >= 250 / hitEnt:GetPhysicsObject():GetMass() * 20 and not IsValid(ply.FakeRagdoll) and not hitEnt:IsPlayerHolding() and hitEnt:GetVelocity():Length() > 150 then

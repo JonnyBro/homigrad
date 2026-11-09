@@ -1,4 +1,4 @@
-﻿AddCSLuaFile()
+AddCSLuaFile()
 ENT.Type = "anim"
 ENT.Base = "base_anim"
 ENT.PrintName = "Fire Hazard"
@@ -13,7 +13,7 @@ if SERVER then
 
 		self.TypeInfo = {
 			"Napalm", {Sound("snds_jack_gmod/fire1.wav"), Sound("snds_jack_gmod/fire2.wav")},
-			"eff_jack_gmod_heavyfire", 20, 30, 100
+			"hg_heavyfire", 20, 30, 100
 		}
 
 		----
@@ -68,7 +68,15 @@ if SERVER then
 		if self.NextSound < Time then
 			self.NextSound = Time + 1
 			self:EmitSound(table.Random(self.TypeInfo[2]), 65, math.random(90, 110))
-			JMod.EmitAIsound(self:GetPos(), 300, .5, 8)
+			local snd = ents.Create("ai_sound")
+			snd:SetPos(self:GetPos())
+			snd:SetKeyValue("volume", "300")
+			snd:SetKeyValue("duration", "0.5")
+			snd:SetKeyValue("soundtype", "8")
+			snd:Spawn()
+			snd:Activate()
+			snd:Fire("EmitAISound")
+			SafeRemoveEntityDelayed(snd, 1)
 		end
 
 		if self.NextEffect < Time then
@@ -88,8 +96,8 @@ if SERVER then
 			for k, v in pairs(ents.FindInSphere(Pos, self.Range)) do
 				local blacklist = {
 					["vfire_ball"] = true,
-					["ent_jack_gmod_ezfirehazard"] = true,
-					["ent_jack_gmod_eznapalm"] = true
+					["ent_hg_firehazard"] = true,
+					["ent_hg_napalm"] = true
 				}
 
 				if not blacklist[v:GetClass()] and IsValid(v:GetPhysicsObject()) and util.QuickTrace(self:GetPos(), v:GetPos() - self:GetPos(), selfg).Entity == v then
@@ -141,12 +149,11 @@ elseif CLIENT then
 
 		self.TypeInfo = {
 			"Napalm", {Sound("snds_jack_gmod/fire1.wav"), Sound("snds_jack_gmod/fire2.wav")},
-			"eff_jack_gmod_heavyfire", 15, 14, 100
+			"hg_heavyfire", 15, 14, 100
 		}
 
 		self.CastLight = (self.HighVisuals and math.random(1, 2) == 1) or (math.random(1, 10) == 1)
 		self.Size = self.TypeInfo[6]
-		--self.FlameSprite=Material("mats_jack_halo_sprites/flamelet"..math.random(1,5))
 	end
 
 	local GlowSprite = Material("mat_jack_gmod_glowsprite")

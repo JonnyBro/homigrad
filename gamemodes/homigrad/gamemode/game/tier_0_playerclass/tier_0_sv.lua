@@ -76,6 +76,6 @@ hook.Add("PlayerCanPickupItem", "PlayerClass", function(ply, item)
 	return ply:PlayerClassEvent("ShouldUpItem", wep)
 end)
 
-hook.Add("Shuold JMod Armor Equip", "PlayerClass", function(ply)
-	return ply:PlayerClassEvent("JModArmorEquip")
+hook.Add("HG_ShouldEquipArmor", "PlayerClass", function(ply)
+	return ply:PlayerClassEvent("ShouldEquipArmor")
 end)

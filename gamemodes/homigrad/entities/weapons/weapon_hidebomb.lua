@@ -72,7 +72,7 @@ if SERVER then
 				sound.Play("explosions/doi_ty_01_close.wav", SelfPos, 140, math.random(80, 110))
 			end
 
-			if util.GetSurfaceIndex(ent:GetBoneSurfaceProp(0)) == 3 or util.GetSurfaceIndex(ent:GetBoneSurfaceProp(0)) == 66 then JMod.FragSplosion(ent, SelfPos + Vector(0, 0, 20), 1024, 50, 3500, ent.owner or game.GetWorld()) end
+			if util.GetSurfaceIndex(ent:GetBoneSurfaceProp(0)) == 3 or util.GetSurfaceIndex(ent:GetBoneSurfaceProp(0)) == 66 then hg.FragSplosion(ent, SelfPos + Vector(0, 0, 20), 1024, 50, 3500, ent.owner or game.GetWorld()) end
 
 			timer.Simple(.1, function()
 				for _ = 1, 5 do
@@ -81,47 +81,13 @@ if SERVER then
 				end
 			end)
 
-			JMod.WreckBuildings(ent, SelfPos, PowerMult)
-			JMod.BlastDoors(ent, SelfPos, PowerMult)
+			hg.WreckBuildings(ent, SelfPos, PowerMult)
+			hg.BlastDoors(ent, SelfPos, PowerMult)
 
 			if BigFireModels[Model] then
-				for _ = 1, 25 do
-					local FireVec = (VectorRand() * .3 + Vector(0, 0, .3)):GetNormalized()
-					FireVec.z = FireVec.z / 2
-
-					local Flame = ents.Create("ent_jack_gmod_eznapalm")
-					Flame:SetPos(SelfPos + Vector(0, 0, 50))
-					Flame:SetAngles(FireVec:Angle())
-					Flame:SetOwner(game.GetWorld())
-
-					JMod.SetOwner(Flame, game.GetWorld())
-
-					Flame.SpeedMul = 0.25
-					Flame.Creator = game.GetWorld()
-					Flame.HighVisuals = true
-
-					Flame:Spawn()
-					Flame:Activate()
-				end
+				hg.SpawnFlames(SelfPos + Vector(0, 0, 50), 25, 0.25)
 			elseif FireModels[Model] then
-				for _ = 1, 7 do
-					local FireVec = (VectorRand() * .3 + Vector(0, 0, .3)):GetNormalized()
-					FireVec.z = FireVec.z / 2
-
-					local Flame = ents.Create("ent_jack_gmod_eznapalm")
-					Flame:SetPos(SelfPos + Vector(0, 0, 50))
-					Flame:SetAngles(FireVec:Angle())
-					Flame:SetOwner(game.GetWorld())
-
-					JMod.SetOwner(Flame, game.GetWorld())
-
-					Flame.SpeedMul = 0.25
-					Flame.Creator = game.GetWorld()
-					Flame.HighVisuals = true
-
-					Flame:Spawn()
-					Flame:Activate()
-				end
+				hg.SpawnFlames(SelfPos + Vector(0, 0, 50), 7, 0.25)
 			end
 
 			if IsValid(ent) then

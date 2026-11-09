@@ -75,9 +75,9 @@ if SERVER then
 				end
 			end)
 
-			JMod.WreckBuildings(ent, SelfPos, PowerMult)
-			JMod.BlastDoors(ent, SelfPos, PowerMult)
-			JMod.FragSplosion(self:GetOwner(), SelfPos + Vector(0, 0, 70), 3000, 80, 5000, self:GetOwner() or game.GetWorld())
+			hg.WreckBuildings(ent, SelfPos, PowerMult)
+			hg.BlastDoors(ent, SelfPos, PowerMult)
+			hg.FragSplosion(self:GetOwner(), SelfPos + Vector(0, 0, 70), 3000, 80, 5000, self:GetOwner() or game.GetWorld())
 
 			timer.Simple(0, function()
 				local ZaWarudo = game.GetWorld()

@@ -56,7 +56,7 @@ function hl2dm.PlayerSpawn2(ply, teamID)
 
 		if math.random(1, 2) == 2 then ply:Give("weapon_hg_hl2") end
 
-		JMod.EZ_Equip_Armor(ply, "Light-Vest", Color(0, 0, 0, 0))
+		hg.EquipArmor(ply, "Light-Vest", Color(0, 0, 0, 0))
 	end
 
 	if teamID == 1 then
@@ -64,8 +64,8 @@ function hl2dm.PlayerSpawn2(ply, teamID)
 		if math.random(1, 4) == 4 then ply:Give("morphine") end
 		if math.random(1, 3) == 3 then ply:Give("weapon_hg_hl2") end
 
-		JMod.EZ_Equip_Armor(ply, "Medium-Helmet", color)
-		JMod.EZ_Equip_Armor(ply, "Light-Vest", Color(0, 0, 0, 0))
+		hg.EquipArmor(ply, "Medium-Helmet", color)
+		hg.EquipArmor(ply, "Light-Vest", Color(0, 0, 0, 0))
 	end
 
 	if ply:IsUserGroup("sponsor") or ply:IsUserGroup("supporterplus") or ply:IsAdmin() then

@@ -115,7 +115,7 @@ function IsUnconscious(ply)
 		ply:SetDSP(16)
 	else
 		ply.unconscious = false
-		ply:SetDSP(ply.EZarmor.effects.earPro and 58 or 1)
+		ply:SetDSP(ply.hgArmor and ply.hgArmor.effects.earPro and 58 or 1)
 	end
 
 	ply:SetNWInt("unconscious", ply.unconscious)

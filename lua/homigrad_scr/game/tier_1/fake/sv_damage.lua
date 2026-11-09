@@ -183,7 +183,7 @@ hook.Add("EntityTakeDamage", "ragdamage", function(ent, dmginfo)
 
 	dmginfo:ScaleDamage(0.01)
 
-	local armors, _ = JMod.LocationalDmgHandling(ply, hitgroup, dmginfo)
+	local armors = hg.ArmorDamage(ply, hitgroup, dmginfo)
 
 	dmginfo:ScaleDamage(100)
 

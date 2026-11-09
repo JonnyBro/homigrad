@@ -1,5 +1,3 @@
-﻿-- Jackarunda 2021
---,"particles/smokey","particle/particle_smokegrenade","sprites/mat_jack_smoke1","sprites/mat_jack_smoke2","sprites/mat_jack_smoke3"}
 local Sprites = {"particle/smokestack"}
 
 function EFFECT:Init(data)
@@ -16,14 +14,13 @@ function EFFECT:Init(data)
 				Particle:SetAirResistance(1000)
 				Particle:SetDieTime(math.random(7, 10))
 				Particle:SetStartAlpha(255)
-				Particle.OriginalStartAlpha = 255
 				Particle:SetEndAlpha(0)
 				local Size = math.Rand(30, 60)
 				Particle:SetStartSize(Size / 50)
 				Particle:SetEndSize(Size * 10)
 				Particle:SetRoll(math.Rand(-3, 3))
 				Particle:SetRollDelta(math.Rand(-2, 2))
-				local Vec = VectorRand() * 1500 + JMod.Wind * 150
+				local Vec = VectorRand() * 1500
 				Vec.z = Vec.z / 4
 				Particle:SetGravity(Vec)
 				Particle:SetLighting(false)
@@ -31,18 +28,6 @@ function EFFECT:Init(data)
 				Particle:SetColor(darg, darg, darg)
 				Particle:SetCollide(true)
 				Particle:SetBounce(1)
-				---
-				Particle:SetNextThink(CurTime())
-
-				Particle:SetThinkFunction(function(pa)
-					if LocalPlayer().EZarmor.effects.thermalVision then
-						pa:SetStartAlpha(20)
-					else
-						pa:SetStartAlpha(pa.OriginalStartAlpha)
-					end
-
-					pa:SetNextThink(CurTime() + 1)
-				end)
 			end
 		end
 	end

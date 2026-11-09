@@ -51,7 +51,7 @@ hook.Add("Player Think", "Looting", function(ply)
 			ply:EmitSound("npc/combine_soldier/gear" .. math.random(1, 6) .. ".wav", 50, math.random(95, 105))
 		end
 
-		if IsValid(hitEnt) and hitEnt.IsJModArmor then hitEnt = hitEnt.Owner end
+		if IsValid(hitEnt) and hitEnt.IsHGArmor then hitEnt = hitEnt.Owner end
 		if not IsValid(hitEnt) then return end
 		if hitEnt:IsPlayer() and hitEnt:Alive() and not IsValid(hitEnt.FakeRagdoll) then return end
 

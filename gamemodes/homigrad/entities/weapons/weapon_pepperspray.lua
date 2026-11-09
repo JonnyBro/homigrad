@@ -91,7 +91,7 @@ if SERVER then
 					dmgInfo:SetDamage(5)
 					GuiltLogic(ent, owner, dmgInfo)
 
-					net.Start("JMod_VisionBlur")
+					net.Start("hg_pepper_blur")
 						net.WriteFloat(5)
 					net.Send(ent)
 
@@ -186,5 +186,46 @@ else
 				sprite[1] = sprite[1] + sprite[3] * animpos * 4
 			end
 		end
+	end)
+end
+
+if SERVER then
+	util.AddNetworkString("hg_pepper_blur")
+else
+	local blurMaterial = Material("pp/bokehblur")
+	local targetBlur, curBlur = 0, 0
+
+	net.Receive("hg_pepper_blur", function()
+		targetBlur = math.Clamp(targetBlur + net.ReadFloat(), 0, 75)
+	end)
+
+	hook.Add("RenderScreenspaceEffects", "hg_pepper_blur", function()
+		if targetBlur <= 0 and curBlur <= 0 then return end
+
+		local ft = FrameTime()
+
+		if not LocalPlayer():Alive() then
+			targetBlur, curBlur = 0, 0
+
+			return
+		end
+
+		targetBlur = math.max(targetBlur - ft * 2, 0)
+		curBlur = Lerp(ft * .5, curBlur, targetBlur)
+
+		if curBlur < .01 then
+			curBlur = 0
+
+			return
+		end
+
+		render.UpdateScreenEffectTexture()
+		blurMaterial:SetTexture("$BASETEXTURE", render.GetScreenEffectTexture())
+		blurMaterial:SetTexture("$DEPTHTEXTURE", render.GetResolvedFullFrameDepth())
+		blurMaterial:SetFloat("$size", (curBlur * 40) ^ .5)
+		blurMaterial:SetFloat("$focus", 1)
+		blurMaterial:SetFloat("$focusradius", 1)
+		render.SetMaterial(blurMaterial)
+		render.DrawScreenQuad()
 	end)
 end

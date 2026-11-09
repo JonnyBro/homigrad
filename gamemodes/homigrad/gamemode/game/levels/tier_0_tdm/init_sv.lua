@@ -227,8 +227,8 @@ function tdm.PlayerSpawn2(ply, teamID)
 	end
 
 	local r = math.random(1, 2)
-	JMod.EZ_Equip_Armor(ply, "Medium-Helmet", color)
-	JMod.EZ_Equip_Armor(ply, (r == 1 and "Medium-Vest") or "Light-Vest", color)
+	hg.EquipArmor(ply, "Medium-Helmet", color)
+	hg.EquipArmor(ply, (r == 1 and "Medium-Vest") or "Light-Vest", color)
 end
 
 function tdm.PlayerInitialSpawn(ply)

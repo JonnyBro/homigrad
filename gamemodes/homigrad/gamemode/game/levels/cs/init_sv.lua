@@ -266,9 +266,9 @@ function css.PlayerSpawn2(ply,teamID)
 	if math.random(1,4) == 4 then ply:Give("morphine") end
 	if math.random(1,3) == 3 then if ply:Team() == 1 then ply:Give("weapon_hg_f1") else ply:Give("weapon_hg_rgd5") end end
 
-	JMod.EZ_Equip_Armor(ply,"Medium-Helmet",color)
+	hg.EquipArmor(ply,"Medium-Helmet",color)
 	local r = math.random(1,2)
-	JMod.EZ_Equip_Armor(ply,(r == 1 and "Medium-Vest") or (r == 2 and "Light-Vest"),color)
+	hg.EquipArmor(ply,(r == 1 and "Medium-Vest") or (r == 2 and "Light-Vest"),color)
 end
 
 function css.PlayerInitialSpawn(ply) ply:SetTeam(math.random(2)) end

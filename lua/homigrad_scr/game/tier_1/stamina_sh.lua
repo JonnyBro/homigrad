@@ -19,7 +19,7 @@ local function gg(ply, mv, mul)
 
 	if ply.IsProne and ply:IsProne() then return end
 
-	local armorSpeedFrac = ply.EZarmor and ply.EZarmor.speedfrac
+	local armorSpeedFrac = ply.hgArmor and ply.hgArmor.speedfrac
 
 	if armorSpeedFrac and armorSpeedFrac ~= 1 then
 		local adjustedSpeed = maxSpeed * math.max(armorSpeedFrac, 0.75)
@@ -34,5 +34,3 @@ hook.Add("Move", "homigrad", function(ply, mv)
 
 	gg(ply, mv, mul)
 end)
-
-hook.Remove("Move", "JMOD_ARMOR_MOVE")

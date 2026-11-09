@@ -1,12 +1,11 @@
 -- Jackarunda 2021
 AddCSLuaFile()
 
-ENT.Base = "ent_jack_gmod_ezgrenade"
+ENT.Base = "ent_hg_grenade_base"
 ENT.Author = "Jackarunda, TheOnly8Z, Niik"
 ENT.PrintName = "Контактный Заряд для Гранатомёта"
-ENT.Category = "JModHomigrad"
+ENT.Category = "Homigrad"
 ENT.Spawnable = true
-ENT.JModPreferredCarryAngles = Angle(0, -140, 0)
 ENT.Model = "models/pwb/weapons/w_m320_projectile.mdl"
 ENT.SpoonScale = 2
 
@@ -19,12 +18,12 @@ if SERVER then
 	end
 
 	function ENT:Arm()
-		self:SetState(JMod.EZ_STATE_ARMING)
+		self:SetState(self.STATE_ARMING)
 		self:SetBodygroup(2, 1)
 
 		timer.Simple(.3, function()
 			if IsValid(self) then
-				self:SetState(JMod.EZ_STATE_ARMED)
+				self:SetState(self.STATE_ARMED)
 			end
 		end)
 		self:EmitSound("snds_jack_gmod/ez_weapons/40mm_grenade.wav")
@@ -34,10 +33,10 @@ if SERVER then
 		if self.Exploded then return end
 		self.Exploded = true
 		local SelfPos = self:LocalToWorld(self:OBBCenter())
-		JMod.Sploom(self:GetOwner(), self:GetPos(), 175) --math.random(150, 250))
+		hg.Sploom(self:GetOwner(), self:GetPos(), 175) --math.random(150, 250))
 		self:EmitSound("dwr/explosions/indoors/distant/" .. math.random(3,8) .. ".wav", 90, 100)
 
-		JMod.FragSplosion(self, SelfPos, 800, 450, 1500, self:GetOwner() or game.GetWorld())
+		hg.FragSplosion(self, SelfPos, 800, 450, 1500, self:GetOwner() or game.GetWorld())
 
 		local plooie = EffectData()
 		plooie:SetOrigin(SelfPos)

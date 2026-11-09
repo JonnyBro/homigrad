@@ -128,7 +128,7 @@ else
 	end
 end
 
-function JMod.WhomILookinAt(ply, cone, dist)
+local function whomILookinAt(ply, cone, dist)
 	local CreatureTr, ObjTr, OtherTr = nil, nil, nil
 
 	for _ = 1, 150 * cone do
@@ -268,7 +268,7 @@ function SWEP:SecondaryAttack()
 		self:SetCarrying()
 
 		local ply = self:GetOwner()
-		local tr = util.QuickTrace(ply:GetAttachment(ply:LookupAttachment("eyes")).Pos - vector_up * 2, self:GetOwner():GetAimVector() * self.ReachDistance, function(ent) return ent ~= ply and not ent.hgFakeBullseye end)
+		local tr = util.QuickTrace(ply:GetAttachment(ply:LookupAttachment("eyes")).Pos - vector_up * 2, self:GetOwner():GetAimVector() * self.ReachDistance, {self:GetOwner()})
 
 		if IsValid(tr.Entity) and self:CanPickup(tr.Entity) and not tr.Entity:IsPlayer() then
 			local Dist = (self:GetOwner():GetShootPos() - tr.HitPos):Length()
@@ -541,7 +541,7 @@ function SWEP:AttackFront()
 
 	self:GetOwner():LagCompensation(true)
 
-	local Ent, HitPos = JMod.WhomILookinAt(self:GetOwner(), .3, 55)
+	local Ent, HitPos = whomILookinAt(self:GetOwner(), .3, 55)
 	local AimVec = self:GetOwner():GetAimVector()
 
 	if IsValid(Ent) or Ent and Ent.IsWorld and Ent:IsWorld() then

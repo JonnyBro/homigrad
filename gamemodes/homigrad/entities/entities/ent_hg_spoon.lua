@@ -1,4 +1,4 @@
-﻿AddCSLuaFile()
+AddCSLuaFile()
 ENT.Type = "anim"
 ENT.Base = "base_anim"
 ENT.PrintName = "Spoon"
@@ -58,6 +58,3 @@ if SERVER then
 	end
 end
 
-if CLIENT then
-	--language.Add("ent_jack_spoon", "Spoon")
-end

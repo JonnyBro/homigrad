@@ -1,4 +1,4 @@
-﻿local Glow = Material("sprites/mat_jack_basicglow")
+local Glow = Material("sprites/mat_jack_basicglow")
 
 function EFFECT:Init(data)
 	self.Position = data:GetOrigin()
@@ -39,7 +39,7 @@ function EFFECT:Render()
 				endpos = self.Position,
 				filter = {self, ply}
 			}).Hit then
-				LocalPlayer().EZflashbanged = 100 * (1 - Pos:Distance(self.Position) / 1000)
+				LocalPlayer().hgFlashbanged = 100 * (1 - Pos:Distance(self.Position) / 1000)
 			end
 		end
 	end

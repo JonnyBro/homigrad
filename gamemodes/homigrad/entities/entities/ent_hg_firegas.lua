@@ -1,4 +1,4 @@
-﻿-- Jackarunda 2021
+-- Jackarunda 2021
 AddCSLuaFile()
 ENT.Type = "anim"
 ENT.PrintName = "EZ fire Gas"
@@ -13,9 +13,19 @@ ENT.EZgasParticle = true
 
 
 if SERVER then
+	local function TryCough(ent)
+		local time = CurTime()
+		if (ent.EZcoughTime or 0) > time then return end
+
+		ent:EmitSound("ambient/voices/cough" .. math.random(1, 4) .. ".wav", 75, math.random(90, 110))
+		if ent.ViewPunch then ent:ViewPunch(Angle(math.random(-5, 5), math.random(-5, 5), math.random(-5, 5))) end
+
+		ent.EZcoughTime = time + math.Rand(.5, 1)
+	end
+
 	function ENT:Initialize()
 		local Time = CurTime()
-		self.LifeTime = math.random(50, 100) * JMod.Config.PoisonGasLingerTime
+		self.LifeTime = math.random(50, 100)
 		self.DieTime = Time + self.LifeTime
 		self:SetModel("models/dav0r/hoverball.mdl")
 		self:SetMaterial("models/debug/debugwhite")
@@ -78,11 +88,11 @@ if SERVER then
 				elseif self:ShouldDamage(obj) and (self.NextDmg < Time) then
 
 					if obj:IsPlayer() then
-						JMod.TryCough(obj)
+						TryCough(obj)
 						obj.o2 = math.Max(obj.o2-0.15,0)
 					end
 					if obj:IsRagdoll() and RagdollOwner(obj) then
-						JMod.TryCough(RagdollOwner(obj))
+						TryCough(RagdollOwner(obj))
 						RagdollOwner(obj).o2 = math.Max(RagdollOwner(obj).o2-0.15,0)
 					end
 				end
