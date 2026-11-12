@@ -1,5 +1,5 @@
 {
-	"lint_maxScopeDepth": 0,
+	"lint_maxScopeDepth": 10,
 	"lint_syntaxErrors": true,
 	"lint_syntaxInconsistencies": true,
 	"lint_deprecated": true,
@@ -18,7 +18,7 @@
 	"lint_unusedVars": true,
 	"lint_unusedParameters": false,
 	"lint_unusedLoopVars": true,
-	"lint_ignoreFiles": ["/tmp/**.lua", "C:\\**.lua"],
+	"lint_ignoreFiles": ["C:\\Temp\\**.lua", "/tmp/**.lua", "TrainingData/**.lua"],
 	"lint_inconsistentVariableStyle": false,
 	"lint_spaceBetweenParens": true,
 	"lint_spaceBetweenBrackets": true,
@@ -26,10 +26,11 @@
 	"lint_spaceBeforeComma": false,
 	"lint_spaceAfterComma": true,
 	"lint_maxLineLength": 0,
+	"lint_warningsAreErrors": false,
 
 	"prettyprint_spaceBetweenParens": false,
 	"prettyprint_spaceBetweenBrackets": false,
-	"prettyprint_spaceBetweenBraces": false,
+	"prettyprint_spaceBetweenBraces": true,
 	"prettyprint_spaceEmptyParens": false,
 	"prettyprint_spaceEmptyBraces": false,
 	"prettyprint_spaceAfterLabel": false,
