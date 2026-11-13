@@ -201,7 +201,7 @@ function Faking(ply, force)
 			local trace = {
 				start = pos,
 				endpos = pos - Vector(0, 0, 64),
-				filter = {ply, rag}
+				filter = { ply, rag }
 			}
 
 			local tracea = util.TraceLine(trace)
@@ -212,7 +212,7 @@ function Faking(ply, force)
 			local trace = {
 				start = pos,
 				endpos = pos + Vector(0, 0, 64),
-				filter = {ply, rag}
+				filter = { ply, rag }
 			}
 
 			local tracea = util.TraceLine(trace)
@@ -658,33 +658,20 @@ IdealMassPlayer = {
 	["ValveBiped.Bip01_R_Finger42"] = 0.1
 }
 
-local selfCollisionPairs = {}
+local armBones = { "L_UpperArm", "L_Forearm", "L_Hand", "R_UpperArm", "R_Forearm", "R_Hand" }
 
-do
-	for _, part in ipairs({"L_UpperArm", "L_Forearm", "L_Hand", "R_UpperArm", "R_Forearm", "R_Hand"}) do
-		table.insert(selfCollisionPairs, {part, "Head1"})
-	end
-
-	for _, part in ipairs({"L_Forearm", "L_Hand", "R_Forearm", "R_Hand"}) do
-		table.insert(selfCollisionPairs, {part, "Spine2"})
-	end
-
-	for _, left in ipairs({"L_Forearm", "L_Hand"}) do
-		for _, right in ipairs({"R_Forearm", "R_Hand"}) do
-			table.insert(selfCollisionPairs, {left, right})
-		end
-	end
-end
-
--- Mega jank: models compiled without "collisionrules" in .phy will fly in fake, this disables the collision
+-- Mega jank: models compiled without "collisionrules" in .phy will fly in fake, so arms stop colliding with the rest of the body.
+-- Not constraint.NoCollide: logic_collision_pair between bones of one ragdoll makes it snap back when dragged
 local function DisableArmSelfCollisions(rag)
-	for _, pair in ipairs(selfCollisionPairs) do
-		local bone1 = rag:LookupBone("ValveBiped.Bip01_" .. pair[1])
-		local bone2 = rag:LookupBone("ValveBiped.Bip01_" .. pair[2])
-		if not bone1 or not bone2 then continue end
+	for _, name in ipairs(armBones) do
+		local bone = rag:LookupBone("ValveBiped.Bip01_" .. name)
+		local physBone = bone and rag:TranslateBoneToPhysBone(bone)
+		local phys = physBone and physBone >= 0 and rag:GetPhysicsObjectNum(physBone)
 
-		local physBone1, physBone2 = rag:TranslateBoneToPhysBone(bone1), rag:TranslateBoneToPhysBone(bone2)
-		if physBone1 >= 0 and physBone2 >= 0 then constraint.NoCollide(rag, rag, physBone1, physBone2) end
+		if IsValid(phys) then
+			phys:AddGameFlag(FVPHYSICS_NO_SELF_COLLISIONS)
+			phys:RecheckCollisionFilter()
+		end
 	end
 end
 
